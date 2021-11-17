@@ -11,9 +11,10 @@ let bench_cmd =
        anon (Command.Anons.non_empty_sequence_as_list ("FILE" %: string))
      and height = return 6
      and width = return 7
-     and position = return (module Position.Basic : Position.S) in
+     and position = return (module Position.Basic : Position.S)
+     and debug = flag "-debug" Command.Flag.no_arg ~doc:" print debug info" in
      fun () ->
-       let bench = Bencher.bench position ~filenames in
+       let bench = Bencher.bench position ~filenames ~debug in
        print_endline (Bencher.to_ascii_table bench))
 ;;
 
