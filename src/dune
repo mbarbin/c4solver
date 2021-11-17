@@ -1,0 +1,7 @@
+(library
+ (name my_package)
+ (public_name my-package)
+ (flags -warn-error +a)
+ (libraries base)
+ (preprocess
+  (pps ppx_sexp_value)))

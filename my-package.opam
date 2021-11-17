@@ -1,0 +1,26 @@
+opam-version: "2.0"
+synopsis: "Add a short synopsis for my package"
+description: """\
+Add a longer description.
+With more details."""
+maintainer: "Mathieu Barbin"
+authors: "Mathieu Barbin"
+license: "MIT"
+homepage: "https://github.com/mbarbin/my-package"
+doc: "https://github.com/mbarbin/my-package"
+bug-reports: "https://github.com/mbarbin/my-package/issues"
+depends: [
+  "ocaml" {>= "4.09.0"}
+  "base"
+  "core_kernel" {with-test}
+  "dune" {>= "2.0.0"}
+  "ppx_jane" {with-test}
+  "ppx_sexp_value"
+
+]
+build: [
+  ["dune" "subst"] {pinned}
+  ["dune" "build" "-p" name "-j" jobs]
+  ["dune" "runtest" "-p" name "-j" jobs] {with-test}
+]
+dev-repo: "git+https://github.com/mbarbin/my-package.git"

@@ -1,0 +1,7 @@
+(library
+ (name my_package_test)
+ (flags -warn-error +a)
+ (libraries core_kernel.core my-package)
+ (inline_tests)
+ (preprocess
+  (pps ppx_jane)))
