@@ -12,9 +12,11 @@ let bench_cmd =
      and height = return 6
      and width = return 7
      and position = return (module Position.Basic : Position.S)
+     and accuracy_only =
+       flag "--accuracy-only" Command.Flag.no_arg ~doc:" print only accuracy info"
      and debug = flag "-debug" Command.Flag.no_arg ~doc:" print debug info" in
      fun () ->
-       let bench = Bencher.bench position ~filenames ~debug in
+       let bench = Bencher.bench position ~filenames ~debug ~accuracy_only in
        print_endline (Bencher.to_ascii_table bench))
 ;;
 

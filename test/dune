@@ -5,3 +5,15 @@
  (inline_tests)
  (preprocess
   (pps ppx_jane)))
+
+(copy_files %{project_root}/resources/Test_L*)
+
+(alias
+ (name runtest)
+ (deps
+  (glob_files Test_L*)))
+
+(cram
+ (deps
+  (glob_files Test_L*)
+  %{bin:c4solver}))

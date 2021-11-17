@@ -27,5 +27,11 @@ end
 
 type t
 
-val bench : (module Position.S) -> filenames:string list -> debug:bool -> t
+val bench
+  :  (module Position.S)
+  -> filenames:string list
+  -> debug:bool
+  -> accuracy_only:bool
+  -> t
+
 val to_ascii_table : t -> string

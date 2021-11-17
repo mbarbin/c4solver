@@ -89,7 +89,8 @@ let%expect_test "Test_L3_R1 #3" =
 
 let%expect_test "Test_L2_R1 #1" =
   require_does_not_raise [%here] (fun () -> test_line "5554224333234511764415115 4");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -120,7 +121,8 @@ let%expect_test "Test_L2_R1 #1" =
 
 let%expect_test "Test_L2_R1 #29" =
   require_does_not_raise [%here] (fun () -> test_line "2737772244262123677516643354 0");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -150,7 +152,8 @@ let%expect_test "Test_L2_R1 #29" =
 
 let%expect_test "Test_L2_R2 #1" =
   require_does_not_raise [%here] (fun () -> test_line "274552224131661 0");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -182,7 +185,8 @@ let%expect_test "Test_L2_R2 #1" =
 
 let%expect_test "Test_L2_R2 #17" =
   require_does_not_raise [%here] (fun () -> test_line "555317266147361 -1");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -214,7 +218,8 @@ let%expect_test "Test_L2_R2 #17" =
 
 let%expect_test "Test_L1_R1 #1" =
   require_does_not_raise [%here] (fun () -> test_line "32164625 11");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -246,7 +251,8 @@ let%expect_test "Test_L1_R1 #1" =
 
 let%expect_test "Test_L1_R1 #67" =
   require_does_not_raise [%here] (fun () -> test_line "25144 18");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -278,7 +284,8 @@ let%expect_test "Test_L1_R1 #67" =
 
 let%expect_test "Test_L1_R2 #1" =
   require_does_not_raise [%here] (fun () -> test_line "32751571231557 -3");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -310,7 +317,8 @@ let%expect_test "Test_L1_R2 #1" =
 
 let%expect_test "Test_L1_R2 #31" =
   require_does_not_raise [%here] (fun () -> test_line "75734233473735 0");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -342,7 +350,8 @@ let%expect_test "Test_L1_R2 #31" =
 
 let%expect_test "Test_L1_R3 #1" =
   require_does_not_raise [%here] (fun () -> test_line "13712 3");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
@@ -374,7 +383,8 @@ let%expect_test "Test_L1_R3 #1" =
 
 let%expect_test "Test_L1_R3 #15" =
   require_does_not_raise [%here] (fun () -> test_line "527376 0");
-  [%expect {|
+  [%expect
+    {|
     ┌───┬───┬───┬───┬───┬───┬───┐
     │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
     ├───┼───┼───┼───┼───┼───┼───┤
