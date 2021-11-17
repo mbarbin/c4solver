@@ -1,8 +1,6 @@
 opam-version: "2.0"
 synopsis: "A solver for the connect4 game, written in OCaml"
-description: """\
-See https://github.com/mbarbin/c4solver/README.md
-"""
+description: "See https://github.com/mbarbin/c4solver/README.md"
 maintainer: "Mathieu Barbin"
 authors: "Mathieu Barbin"
 license: "MIT"
@@ -12,11 +10,15 @@ bug-reports: "https://github.com/mbarbin/c4solver/issues"
 depends: [
   "ocaml" {>= "4.09.0"}
   "base"
-  "core_kernel" {with-test}
+  "core_kernel"
   "dune" {>= "2.0.0"}
-  "ppx_jane" {with-test}
+  "ppx_jane"
   "ppx_sexp_value"
-
+  "ANSITerminal" {>= "0.8.3"}
+  "core" {>= "v0.15~preview.125.13+424"}
+  "stdio" {>= "v0.15~preview.125.13+424"}
+  "textutils" {>= "v0.15~preview.125.13+424"}
+  "expect_test_helpers_core" {>= "v0.15~preview.125.13+424" & with-test}
 ]
 build: [
   ["dune" "subst"] {pinned}
