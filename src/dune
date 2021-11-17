@@ -1,6 +1,6 @@
 (library
- (name my_package)
- (public_name my-package)
+ (name c4solver)
+ (public_name c4solver)
  (flags -warn-error +a)
  (libraries base)
  (preprocess

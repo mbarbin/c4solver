@@ -1,2 +1,2 @@
 (lang dune 2.8)
-(name my-package)
+(name c4solver)
