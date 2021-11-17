@@ -1,0 +1,6 @@
+(executable
+ (name main)
+ (public_name c4solver)
+ (package c4solver)
+ (flags -warn-error +a)
+ (libraries c4solver core.command_unix))
