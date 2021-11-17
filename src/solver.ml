@@ -18,7 +18,7 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
     else if Array.exists moves ~f:(fun column ->
                 (* Check if current player can win next move. *)
                 P.can_play t ~column && P.is_winning_move t ~column)
-    then ((width * (height + 1)) - P.number_of_plies t) / 2
+    then ((width * height) + 1 - P.number_of_plies t) / 2
     else (
       (* Init the best possible score with a lower bound. *)
       let best_score = ref (-1 * width * height) in
