@@ -11,17 +11,17 @@ let bench_cmd =
      and height = return 6
      and width = return 7
      and position = return (module Position.Basic : Position.S)
-     and alphabeta =
+     and alpha_beta =
        flag
-         "--alphabeta"
+         "--alpha-beta"
          (optional_with_default true bool)
-         ~doc:" enable alphabeta prunning (default true)"
-     and weak = flag "--weak" no_arg ~doc:" enable weak solving (Win/Lose/Draw)"
+         ~doc:" enable alpha-beta prunning (default true)"
+     and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
      and debug = flag "--debug" no_arg ~doc:" print debug info" in
      fun () ->
        let bench =
-         Bencher.bench position ~filenames ~debug ~accuracy_only ~alphabeta ~weak
+         Bencher.bench position ~filenames ~debug ~accuracy_only ~alpha_beta ~weak
        in
        print_endline (Bencher.to_ascii_table bench))
 ;;

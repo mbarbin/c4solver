@@ -6,4 +6,4 @@ type t =
   }
 
 val negamax : (module Position.S with type t = 'a) -> 'a -> t
-val negamax_alphabeta : (module Position.S with type t = 'a) -> 'a -> weak:bool -> t
+val negamax_alpha_beta : (module Position.S with type t = 'a) -> 'a -> weak:bool -> t

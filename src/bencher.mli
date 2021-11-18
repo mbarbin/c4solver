@@ -32,7 +32,7 @@ val bench
   -> filenames:string list
   -> debug:bool
   -> accuracy_only:bool
-  -> alphabeta:bool
+  -> alpha_beta:bool
   -> weak:bool
   -> t
 

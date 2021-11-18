@@ -62,7 +62,7 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
    alpha-beta function is allowed to return any lower bound of the
    actual score that is greater or equal to beta. *)
 
-let negamax_alphabeta (type t) (module P : Position.S with type t = t) (t : t) ~weak =
+let negamax_alpha_beta (type t) (module P : Position.S with type t = t) (t : t) ~weak =
   let height = P.height t in
   let width = P.width t in
   let moves = Array.init width ~f:Fn.id in
