@@ -32,6 +32,8 @@ val bench
   -> filenames:string list
   -> debug:bool
   -> accuracy_only:bool
+  -> alphabeta:bool
+  -> weak:bool
   -> t
 
 val to_ascii_table : t -> string
