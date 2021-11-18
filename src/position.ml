@@ -112,3 +112,9 @@ module Basic : S = struct
         acc >= 3)
   ;;
 end
+
+type t = Basic [@@deriving enumerate, sexp_of]
+
+let get = function
+  | Basic -> (module Basic : S)
+;;

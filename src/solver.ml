@@ -62,10 +62,22 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
    alpha-beta function is allowed to return any lower bound of the
    actual score that is greater or equal to beta. *)
 
-let negamax_alpha_beta (type t) (module P : Position.S with type t = t) (t : t) ~weak =
+let negamax_alpha_beta
+    (type t)
+    (module P : Position.S with type t = t)
+    (t : t)
+    ~weak
+    ~column_exploration_reorder
+  =
   let height = P.height t in
   let width = P.width t in
-  let moves = Array.init width ~f:Fn.id in
+  let moves =
+    match column_exploration_reorder with
+    | false -> Array.init width ~f:Fn.id
+    | true ->
+      (* Initialize the column exploration order, starting with center columns. *)
+      Array.init width ~f:(fun i -> (width / 2) + ((1 - (2 * (i % 2))) * (i + 1) / 2))
+  in
   let number_of_positions = ref 0 in
   let rec negamax t ~alpha ~beta =
     incr number_of_positions;

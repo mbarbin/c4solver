@@ -47,7 +47,15 @@ type t =
 
 let do_ansi f = if ANSITerminal.isatty.contents Core_unix.stdout then f ()
 
-let bench (module P : Position.S) ~filenames ~debug ~accuracy_only ~alpha_beta ~weak =
+let bench
+    (module P : Position.S)
+    ~filenames
+    ~debug
+    ~accuracy_only
+    ~alpha_beta
+    ~weak
+    ~column_exploration_reorder
+  =
   let test_files = List.map filenames ~f:(fun filename -> Test_file.load_exn ~filename) in
   let headers =
     [ [ "test"; "accuracy" ]
@@ -77,15 +85,20 @@ let bench (module P : Position.S) ~filenames ~debug ~accuracy_only ~alpha_beta ~
               in
               let { Solver.measure; result } =
                 if alpha_beta
-                then Solver.negamax_alpha_beta (module P) position ~weak
+                then
+                  Solver.negamax_alpha_beta
+                    (module P)
+                    position
+                    ~weak
+                    ~column_exploration_reorder
                 else (
-                  if weak
+                  if weak || column_exploration_reorder
                   then
                     raise_s
                       [%sexp
                         "weak = true is not available with this combination of options"
                         , [%here]
-                        , { alpha_beta : bool }];
+                        , { alpha_beta : bool; column_exploration_reorder : bool }];
                   Solver.negamax (module P) position)
               in
               if result = test_line.result then incr accuracy_count;

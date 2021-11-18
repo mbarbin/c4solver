@@ -34,6 +34,7 @@ val bench
   -> accuracy_only:bool
   -> alpha_beta:bool
   -> weak:bool
+  -> column_exploration_reorder:bool
   -> t
 
 val to_ascii_table : t -> string

@@ -37,4 +37,10 @@ module type Position = sig
   (** A basic implementation for [S], with the board represented by a
      token matrix. *)
   module Basic : S
+
+  (** [t] Allows for dynamically choosing the implementation among
+     those available. *)
+  type t = Basic [@@deriving enumerate, sexp_of]
+
+  val get : t -> (module S)
 end
