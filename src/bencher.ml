@@ -58,10 +58,13 @@ let bench
   =
   let test_files = List.map filenames ~f:(fun filename -> Test_file.load_exn ~filename) in
   let headers =
-    [ [ "test"; "accuracy" ]
-    ; (if accuracy_only then [] else [ "mean time"; "mean nb of pos"; "K pos / s" ])
+    [ true, "test"
+    ; true, "accuracy"
+    ; not accuracy_only, "mean time"
+    ; true, "mean nb of pos"
+    ; not accuracy_only, "K pos / s"
     ]
-    |> List.concat
+    |> List.filter_map ~f:(fun (t, v) -> Option.some_if t v)
   in
   let data =
     List.map test_files ~f:(fun test_file ->
@@ -128,16 +131,13 @@ let bench
         let accuracy =
           float_of_int !accuracy_count /. float_of_int number_of_lines *. 100.
         in
-        [ [ test_file.basename; sprintf "%.2f%%" accuracy ]
-        ; (if accuracy_only
-          then []
-          else
-            [ Time.Span.to_string_hum mean.span
-            ; Int.to_string_hum mean.number_of_positions
-            ; Int.to_string_hum mean.k_pos_per_s
-            ])
+        [ true, test_file.basename
+        ; true, sprintf "%.2f%%" accuracy
+        ; not accuracy_only, Time.Span.to_string_hum mean.span
+        ; true, Int.to_string_hum mean.number_of_positions
+        ; not accuracy_only, Int.to_string_hum mean.k_pos_per_s
         ]
-        |> List.concat)
+        |> List.filter_map ~f:(fun (t, v) -> Option.some_if t v))
   in
   { headers; data }
 ;;
