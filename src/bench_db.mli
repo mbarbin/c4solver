@@ -29,8 +29,8 @@ end
 
 module Key : sig
   type t =
-    { solver : Solver.t
-    ; test_basename : string
+    { test_basename : string
+    ; solver : Solver.t
     }
 end
 

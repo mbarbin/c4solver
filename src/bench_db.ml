@@ -20,7 +20,15 @@ module Solver = struct
   end
 
   module Human_name = struct
-    type t = MinMax [@@deriving compare, equal, enumerate, sexp]
+    type t =
+      | MinMax
+      | Alpha_beta
+    [@@deriving compare, equal, enumerate, sexp]
+
+    let to_string_hum = function
+      | MinMax -> "MinMax"
+      | Alpha_beta -> "Alpha-beta"
+    ;;
   end
 
   type t =
@@ -33,7 +41,7 @@ module Solver = struct
   let to_string_hum t =
     sprintf
       "%s%s%s"
-      (Sexp.to_string (Human_name.sexp_of_t t.human_name))
+      (Human_name.to_string_hum t.human_name)
       (if t.weak then " (weak)" else "")
       (if t.reference then " - ref" else "")
   ;;
@@ -43,6 +51,14 @@ module Solver = struct
     | MinMax ->
       { position = Basic
       ; alpha_beta = false
+      ; weak = t.weak
+      ; column_exploration_reorder = false
+      ; with_transposition_table = false
+      ; reference = t.reference
+      }
+    | Alpha_beta ->
+      { position = Basic
+      ; alpha_beta = true
       ; weak = t.weak
       ; column_exploration_reorder = false
       ; with_transposition_table = false
@@ -71,8 +87,8 @@ end
 module Key = struct
   module T = struct
     type t =
-      { solver : Solver.t
-      ; test_basename : string
+      { test_basename : string
+      ; solver : Solver.t
       }
     [@@deriving compare, equal, sexp]
   end
@@ -92,11 +108,59 @@ end
 (* References entries - from [http://blog.gamesolver.org/solving-connect-four/]. *)
 let reference_entries =
   let minmax = { Solver.human_name = MinMax; weak = false; reference = true } in
+  let alpha_beta_strong =
+    { Solver.human_name = Alpha_beta; weak = false; reference = true }
+  in
+  let alpha_beta_weak =
+    { Solver.human_name = Alpha_beta; weak = true; reference = true }
+  in
   [ ( { Key.solver = minmax; test_basename = "Test_L3_R1" }
     , { Result.mean =
           { span = Time.Span.of_us 790.28
           ; number_of_positions = 11_024
           ; k_pos_per_s = 13_950
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = alpha_beta_strong; test_basename = "Test_L3_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_us 69.62; number_of_positions = 284; k_pos_per_s = 4_074 }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = alpha_beta_strong; test_basename = "Test_L2_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 4.54
+          ; number_of_positions = 54_236_700
+          ; k_pos_per_s = 11_940
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = alpha_beta_strong; test_basename = "Test_L2_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 38.7
+          ; number_of_positions = 453_614_000
+          ; k_pos_per_s = 11_725
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = alpha_beta_weak; test_basename = "Test_L3_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_us 52.0; number_of_positions = 223; k_pos_per_s = 4_284 }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = alpha_beta_weak; test_basename = "Test_L2_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 3.28
+          ; number_of_positions = 41_401_200
+          ; k_pos_per_s = 12_638
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = alpha_beta_weak; test_basename = "Test_L2_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 24.5
+          ; number_of_positions = 308_114_000
+          ; k_pos_per_s = 12_548
           }
       ; accuracy = 100.
       } )
