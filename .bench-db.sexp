@@ -1,0 +1,10 @@
+((((solver ((human_name MinMax) (weak false) (reference false)))
+   (test_basename Test_L3_R1))
+  ((mean
+    ((span 4.47141432762146ms) (number_of_positions 11024)
+     (k_pos_per_s 2465)))
+   (accuracy 100)))
+ (((solver ((human_name MinMax) (weak false) (reference true)))
+   (test_basename Test_L3_R1))
+  ((mean ((span 790.28us) (number_of_positions 11024) (k_pos_per_s 13950)))
+   (accuracy 100))))

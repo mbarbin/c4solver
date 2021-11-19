@@ -12,7 +12,7 @@ module Mean : sig
     ; number_of_positions : int
     ; k_pos_per_s : int
     }
-  [@@deriving sexp_of]
+  [@@deriving sexp]
 end
 
 val mean : t list -> Mean.t

@@ -12,7 +12,7 @@ module Mean = struct
     ; number_of_positions : int
     ; k_pos_per_s : int
     }
-  [@@deriving sexp_of]
+  [@@deriving sexp]
 
   let zero = { span = Time.Span.zero; number_of_positions = 0; k_pos_per_s = 0 }
 end

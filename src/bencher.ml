@@ -47,8 +47,9 @@ type t =
 
 let do_ansi f = if ANSITerminal.isatty.contents Core_unix.stdout then f ()
 
-let bench
-    (module P : Position.S)
+let run
+    ~bench_db
+    ~position
     ~filenames
     ~debug
     ~accuracy_only
@@ -57,6 +58,17 @@ let bench
     ~column_exploration_reorder
     ~with_transposition_table
   =
+  let solver =
+    Bench_db.Solver.of_params
+      { position
+      ; alpha_beta
+      ; weak
+      ; column_exploration_reorder
+      ; with_transposition_table
+      ; reference = false
+      }
+  in
+  let (module P : Position.S) = Position.get position in
   let test_files = List.map filenames ~f:(fun filename -> Test_file.load_exn ~filename) in
   let headers =
     [ true, "test"
@@ -133,6 +145,9 @@ let bench
         let accuracy =
           float_of_int !accuracy_count /. float_of_int number_of_lines *. 100.
         in
+        let key = { Bench_db.Key.solver; test_basename = test_file.basename } in
+        let result = { Bench_db.Result.mean; accuracy } in
+        Bench_db.add bench_db ~key ~result;
         [ true, test_file.basename
         ; true, sprintf "%.2f%%" accuracy
         ; not accuracy_only, Time.Span.to_string_hum mean.span

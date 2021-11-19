@@ -49,7 +49,7 @@ module type Position = sig
     | Basic
     | Bitboard
     | Bitboard64
-  [@@deriving enumerate, sexp_of]
+  [@@deriving compare, equal, enumerate, sexp_of]
 
   val get : t -> (module S)
 end

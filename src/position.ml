@@ -299,7 +299,7 @@ type t =
   | Basic
   | Bitboard
   | Bitboard64
-[@@deriving enumerate, sexp_of]
+[@@deriving compare, equal, enumerate, sexp_of]
 
 let get = function
   | Basic -> (module Basic : S)

@@ -27,8 +27,9 @@ end
 
 type t
 
-val bench
-  :  (module Position.S)
+val run
+  :  bench_db:Bench_db.t
+  -> position:Position.t
   -> filenames:string list
   -> debug:bool
   -> accuracy_only:bool

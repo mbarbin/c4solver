@@ -4,9 +4,11 @@ module Measure = Measure
 module Position = Position
 module Solver = Solver
 
-let bench_cmd =
+let bench_db_default_filename = ".bench-db.sexp"
+
+let bench_run_cmd =
   Command.basic
-    ~summary:"bench solver"
+    ~summary:"run a benchmark"
     (let%map_open.Command filenames = anon (non_empty_sequence_as_list ("FILE" %: string))
      and height = return 6
      and width = return 7
@@ -17,7 +19,6 @@ let bench_cmd =
             Position.Basic
             (Arg_type.enumerated_sexpable ~case_sensitive:false (module Position)))
          ~doc:" choose position implementation"
-       >>| Position.get
      and alpha_beta =
        flag
          "--alpha-beta"
@@ -37,9 +38,11 @@ let bench_cmd =
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
      and debug = flag "--debug" no_arg ~doc:" print debug info" in
      fun () ->
+       let bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
        let bench =
-         Bencher.bench
-           position
+         Bencher.run
+           ~bench_db
+           ~position
            ~filenames
            ~debug
            ~accuracy_only
@@ -49,6 +52,21 @@ let bench_cmd =
            ~with_transposition_table
        in
        print_endline (Bencher.to_ascii_table bench))
+;;
+
+let bench_show_cmd =
+  Command.basic
+    ~summary:"show saved benchmark"
+    (let%map_open.Command filename =
+       anon (maybe_with_default bench_db_default_filename ("FILE" %: string))
+     in
+     fun () ->
+       let bench_db = Bench_db.load_or_init ~filename in
+       print_string (Bench_db.to_ascii_table bench_db))
+;;
+
+let bench_cmd =
+  Command.group ~summary:"bench commands" [ "show", bench_show_cmd; "run", bench_run_cmd ]
 ;;
 
 let main = Command.group ~summary:"c4 solver" [ "bench", bench_cmd ]
