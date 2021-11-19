@@ -38,9 +38,16 @@ module type Position = sig
      token matrix. *)
   module Basic : S
 
+  (** A more effecient implementation based on a clever use of bit
+     operations. *)
+  module Bitboard : S
+
   (** [t] Allows for dynamically choosing the implementation among
      those available. *)
-  type t = Basic [@@deriving enumerate, sexp_of]
+  type t =
+    | Basic
+    | Bitboard
+  [@@deriving enumerate, sexp_of]
 
   val get : t -> (module S)
 end

@@ -113,8 +113,137 @@ module Basic : S = struct
   ;;
 end
 
-type t = Basic [@@deriving enumerate, sexp_of]
+module Bitboard : S = struct
+  (* From: http://blog.gamesolver.org/solving-connect-four/06-bitboard
+   *
+   * A binary bitboard representationis used.
+   * Each column is encoded on HEIGH+1 bits.
+   *
+   * Example of bit order to encode for a 7x6 board
+   * .  .  .  .  .  .  .
+   * 5 12 19 26 33 40 47
+   * 4 11 18 25 32 39 46
+   * 3 10 17 24 31 38 45
+   * 2  9 16 23 30 37 44
+   * 1  8 15 22 29 36 43
+   * 0  7 14 21 28 35 42
+   *
+   * Position is stored as
+   * - a bitboard "mask" with 1 on any color stones
+   * - a bitboard "current_player" with 1 on stones of current player
+   *
+   * "current_player" bitboard can be transformed into a compact and non ambiguous key
+   * by adding an extra bit on top of the last non empty cell of each column.
+   * This allow to identify all the empty cells whithout needing "mask" bitboard
+   *
+   * current_player "x" = 1, opponent "o" = 0
+   * board     position  mask      key       bottom
+   *           0000000   0000000   0000000   0000000
+   * .......   0000000   0000000   0001000   0000000
+   * ...o...   0000000   0001000   0010000   0000000
+   * ..xx...   0011000   0011000   0011000   0000000
+   * ..ox...   0001000   0011000   0001100   0000000
+   * ..oox..   0000100   0011100   0000110   0000000
+   * ..oxxo.   0001100   0011110   1101101   1111111
+   *
+   * current_player "o" = 1, opponent "x" = 0
+   * board     position  mask      key       bottom
+   *           0000000   0000000   0001000   0000000
+   * ...x...   0000000   0001000   0000000   0000000
+   * ...o...   0001000   0001000   0011000   0000000
+   * ..xx...   0000000   0011000   0000000   0000000
+   * ..ox...   0010000   0011000   0010100   0000000
+   * ..oox..   0011000   0011100   0011010   0000000
+   * ..oxxo.   0010010   0011110   1110011   1111111
+   *
+   * key is an unique representation of a board key = position + mask + bottom
+   * in practice, as bottom is constant, key = position + mask is also a
+   * non-ambigous representation of the position.
+   *)
+  type t =
+    { width : int
+    ; height : int
+    ; mutable number_of_plies : int
+    ; mutable position : int
+    ; mutable mask : int
+    }
+  [@@deriving sexp_of]
+
+  let copy { width; height; number_of_plies; position; mask } =
+    { width; height; number_of_plies; position; mask }
+  ;;
+
+  let width t = t.width
+  let height t = t.height
+
+  let create ~width ~height =
+    { width; height; number_of_plies = 0; position = 0; mask = 0 }
+  ;;
+
+  let top_mask_col t ~column = 1 lsl (t.height - 1 + (column * (t.height + 1)))
+  let bottom_mask_col t ~column = 1 lsl (column * (t.height + 1))
+  let can_play t ~column = t.mask land top_mask_col t ~column = 0
+  let column_mask t ~column = ((1 lsl t.height) - 1) lsl (column * (t.height + 1))
+
+  let move_mask t ~column =
+    (t.mask + bottom_mask_col t ~column) land column_mask t ~column
+  ;;
+
+  let play t ~column =
+    let move = move_mask t ~column in
+    t.position <- t.position lxor t.mask;
+    t.mask <- t.mask lor move;
+    t.number_of_plies <- Int.succ t.number_of_plies
+  ;;
+
+  let alignment t position =
+    (* Horizontal. *)
+    (let m = position land (position lsr (t.height + 1)) in
+     0 <> m land (m lsr (2 * (t.height + 1))))
+    (* Diagonal 1. *)
+    || (let m = position land (position lsr t.height) in
+        0 <> m land (m lsr (2 * t.height)))
+    (* Diagonal 2. *)
+    || (let m = position land (position lsr (t.height + 2)) in
+        0 <> m land (m lsr (2 * (t.height + 2))))
+    ||
+    (* Vertical. *)
+    let m = position land (position lsr 1) in
+    0 <> m land (m lsr 2)
+  ;;
+
+  let is_winning_move t ~column =
+    let position = t.position lxor move_mask t ~column in
+    alignment t position
+  ;;
+
+  let number_of_plies t = t.number_of_plies
+  let cell_mask t ~column ~line = 1 lsl ((column * (t.height + 1)) + line)
+
+  let to_ascii_table t =
+    let player, opponent = if t.number_of_plies % 2 = 0 then "X", "0" else "0", "X" in
+    let headers = List.init (width t) ~f:(fun i -> Int.to_string i) in
+    let data =
+      List.init (height t) ~f:(fun line ->
+          let line = height t - 1 - line in
+          List.init (width t) ~f:(fun column ->
+              let cell = cell_mask t ~column ~line in
+              if cell land t.mask = 0
+              then " "
+              else if cell land t.position = 0
+              then opponent
+              else player))
+    in
+    Ascii_table.simple_list_table_string headers data
+  ;;
+end
+
+type t =
+  | Basic
+  | Bitboard
+[@@deriving enumerate, sexp_of]
 
 let get = function
   | Basic -> (module Basic : S)
+  | Bitboard -> (module Bitboard : S)
 ;;

@@ -69,17 +69,15 @@ let bench
         let number_of_lines = Array.length test_file.test_lines in
         let measures =
           Array.mapi test_file.test_lines ~f:(fun index test_line ->
-              if index % 10 = 0
-              then
-                do_ansi (fun () ->
-                    ANSITerminal.move_bol ();
-                    ANSITerminal.print_string
-                      []
-                      (sprintf
-                         "Bench: file %S : %d / %d"
-                         test_file.basename
-                         index
-                         number_of_lines));
+              do_ansi (fun () ->
+                  ANSITerminal.move_bol ();
+                  ANSITerminal.print_string
+                    []
+                    (sprintf
+                       "Bench: file %S : %d / %d"
+                       test_file.basename
+                       index
+                       number_of_lines));
               let position =
                 Test_line.make_position test_line ~height:6 ~width:7 (module P)
               in
@@ -96,12 +94,21 @@ let bench
                   then
                     raise_s
                       [%sexp
-                        "weak = true is not available with this combination of options"
+                        "Solver is not available with this combination of options"
                         , [%here]
-                        , { alpha_beta : bool; column_exploration_reorder : bool }];
+                        , { alpha_beta : bool
+                          ; column_exploration_reorder : bool
+                          ; weak : bool
+                          }];
                   Solver.negamax (module P) position)
               in
-              if result = test_line.result then incr accuracy_count;
+              if match weak with
+                 | false -> result = test_line.result
+                 | true ->
+                   Ordering.equal
+                     (Int.compare 0 result |> Ordering.of_int)
+                     (Int.compare 0 test_line.result |> Ordering.of_int)
+              then incr accuracy_count;
               if debug
               then
                 print_s
