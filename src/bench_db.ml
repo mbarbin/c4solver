@@ -115,10 +115,33 @@ module Solver = struct
 end
 
 module Key = struct
+  module Test_basename = struct
+    module Key = struct
+      type t =
+        | Int of int
+        | String of string
+      [@@deriving equal, compare]
+    end
+
+    type t = string [@@deriving equal, sexp]
+
+    let to_key : t -> Key.t = function
+      | "Test_L3_R1" -> Int 0
+      | "Test_L2_R1" -> Int 1
+      | "Test_L2_R2" -> Int 2
+      | "Test_L1_R1" -> Int 3
+      | "Test_L1_R2" -> Int 4
+      | "Test_L1_R3" -> Int 5
+      | str -> String str
+    ;;
+
+    let compare a b = Key.compare (to_key a) (to_key b)
+  end
+
   module T = struct
     type t =
-      { test_basename : string
-      ; solver : Solver.t
+      { solver : Solver.t
+      ; test_basename : Test_basename.t
       }
     [@@deriving compare, equal, sexp]
   end
