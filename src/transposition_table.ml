@@ -18,6 +18,12 @@ let create ~size =
   Array.create size Entry.zero
 ;;
 
+let reset t =
+  for i = 0 to Array.length t - 1 do
+    t.(i) <- Entry.zero
+  done
+;;
+
 let put (t : t) ~key ~data = t.(index t ~key) <- { Entry.key; data }
 
 let get (t : t) ~key =

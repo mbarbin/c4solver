@@ -54,3 +54,23 @@ the test data placed in the ./resources/ directory.
   │ Test_L3_R1 │  100.00% │            107 │
   └────────────┴──────────┴────────────────┘
   
+
+  $ c4solver bench ./Test_L3_R1 --accuracy-only --alpha-beta true \
+  > --column-exploration-reorder true --position bitboard \
+  > --with-transposition-table true
+  ┌────────────┬──────────┬────────────────┐
+  │       test │ accuracy │ mean nb of pos │
+  ├────────────┼──────────┼────────────────┤
+  │ Test_L3_R1 │  100.00% │             92 │
+  └────────────┴──────────┴────────────────┘
+  
+
+  $ c4solver bench ./Test_L3_R1 --accuracy-only --alpha-beta true \
+  > --column-exploration-reorder true --position bitboard --weak \
+  > --with-transposition-table true
+  ┌────────────┬──────────┬────────────────┐
+  │       test │ accuracy │ mean nb of pos │
+  ├────────────┼──────────┼────────────────┤
+  │ Test_L3_R1 │  100.00% │             68 │
+  └────────────┴──────────┴────────────────┘
+  
