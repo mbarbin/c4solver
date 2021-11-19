@@ -23,11 +23,15 @@ module Solver = struct
     type t =
       | MinMax
       | Alpha_beta
+      | Column_exploration_order
+      | Bitboard
     [@@deriving compare, equal, enumerate, sexp]
 
     let to_string_hum = function
       | MinMax -> "MinMax"
       | Alpha_beta -> "Alpha-beta"
+      | Column_exploration_order -> "Column exploration order"
+      | Bitboard -> "Bitboard"
     ;;
   end
 
@@ -61,6 +65,22 @@ module Solver = struct
       ; alpha_beta = true
       ; weak = t.weak
       ; column_exploration_reorder = false
+      ; with_transposition_table = false
+      ; reference = t.reference
+      }
+    | Column_exploration_order ->
+      { position = Basic
+      ; alpha_beta = true
+      ; weak = t.weak
+      ; column_exploration_reorder = true
+      ; with_transposition_table = false
+      ; reference = t.reference
+      }
+    | Bitboard ->
+      { position = Bitboard
+      ; alpha_beta = true
+      ; weak = t.weak
+      ; column_exploration_reorder = true
       ; with_transposition_table = false
       ; reference = t.reference
       }
@@ -114,6 +134,15 @@ let reference_entries =
   let alpha_beta_weak =
     { Solver.human_name = Alpha_beta; weak = true; reference = true }
   in
+  let ceo_strong =
+    { Solver.human_name = Column_exploration_order; weak = false; reference = true }
+  in
+  let ceo_weak =
+    { Solver.human_name = Column_exploration_order; weak = true; reference = true }
+  in
+  let bit_strong = { Solver.human_name = Bitboard; weak = false; reference = true } in
+  let bit_weak = { Solver.human_name = Bitboard; weak = true; reference = true } in
+  (* MinMax. *)
   [ ( { Key.solver = minmax; test_basename = "Test_L3_R1" }
     , { Result.mean =
           { span = Time.Span.of_us 790.28
@@ -122,6 +151,7 @@ let reference_entries =
           }
       ; accuracy = 100.
       } )
+    (* Alpha-beta. *)
   ; ( { Key.solver = alpha_beta_strong; test_basename = "Test_L3_R1" }
     , { Result.mean =
           { span = Time.Span.of_us 69.62; number_of_positions = 284; k_pos_per_s = 4_074 }
@@ -164,6 +194,95 @@ let reference_entries =
           }
       ; accuracy = 100.
       } )
+    (* Column exploration order. *)
+  ; ( { Key.solver = ceo_strong; test_basename = "Test_L3_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_us 40.86; number_of_positions = 140; k_pos_per_s = 3_417 }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = ceo_strong; test_basename = "Test_L2_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 189.1
+          ; number_of_positions = 2_081_790
+          ; k_pos_per_s = 11_009
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = ceo_strong; test_basename = "Test_L2_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 3.48
+          ; number_of_positions = 40_396_700
+          ; k_pos_per_s = 11_594
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = ceo_weak; test_basename = "Test_L3_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_us 31.16; number_of_positions = 107; k_pos_per_s = 3_438 }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = ceo_weak; test_basename = "Test_L2_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 77.13
+          ; number_of_positions = 927_943
+          ; k_pos_per_s = 12_031
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = ceo_weak; test_basename = "Test_L2_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 1.949
+          ; number_of_positions = 23_685_400
+          ; k_pos_per_s = 12_153
+          }
+      ; accuracy = 100.
+      } )
+    (* Bitboard. *)
+  ; ( { Key.solver = bit_strong; test_basename = "Test_L3_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_us 8.55; number_of_positions = 140; k_pos_per_s = 16_334 }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = bit_strong; test_basename = "Test_L2_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 33.31
+          ; number_of_positions = 2_081_790
+          ; k_pos_per_s = 62_504
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = bit_strong; test_basename = "Test_L2_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 644.
+          ; number_of_positions = 40_396_700
+          ; k_pos_per_s = 62_727
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = bit_weak; test_basename = "Test_L3_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_us 6.708
+          ; number_of_positions = 107
+          ; k_pos_per_s = 15_973
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = bit_weak; test_basename = "Test_L2_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 14.69
+          ; number_of_positions = 927_943
+          ; k_pos_per_s = 63_149
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = bit_weak; test_basename = "Test_L2_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 370.3
+          ; number_of_positions = 23_685_400
+          ; k_pos_per_s = 63_968
+          }
+      ; accuracy = 100.
+      } )
   ]
 ;;
 
@@ -197,19 +316,32 @@ let add t ~key ~result =
 ;;
 
 let to_ascii_table t =
-  let headers =
-    [ "solver"; "test"; "accuracy"; "mean time"; "mean nb of pos"; "K pos / s" ]
+  let columns =
+    let key ~f ((key : Key.t), _) = f key in
+    let result ~f (_, (result : Result.t)) = f result in
+    [ Ascii_table.Column.create
+        "solver"
+        ~align:Left
+        (key ~f:(fun key -> Solver.to_string_hum key.solver))
+    ; Ascii_table.Column.create "test" ~align:Left (key ~f:(fun key -> key.test_basename))
+    ; Ascii_table.Column.create
+        "accuracy"
+        ~align:Right
+        (result ~f:(fun result -> sprintf "%.2f%%" result.accuracy))
+    ; Ascii_table.Column.create
+        "mean time"
+        ~align:Right
+        (result ~f:(fun result -> Time.Span.to_string_hum result.mean.span))
+    ; Ascii_table.Column.create
+        "mean nb of pos"
+        ~align:Right
+        (result ~f:(fun result -> Int.to_string_hum result.mean.number_of_positions))
+    ; Ascii_table.Column.create
+        "K pos / s"
+        ~align:Right
+        (result ~f:(fun result -> Int.to_string_hum result.mean.k_pos_per_s))
+    ]
   in
-  let data =
-    Map.to_alist t.entries
-    |> List.map ~f:(fun (key, result) ->
-           [ Solver.to_string_hum key.solver
-           ; key.test_basename
-           ; sprintf "%.2f%%" result.accuracy
-           ; Time.Span.to_string_hum result.mean.span
-           ; Int.to_string_hum result.mean.number_of_positions
-           ; Int.to_string_hum result.mean.k_pos_per_s
-           ])
-  in
-  Ascii_table.simple_list_table_string headers data
+  let data = Map.to_alist t.entries in
+  Ascii_table.to_string ~limit_width_to:250 columns data
 ;;
