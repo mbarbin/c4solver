@@ -29,7 +29,11 @@ let mean ts =
         number_of_positions := !number_of_positions + t.number_of_positions;
         count := !count + 1);
     let span = Time.Span.( / ) !span (float_of_int !count) in
-    let number_of_positions = !number_of_positions / !count in
+    let number_of_positions =
+      Float.iround_exn
+        ~dir:`Nearest
+        (float_of_int !number_of_positions /. float_of_int !count)
+    in
     { Mean.span
     ; number_of_positions
     ; k_pos_per_s =

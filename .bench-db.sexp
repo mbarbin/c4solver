@@ -31,8 +31,20 @@
   ((mean ((span 77.13ms) (number_of_positions 927943) (k_pos_per_s 12031)))
    (accuracy 100)))
  (((test_basename Test_L2_R1)
+   (solver ((human_name Bitboard) (weak false) (reference false))))
+  ((mean
+    ((span 657.395082950592ms) (number_of_positions 2081790)
+     (k_pos_per_s 3166)))
+   (accuracy 100)))
+ (((test_basename Test_L2_R1)
    (solver ((human_name Bitboard) (weak false) (reference true))))
   ((mean ((span 33.31ms) (number_of_positions 2081790) (k_pos_per_s 62504)))
+   (accuracy 100)))
+ (((test_basename Test_L2_R1)
+   (solver ((human_name Bitboard) (weak true) (reference false))))
+  ((mean
+    ((span 267.49601006507874ms) (number_of_positions 927942)
+     (k_pos_per_s 3468)))
    (accuracy 100)))
  (((test_basename Test_L2_R1)
    (solver ((human_name Bitboard) (weak true) (reference true))))
@@ -77,8 +89,8 @@
  (((test_basename Test_L3_R1)
    (solver ((human_name Alpha_beta) (weak false) (reference false))))
   ((mean
-    ((span 157.23824501037598us) (number_of_positions 283)
-     (k_pos_per_s 1799)))
+    ((span 154.33573722839355us) (number_of_positions 284)
+     (k_pos_per_s 1840)))
    (accuracy 100)))
  (((test_basename Test_L3_R1)
    (solver ((human_name Alpha_beta) (weak false) (reference true))))
@@ -87,8 +99,8 @@
  (((test_basename Test_L3_R1)
    (solver ((human_name Alpha_beta) (weak true) (reference false))))
   ((mean
-    ((span 124.01533126831055us) (number_of_positions 222)
-     (k_pos_per_s 1790)))
+    ((span 119.85373497009277us) (number_of_positions 223)
+     (k_pos_per_s 1860)))
    (accuracy 100)))
  (((test_basename Test_L3_R1)
    (solver ((human_name Alpha_beta) (weak true) (reference true))))
@@ -98,7 +110,8 @@
    (solver
     ((human_name Column_exploration_order) (weak false) (reference false))))
   ((mean
-    ((span 87.00871467590332us) (number_of_positions 139) (k_pos_per_s 1597)))
+    ((span 83.352804183959961us) (number_of_positions 140)
+     (k_pos_per_s 1679)))
    (accuracy 100)))
  (((test_basename Test_L3_R1)
    (solver
@@ -120,8 +133,8 @@
  (((test_basename Test_L3_R1)
    (solver ((human_name Bitboard) (weak false) (reference false))))
   ((mean
-    ((span 51.233768463134766us) (number_of_positions 139)
-     (k_pos_per_s 2713)))
+    ((span 44.109582901000977us) (number_of_positions 140)
+     (k_pos_per_s 3173)))
    (accuracy 100)))
  (((test_basename Test_L3_R1)
    (solver ((human_name Bitboard) (weak false) (reference true))))

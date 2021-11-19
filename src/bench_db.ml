@@ -25,6 +25,7 @@ module Solver = struct
       | Alpha_beta
       | Column_exploration_order
       | Bitboard
+      | Transposition_table
     [@@deriving compare, equal, enumerate, sexp]
 
     let to_string_hum = function
@@ -32,6 +33,7 @@ module Solver = struct
       | Alpha_beta -> "Alpha-beta"
       | Column_exploration_order -> "Column exploration order"
       | Bitboard -> "Bitboard"
+      | Transposition_table -> "Transposition table"
     ;;
   end
 
@@ -82,6 +84,14 @@ module Solver = struct
       ; weak = t.weak
       ; column_exploration_reorder = true
       ; with_transposition_table = false
+      ; reference = t.reference
+      }
+    | Transposition_table ->
+      { position = Bitboard
+      ; alpha_beta = true
+      ; weak = t.weak
+      ; column_exploration_reorder = true
+      ; with_transposition_table = true
       ; reference = t.reference
       }
   ;;
