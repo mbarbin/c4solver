@@ -275,7 +275,7 @@ module Make_bitboard (Uint : Uint) : S = struct
   ;;
 end
 
-module U_Int : Uint = struct
+module Uint : Uint = struct
   type t = int
 
   let to_string = Int.to_string
@@ -292,17 +292,121 @@ module U_Int : Uint = struct
   let shift_right t i = t lsr i
 end
 
-module Bitboard = Make_bitboard (U_Int)
+(* In theory this is the bitboard that we would want to use, however
+   sadly the fact that we are using a functor degrades performances.
+   Perhaps using flambda would be something to consider and bench if
+   interested. In practice we use an inlined version of this code, see
+   below. *)
+module Bitboard_uint = Make_bitboard (Uint)
+
+(* Bitboards 64 and 128 are not actually used, we just show that we
+   can build it if we wanted to work with bigger boards. *)
 module Bitboard64 = Make_bitboard (Stdint.Uint64)
+module Bitboard128 = Make_bitboard (Stdint.Uint128)
+
+module Bitboard = struct
+  type uint = Uint.t
+
+  let sexp_of_uint t = Sexp.Atom (Uint.to_string t)
+
+  type t =
+    { width : int
+    ; height : int
+    ; mutable number_of_plies : int
+    ; mutable position : uint
+    ; mutable mask : uint
+    }
+  [@@deriving sexp_of]
+
+  let copy { width; height; number_of_plies; position; mask } =
+    { width; height; number_of_plies; position; mask }
+  ;;
+
+  let width t = t.width
+  let height t = t.height
+  let key = `some (fun t -> Uint.add t.position t.mask |> Uint.to_int)
+
+  let create ~width ~height =
+    { width; height; number_of_plies = 0; position = Uint.zero; mask = Uint.zero }
+  ;;
+
+  let is_zero u = 0 = Uint.compare Uint.zero u
+
+  let top_mask_col t ~column =
+    Uint.shift_left Uint.one (t.height - 1 + (column * (t.height + 1)))
+  ;;
+
+  let bottom_mask_col t ~column = Uint.shift_left Uint.one (column * (t.height + 1))
+  let can_play t ~column = is_zero (Uint.logand t.mask (top_mask_col t ~column))
+
+  let column_mask t ~column =
+    Uint.shift_left
+      (Uint.shift_left Uint.one t.height |> Uint.pred)
+      (column * (t.height + 1))
+  ;;
+
+  let move_mask t ~column =
+    Uint.logand (Uint.add t.mask (bottom_mask_col t ~column)) (column_mask t ~column)
+  ;;
+
+  let play t ~column =
+    let move = move_mask t ~column in
+    t.position <- Uint.logxor t.position t.mask;
+    t.mask <- Uint.logor t.mask move;
+    t.number_of_plies <- Int.succ t.number_of_plies
+  ;;
+
+  let alignment t position =
+    (* Horizontal. *)
+    (let m = Uint.logand position (Uint.shift_right position (t.height + 1)) in
+     not (is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 1))))))
+    (* Diagonal 1. *)
+    || (let m = Uint.logand position (Uint.shift_right position t.height) in
+        not (is_zero (Uint.logand m (Uint.shift_right m (2 * t.height)))))
+    (* Diagonal 2. *)
+    || (let m = Uint.logand position (Uint.shift_right position (t.height + 2)) in
+        not (is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 2))))))
+    ||
+    (* Vertical. *)
+    let m = Uint.logand position (Uint.shift_right position 1) in
+    not (is_zero (Uint.logand m (Uint.shift_right m 2)))
+  ;;
+
+  let is_winning_move t ~column =
+    let position = Uint.logxor t.position (move_mask t ~column) in
+    alignment t position
+  ;;
+
+  let number_of_plies t = t.number_of_plies
+
+  let cell_mask t ~column ~line =
+    Uint.shift_left Uint.one ((column * (t.height + 1)) + line)
+  ;;
+
+  let to_ascii_table t =
+    let player, opponent = if t.number_of_plies % 2 = 0 then "X", "0" else "0", "X" in
+    let headers = List.init (width t) ~f:(fun i -> Int.to_string i) in
+    let data =
+      List.init (height t) ~f:(fun line ->
+          let line = height t - 1 - line in
+          List.init (width t) ~f:(fun column ->
+              let cell = cell_mask t ~column ~line in
+              if is_zero (Uint.logand cell t.mask)
+              then " "
+              else if is_zero (Uint.logand cell t.position)
+              then opponent
+              else player))
+    in
+    Ascii_table.simple_list_table_string headers data
+  ;;
+end
 
 type t =
   | Basic
   | Bitboard
-  | Bitboard64
 [@@deriving compare, equal, enumerate, sexp_of]
 
 let get = function
   | Basic -> (module Basic : S)
   | Bitboard -> (module Bitboard : S)
-  | Bitboard64 -> (module Bitboard64 : S)
 ;;
