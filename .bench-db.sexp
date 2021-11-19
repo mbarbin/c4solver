@@ -161,6 +161,12 @@
     ((span 77.539192676544189ms) (number_of_positions 207942)
      (k_pos_per_s 2681)))
    (accuracy 100)))
+ (((solver ((human_name Transposition_table) (weak false) (reference false)))
+   (test_basename Test_L2_R2))
+  ((mean
+    ((span 637.467386007309ms) (number_of_positions 1731151)
+     (k_pos_per_s 2715)))
+   (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak true) (reference false)))
    (test_basename Test_L3_R1))
   ((mean

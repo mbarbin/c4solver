@@ -175,6 +175,12 @@ let reference_entries =
   in
   let bit_strong = { Solver.human_name = Bitboard; weak = false; reference = true } in
   let bit_weak = { Solver.human_name = Bitboard; weak = true; reference = true } in
+  let trans_strong =
+    { Solver.human_name = Transposition_table; weak = false; reference = true }
+  in
+  let trans_weak =
+    { Solver.human_name = Transposition_table; weak = true; reference = true }
+  in
   (* MinMax. *)
   [ ( { Key.solver = minmax; test_basename = "Test_L3_R1" }
     , { Result.mean =
@@ -313,6 +319,81 @@ let reference_entries =
           { span = Time.Span.of_ms 370.3
           ; number_of_positions = 23_685_400
           ; k_pos_per_s = 63_968
+          }
+      ; accuracy = 100.
+      } )
+    (* Transposition table. *)
+  ; ( { Key.solver = trans_strong; test_basename = "Test_L3_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_us 6.531; number_of_positions = 93; k_pos_per_s = 14_220 }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_strong; test_basename = "Test_L2_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 5.594
+          ; number_of_positions = 207_900
+          ; k_pos_per_s = 37_170
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_strong; test_basename = "Test_L2_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 52.45
+          ; number_of_positions = 1_731_000
+          ; k_pos_per_s = 33_000
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_strong; test_basename = "Test_L1_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 4.727
+          ; number_of_positions = 156_400_000
+          ; k_pos_per_s = 33_090
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_strong; test_basename = "Test_L1_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 8.2
+          ; number_of_positions = 306_100_000
+          ; k_pos_per_s = 37_330
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_weak; test_basename = "Test_L3_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_us 5.155; number_of_positions = 67; k_pos_per_s = 13_320 }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_weak; test_basename = "Test_L2_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 1.072
+          ; number_of_positions = 28_750
+          ; k_pos_per_s = 26_830
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_weak; test_basename = "Test_L2_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_ms 23.79
+          ; number_of_positions = 752_300
+          ; k_pos_per_s = 31_620
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_weak; test_basename = "Test_L1_R1" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 1.610
+          ; number_of_positions = 52_840_000
+          ; k_pos_per_s = 32_830
+          }
+      ; accuracy = 100.
+      } )
+  ; ( { Key.solver = trans_weak; test_basename = "Test_L1_R2" }
+    , { Result.mean =
+          { span = Time.Span.of_sec 1.762
+          ; number_of_positions = 63_930_000
+          ; k_pos_per_s = 36_280
           }
       ; accuracy = 100.
       } )
