@@ -55,6 +55,7 @@ let bench
     ~alpha_beta
     ~weak
     ~column_exploration_reorder
+    ~with_transposition_table
   =
   let test_files = List.map filenames ~f:(fun filename -> Test_file.load_exn ~filename) in
   let headers =
@@ -92,8 +93,9 @@ let bench
                     position
                     ~weak
                     ~column_exploration_reorder
+                    ~with_transposition_table
                 else (
-                  if weak || column_exploration_reorder
+                  if weak || column_exploration_reorder || with_transposition_table
                   then
                     raise_s
                       [%sexp

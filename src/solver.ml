@@ -68,9 +68,27 @@ let negamax_alpha_beta
     (t : t)
     ~weak
     ~column_exploration_reorder
+    ~with_transposition_table
   =
   let height = P.height t in
   let width = P.width t in
+  let min_score = (-(width * height) / 2) + 3 in
+  let _max_score = (((width * height) + 1) / 2) - 3 in
+  let key =
+    if with_transposition_table
+    then (
+      match P.key with
+      | `not_available ->
+        raise_s
+          [%sexp "Transposition table not available with this position implementation"]
+      | `some fct -> fct)
+    else fun _ -> 0
+  in
+  let transposition_table =
+    if with_transposition_table
+    then Transposition_table.create ~size:8388593
+    else Transposition_table.create ~size:1
+  in
   let moves =
     match column_exploration_reorder with
     | false -> Array.init width ~f:Fn.id
@@ -89,9 +107,17 @@ let negamax_alpha_beta
                 P.can_play t ~column && P.is_winning_move t ~column)
     then ((width * height) + 1 - P.number_of_plies t) / 2
     else (
+      let key = key t in
       let max =
         (* Upper bound of our score as we cannot win immediately. *)
         ((width * height) - 1 - P.number_of_plies t) / 2
+      in
+      let max =
+        if with_transposition_table
+        then (
+          let data = Transposition_table.get transposition_table ~key in
+          if data > 0 then data + min_score - 1 else max)
+        else max
       in
       let beta =
         (* There is no need to keep beta above our max possible score. *)
@@ -104,7 +130,15 @@ let negamax_alpha_beta
         (* Compute the score of all possible next move and keep the best one. *)
         let rec iter alpha index =
           if index >= Array.length moves
-          then alpha
+          then (
+            if with_transposition_table
+            then
+              (* Save the upper bound of the position. *)
+              Transposition_table.put
+                transposition_table
+                ~key
+                ~data:(alpha - min_score + 1);
+            alpha)
           else (
             let column = moves.(index) in
             match P.can_play t ~column with

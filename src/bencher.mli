@@ -35,6 +35,7 @@ val bench
   -> alpha_beta:bool
   -> weak:bool
   -> column_exploration_reorder:bool
+  -> with_transposition_table:bool
   -> t
 
 val to_ascii_table : t -> string

@@ -12,4 +12,5 @@ val negamax_alpha_beta
   -> 'a
   -> weak:bool
   -> column_exploration_reorder:bool
+  -> with_transposition_table:bool
   -> t

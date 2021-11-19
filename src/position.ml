@@ -25,6 +25,7 @@ module Basic : S = struct
 
   let width t = Array.length t.board
   let height t = if width t = 0 then 0 else Array.length t.board.(0)
+  let key = `not_available
 
   let to_ascii_table t =
     let headers = List.init (width t) ~f:(fun i -> Int.to_string i) in
@@ -117,6 +118,7 @@ module type Uint = sig
   type t
 
   val to_string : t -> string
+  val to_int : t -> int
   val one : t
   val zero : t
   val pred : t -> t
@@ -196,6 +198,7 @@ module Make_bitboard (Uint : Uint) : S = struct
 
   let width t = t.width
   let height t = t.height
+  let key = `some (fun t -> Uint.add t.position t.mask |> Uint.to_int)
 
   let create ~width ~height =
     { width; height; number_of_plies = 0; position = Uint.zero; mask = Uint.zero }
@@ -276,6 +279,7 @@ module U_Int : Uint = struct
   type t = int
 
   let to_string = Int.to_string
+  let to_int t = t
   let one = 1
   let zero = 0
   let pred = Int.pred

@@ -4,6 +4,7 @@ module type S = sig
 
   val width : t -> int
   val height : t -> int
+  val key : [ `not_available | `some of t -> int ]
 
   (** Create a new position from the given sizes. *)
   val create : width:int -> height:int -> t

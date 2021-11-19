@@ -28,6 +28,11 @@ let bench_cmd =
          "--column-exploration-reorder"
          (optional_with_default true bool)
          ~doc:"bool explore with center columns first (default true)"
+     and with_transposition_table =
+       flag
+         "--with-transposition-table"
+         (optional_with_default false bool)
+         ~doc:"bool use a transposition table (default false)"
      and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
      and debug = flag "--debug" no_arg ~doc:" print debug info" in
@@ -41,6 +46,7 @@ let bench_cmd =
            ~alpha_beta
            ~weak
            ~column_exploration_reorder
+           ~with_transposition_table
        in
        print_endline (Bencher.to_ascii_table bench))
 ;;
