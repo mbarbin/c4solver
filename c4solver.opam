@@ -16,6 +16,7 @@ depends: [
   "ppx_sexp_value"
   "ANSITerminal" {>= "0.8.3"}
   "core" {>= "v0.15~preview.125.13+424"}
+  "stdint" {>= "0.7.0"}
   "stdio" {>= "v0.15~preview.125.13+424"}
   "textutils" {>= "v0.15~preview.125.13+424"}
   "expect_test_helpers_core" {>= "v0.15~preview.125.13+424" & with-test}

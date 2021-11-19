@@ -2,6 +2,6 @@
  (name c4solver)
  (public_name c4solver)
  (flags -warn-error +a)
- (libraries ANSITerminal core_kernel.core stdio textutils.ascii_table)
+ (libraries ANSITerminal core_kernel.core stdint stdio textutils.ascii_table)
  (preprocess
   (pps ppx_jane)))

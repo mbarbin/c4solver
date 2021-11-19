@@ -113,7 +113,23 @@ module Basic : S = struct
   ;;
 end
 
-module Bitboard : S = struct
+module type Uint = sig
+  type t
+
+  val to_string : t -> string
+  val one : t
+  val zero : t
+  val pred : t -> t
+  val add : t -> t -> t
+  val compare : t -> t -> int
+  val logand : t -> t -> t
+  val logor : t -> t -> t
+  val logxor : t -> t -> t
+  val shift_left : t -> int -> t
+  val shift_right : t -> int -> t
+end
+
+module Make_bitboard (Uint : Uint) : S = struct
   (* From: http://blog.gamesolver.org/solving-connect-four/06-bitboard
    *
    * A binary bitboard representationis used.
@@ -160,12 +176,17 @@ module Bitboard : S = struct
    * in practice, as bottom is constant, key = position + mask is also a
    * non-ambigous representation of the position.
    *)
+
+  type uint = Uint.t
+
+  let sexp_of_uint t = Sexp.Atom (Uint.to_string t)
+
   type t =
     { width : int
     ; height : int
     ; mutable number_of_plies : int
-    ; mutable position : int
-    ; mutable mask : int
+    ; mutable position : uint
+    ; mutable mask : uint
     }
   [@@deriving sexp_of]
 
@@ -177,48 +198,61 @@ module Bitboard : S = struct
   let height t = t.height
 
   let create ~width ~height =
-    { width; height; number_of_plies = 0; position = 0; mask = 0 }
+    { width; height; number_of_plies = 0; position = Uint.zero; mask = Uint.zero }
   ;;
 
-  let top_mask_col t ~column = 1 lsl (t.height - 1 + (column * (t.height + 1)))
-  let bottom_mask_col t ~column = 1 lsl (column * (t.height + 1))
-  let can_play t ~column = t.mask land top_mask_col t ~column = 0
-  let column_mask t ~column = ((1 lsl t.height) - 1) lsl (column * (t.height + 1))
+  let is_zero u = 0 = Uint.compare Uint.zero u
+
+  let top_mask_col t ~column =
+    Uint.shift_left Uint.one (t.height - 1 + (column * (t.height + 1)))
+  ;;
+
+  let bottom_mask_col t ~column = Uint.shift_left Uint.one (column * (t.height + 1))
+  let can_play t ~column = is_zero (Uint.logand t.mask (top_mask_col t ~column))
+
+  let column_mask t ~column =
+    Uint.shift_left
+      (Uint.shift_left Uint.one t.height |> Uint.pred)
+      (column * (t.height + 1))
+  ;;
 
   let move_mask t ~column =
-    (t.mask + bottom_mask_col t ~column) land column_mask t ~column
+    Uint.logand (Uint.add t.mask (bottom_mask_col t ~column)) (column_mask t ~column)
   ;;
 
   let play t ~column =
     let move = move_mask t ~column in
-    t.position <- t.position lxor t.mask;
-    t.mask <- t.mask lor move;
+    t.position <- Uint.logxor t.position t.mask;
+    t.mask <- Uint.logor t.mask move;
     t.number_of_plies <- Int.succ t.number_of_plies
   ;;
 
   let alignment t position =
     (* Horizontal. *)
-    (let m = position land (position lsr (t.height + 1)) in
-     0 <> m land (m lsr (2 * (t.height + 1))))
+    (let m = Uint.logand position (Uint.shift_right position (t.height + 1)) in
+     not (is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 1))))))
     (* Diagonal 1. *)
-    || (let m = position land (position lsr t.height) in
-        0 <> m land (m lsr (2 * t.height)))
+    || (let m = Uint.logand position (Uint.shift_right position t.height) in
+        not (is_zero (Uint.logand m (Uint.shift_right m (2 * t.height)))))
     (* Diagonal 2. *)
-    || (let m = position land (position lsr (t.height + 2)) in
-        0 <> m land (m lsr (2 * (t.height + 2))))
+    || (let m = Uint.logand position (Uint.shift_right position (t.height + 2)) in
+        not (is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 2))))))
     ||
     (* Vertical. *)
-    let m = position land (position lsr 1) in
-    0 <> m land (m lsr 2)
+    let m = Uint.logand position (Uint.shift_right position 1) in
+    not (is_zero (Uint.logand m (Uint.shift_right m 2)))
   ;;
 
   let is_winning_move t ~column =
-    let position = t.position lxor move_mask t ~column in
+    let position = Uint.logxor t.position (move_mask t ~column) in
     alignment t position
   ;;
 
   let number_of_plies t = t.number_of_plies
-  let cell_mask t ~column ~line = 1 lsl ((column * (t.height + 1)) + line)
+
+  let cell_mask t ~column ~line =
+    Uint.shift_left Uint.one ((column * (t.height + 1)) + line)
+  ;;
 
   let to_ascii_table t =
     let player, opponent = if t.number_of_plies % 2 = 0 then "X", "0" else "0", "X" in
@@ -228,9 +262,9 @@ module Bitboard : S = struct
           let line = height t - 1 - line in
           List.init (width t) ~f:(fun column ->
               let cell = cell_mask t ~column ~line in
-              if cell land t.mask = 0
+              if is_zero (Uint.logand cell t.mask)
               then " "
-              else if cell land t.position = 0
+              else if is_zero (Uint.logand cell t.position)
               then opponent
               else player))
     in
@@ -238,12 +272,33 @@ module Bitboard : S = struct
   ;;
 end
 
+module U_Int : Uint = struct
+  type t = int
+
+  let to_string = Int.to_string
+  let one = 1
+  let zero = 0
+  let pred = Int.pred
+  let add = ( + )
+  let compare = Int.compare
+  let logand a b = a land b
+  let logor a b = a lor b
+  let logxor a b = a lxor b
+  let shift_left t i = t lsl i
+  let shift_right t i = t lsr i
+end
+
+module Bitboard = Make_bitboard (U_Int)
+module Bitboard64 = Make_bitboard (Stdint.Uint64)
+
 type t =
   | Basic
   | Bitboard
+  | Bitboard64
 [@@deriving enumerate, sexp_of]
 
 let get = function
   | Basic -> (module Basic : S)
   | Bitboard -> (module Bitboard : S)
+  | Bitboard64 -> (module Bitboard64 : S)
 ;;
