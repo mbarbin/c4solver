@@ -8,18 +8,18 @@ homepage: "https://github.com/mbarbin/c4solver"
 doc: "https://github.com/mbarbin/c4solver"
 bug-reports: "https://github.com/mbarbin/c4solver/issues"
 depends: [
-  "ocaml" {>= "4.09.0"}
-  "base"
-  "core_kernel"
+  "ocaml" {>= "4.12.0"}
   "dune" {>= "2.0.0"}
-  "ppx_jane"
-  "ppx_sexp_value"
   "ANSITerminal" {>= "0.8.3"}
+  "base" {>= "v0.15~preview.125.13+424"}
   "core" {>= "v0.15~preview.125.13+424"}
+  "core_kernel" {>= "v0.15~preview.125.13+424"}
+  "expect_test_helpers_core" {>= "v0.15~preview.125.13+424" & with-test}
+  "ppx_jane" {>= "v0.15~preview.125.13+424"}
+  "ppx_sexp_value" {>= "v0.15~preview.125.13+424"}
   "stdint" {>= "0.7.0"}
   "stdio" {>= "v0.15~preview.125.13+424"}
   "textutils" {>= "v0.15~preview.125.13+424"}
-  "expect_test_helpers_core" {>= "v0.15~preview.125.13+424" & with-test}
 ]
 build: [
   ["dune" "subst"] {pinned}

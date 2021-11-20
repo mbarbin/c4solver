@@ -1,0 +1,52 @@
+name: Main workflow
+
+on:
+  - pull_request
+  - push
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        ocaml-compiler:
+          - 4.12.0
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          opam-repositories: |
+            default: https://github.com/ocaml/opam-repository.git
+            janestreet-bleeding: https://ocaml.janestreet.com/opam-repository
+            janestreet-bleeding-external: https://github.com/janestreet/opam-repository.git#external-packages
+
+      - name: Install dependencies
+        run: |
+          opam pin c4solver.dev . --no-action
+          opam depext c4solver --yes --with-doc --with-test
+          opam install . --deps-only --with-doc --with-test
+
+      - name: Build
+        run: opam exec -- dune build
+
+      - name: Run tests
+        run: opam exec -- dune runtest
+
+      - name: Run opam-dune-lint
+        run: |
+          opam depext opam-dune-lint --install
+          opam exec -- opam-dune-lint
+
+      - name: Ocamlformat and dune @fmt
+        run: |
+          opam depext ocamlformat=$(grep 'version' .ocamlformat | awk -F '=' '{ print $2 }') --install
+          opam exec -- dune build @fmt
