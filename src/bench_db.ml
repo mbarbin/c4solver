@@ -431,29 +431,40 @@ let add t ~key ~result =
 
 let to_ascii_table t =
   let columns =
-    let key ~f ((key : Key.t), _) = f key in
-    let result ~f (_, (result : Result.t)) = f result in
-    [ Ascii_table.Column.create
-        "solver"
-        ~align:Left
-        (key ~f:(fun key -> Solver.to_string_hum key.solver))
-    ; Ascii_table.Column.create "test" ~align:Left (key ~f:(fun key -> key.test_basename))
-    ; Ascii_table.Column.create
-        "accuracy"
-        ~align:Right
-        (result ~f:(fun result -> sprintf "%.2f%%" result.accuracy))
-    ; Ascii_table.Column.create
-        "mean time"
-        ~align:Right
-        (result ~f:(fun result -> Time.Span.to_string_hum result.mean.span))
-    ; Ascii_table.Column.create
-        "mean nb of pos"
-        ~align:Right
-        (result ~f:(fun result -> Int.to_string_hum result.mean.number_of_positions))
-    ; Ascii_table.Column.create
-        "K pos / s"
-        ~align:Right
-        (result ~f:(fun result -> Int.to_string_hum result.mean.k_pos_per_s))
+    let f ((key : Key.t), (result : Result.t)) = key, result in
+    let dim (key : Key.t) styles =
+      if key.solver.reference then `Dim :: styles else styles
+    in
+    [ Ascii_table.Column.create_attr "solver" ~align:Left (fun c ->
+          let key, _ = f c in
+          dim key [], Solver.to_string_hum key.solver)
+    ; Ascii_table.Column.create_attr "test" ~align:Left (fun c ->
+          let key, _ = f c in
+          dim key [], key.test_basename)
+    ; Ascii_table.Column.create_attr "accuracy" ~align:Right (fun c ->
+          let key, result = f c in
+          dim key [], sprintf "%.2f%%" result.accuracy)
+    ; Ascii_table.Column.create_attr "mean time" ~align:Right (fun c ->
+          let key, result = f c in
+          dim key [], Time.Span.to_string_hum result.mean.span)
+    ; Ascii_table.Column.create_attr "mean nb of pos" ~align:Right (fun c ->
+          let key, result = f c in
+          let styles =
+            if key.solver.reference
+            then []
+            else (
+              let ref = { key with solver = { key.solver with reference = true } } in
+              match Map.find t.entries ref with
+              | None -> []
+              | Some ref_result ->
+                if ref_result.mean.number_of_positions = result.mean.number_of_positions
+                then [ `Green ]
+                else [ `Yellow ])
+          in
+          dim key styles, Int.to_string_hum result.mean.number_of_positions)
+    ; Ascii_table.Column.create_attr "K pos / s" ~align:Right (fun c ->
+          let key, result = f c in
+          dim key [], Int.to_string_hum result.mean.k_pos_per_s)
     ]
   in
   let data = Map.to_alist t.entries in

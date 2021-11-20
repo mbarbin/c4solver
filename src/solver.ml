@@ -62,7 +62,7 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
    alpha-beta function is allowed to return any lower bound of the
    actual score that is greater or equal to beta. *)
 
-let transposition_table = lazy (Transposition_table.create ~size:8388593)
+let transposition_table = lazy (Transposition_table.create ~size:8_388_593)
 
 let negamax_alpha_beta
     (type t)
