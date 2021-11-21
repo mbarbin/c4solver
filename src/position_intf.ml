@@ -51,4 +51,10 @@ module type Position = sig
   [@@deriving compare, equal, enumerate, sexp_of]
 
   val get : t -> (module S)
+
+  (** Additional implementations - used for tests only. *)
+
+  module Bitboard_uint : S
+  module Bitboard64 : S
+  module Bitboard128 : S
 end
