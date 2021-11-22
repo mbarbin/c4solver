@@ -300,45 +300,7 @@ let add t ~bench:{ Bench.key; result } =
 ;;
 
 let to_ascii_table t =
-  let isatty = ANSITerminal.isatty.contents Core_unix.stdout in
-  let columns =
-    let f ((key : Key.t), (result : Result.t)) = key, result in
-    let dim (key : Key.t) styles =
-      let styles = if key.solver.reference then `Dim :: styles else styles in
-      if isatty then styles else []
-    in
-    [ Ascii_table.Column.create_attr "solver" ~align:Left (fun c ->
-          let key, _ = f c in
-          dim key [], Solver.to_string_hum key.solver)
-    ; Ascii_table.Column.create_attr "test" ~align:Left (fun c ->
-          let key, _ = f c in
-          dim key [], key.test_basename)
-    ; Ascii_table.Column.create_attr "accuracy" ~align:Right (fun c ->
-          let key, result = f c in
-          dim key [], sprintf "%.2f%%" result.accuracy)
-    ; Ascii_table.Column.create_attr "mean time" ~align:Right (fun c ->
-          let key, result = f c in
-          dim key [], Time_ns.Span.to_string_hum result.mean.span)
-    ; Ascii_table.Column.create_attr "mean nb of pos" ~align:Right (fun c ->
-          let key, result = f c in
-          let styles =
-            if key.solver.reference
-            then []
-            else (
-              let ref = { key with solver = { key.solver with reference = true } } in
-              match Map.find t.entries ref with
-              | None -> []
-              | Some ref_result ->
-                if ref_result.mean.number_of_positions = result.mean.number_of_positions
-                then [ `Green ]
-                else [ `Yellow ])
-          in
-          dim key styles, Int.to_string_hum result.mean.number_of_positions)
-    ; Ascii_table.Column.create_attr "K pos / s" ~align:Right (fun c ->
-          let key, result = f c in
-          dim key [], Int.to_string_hum result.mean.k_pos_per_s)
-    ]
-  in
-  let data = Map.to_alist t.entries in
-  Ascii_table.to_string ~limit_width_to:250 columns data
+  Bench.to_ascii_table
+    ~entries:t.entries
+    (Map.to_alist t.entries |> List.map ~f:(fun (key, result) -> { Bench.key; result }))
 ;;

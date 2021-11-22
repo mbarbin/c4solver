@@ -197,3 +197,40 @@ type t =
   ; result : Result.t
   }
 [@@deriving compare, equal, sexp]
+
+let to_ascii_table ?(entries = (Map.empty (module Key) : Result.t Map.M(Key).t)) ts =
+  let isatty = ANSITerminal.isatty.contents Core_unix.stdout in
+  let columns =
+    let dim (t : t) styles =
+      let styles = if t.key.solver.reference then `Dim :: styles else styles in
+      if isatty then styles else []
+    in
+    [ Ascii_table.Column.create_attr "solver" ~align:Left (fun t ->
+          dim t [], Solver.to_string_hum t.key.solver)
+    ; Ascii_table.Column.create_attr "test" ~align:Left (fun t ->
+          dim t [], t.key.test_basename)
+    ; Ascii_table.Column.create_attr "accuracy" ~align:Right (fun t ->
+          dim t [], sprintf "%.2f%%" t.result.accuracy)
+    ; Ascii_table.Column.create_attr "mean time" ~align:Right (fun t ->
+          dim t [], Time_ns.Span.to_string_hum t.result.mean.span)
+    ; Ascii_table.Column.create_attr "mean nb of pos" ~align:Right (fun t ->
+          let { key; result } = t in
+          let styles =
+            if key.solver.reference
+            then []
+            else (
+              let ref = { key with solver = { key.solver with reference = true } } in
+              match Map.find entries ref with
+              | None -> []
+              | Some ref_result ->
+                if ref_result.mean.number_of_positions = result.mean.number_of_positions
+                then [ `Green ]
+                else [ `Yellow ])
+          in
+          dim t styles, Int.to_string_hum result.mean.number_of_positions)
+    ; Ascii_table.Column.create_attr "K pos / s" ~align:Right (fun t ->
+          dim t [], Int.to_string_hum t.result.mean.k_pos_per_s)
+    ]
+  in
+  Ascii_table.to_string ~limit_width_to:250 columns ts
+;;
