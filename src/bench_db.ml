@@ -430,10 +430,12 @@ let add t ~key ~result =
 ;;
 
 let to_ascii_table t =
+  let isatty = ANSITerminal.isatty.contents Core_unix.stdout in
   let columns =
     let f ((key : Key.t), (result : Result.t)) = key, result in
     let dim (key : Key.t) styles =
-      if key.solver.reference then `Dim :: styles else styles
+      let styles = if key.solver.reference then `Dim :: styles else styles in
+      if isatty then styles else []
     in
     [ Ascii_table.Column.create_attr "solver" ~align:Left (fun c ->
           let key, _ = f c in

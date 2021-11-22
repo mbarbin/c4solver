@@ -1,4 +1,4 @@
-.PHONY: all test fmt clean lint
+.PHONY: all test fmt clean lint show-benches
 
 all:
 	dune build
@@ -15,3 +15,6 @@ lint:
 
 clean:
 	dune clean
+
+show-benches:
+	dune exec c4solver -- bench show
