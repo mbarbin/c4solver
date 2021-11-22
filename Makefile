@@ -17,4 +17,5 @@ clean:
 	dune clean
 
 show-benches:
+	dune exec c4solver -- bench show > benchmark.txt
 	dune exec c4solver -- bench show
