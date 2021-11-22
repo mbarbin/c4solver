@@ -150,7 +150,7 @@ let run
         Bench_db.add bench_db ~key ~result;
         [ true, test_file.basename
         ; true, sprintf "%.2f%%" accuracy
-        ; not accuracy_only, Time.Span.to_string_hum mean.span
+        ; not accuracy_only, Time_ns.Span.to_string_hum mean.span
         ; true, Int.to_string_hum mean.number_of_positions
         ; not accuracy_only, Int.to_string_hum mean.k_pos_per_s
         ]

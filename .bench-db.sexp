@@ -1,8 +1,6 @@
 ((((solver ((human_name MinMax) (weak false) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 4.47141432762146ms) (number_of_positions 11024)
-     (k_pos_per_s 2465)))
+  ((mean ((span 4.509052ms) (number_of_positions 11025) (k_pos_per_s 2445)))
    (accuracy 100)))
  (((solver ((human_name MinMax) (weak false) (reference true)))
    (test_basename Test_L3_R1))
@@ -10,9 +8,7 @@
    (accuracy 100)))
  (((solver ((human_name Alpha_beta) (weak false) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 154.33573722839355us) (number_of_positions 284)
-     (k_pos_per_s 1840)))
+  ((mean ((span 154.336us) (number_of_positions 284) (k_pos_per_s 1840)))
    (accuracy 100)))
  (((solver ((human_name Alpha_beta) (weak false) (reference true)))
    (test_basename Test_L3_R1))
@@ -28,9 +24,7 @@
    (accuracy 100)))
  (((solver ((human_name Alpha_beta) (weak true) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 119.85373497009277us) (number_of_positions 223)
-     (k_pos_per_s 1860)))
+  ((mean ((span 119.854us) (number_of_positions 223) (k_pos_per_s 1860)))
    (accuracy 100)))
  (((solver ((human_name Alpha_beta) (weak true) (reference true)))
    (test_basename Test_L3_R1))
@@ -47,16 +41,13 @@
  (((solver
     ((human_name Column_exploration_order) (weak false) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 83.352804183959961us) (number_of_positions 140)
-     (k_pos_per_s 1679)))
+  ((mean ((span 83.353us) (number_of_positions 140) (k_pos_per_s 1679)))
    (accuracy 100)))
  (((solver
     ((human_name Column_exploration_order) (weak false) (reference false)))
    (test_basename Test_L2_R1))
   ((mean
-    ((span 1.2238051443099975s) (number_of_positions 2081790)
-     (k_pos_per_s 1701)))
+    ((span 1.223805144s) (number_of_positions 2081790) (k_pos_per_s 1701)))
    (accuracy 100)))
  (((solver
     ((human_name Column_exploration_order) (weak false) (reference true)))
@@ -76,16 +67,13 @@
  (((solver
     ((human_name Column_exploration_order) (weak true) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 79.017400741577148us) (number_of_positions 107)
-     (k_pos_per_s 1354)))
+  ((mean ((span 79.017us) (number_of_positions 107) (k_pos_per_s 1354)))
    (accuracy 100)))
  (((solver
     ((human_name Column_exploration_order) (weak true) (reference false)))
    (test_basename Test_L2_R1))
   ((mean
-    ((span 485.80101823806763ms) (number_of_positions 927942)
-     (k_pos_per_s 1910)))
+    ((span 485.801018ms) (number_of_positions 927942) (k_pos_per_s 1910)))
    (accuracy 100)))
  (((solver
     ((human_name Column_exploration_order) (weak true) (reference true)))
@@ -104,21 +92,17 @@
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak false) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 26.732921600341797us) (number_of_positions 140)
-     (k_pos_per_s 5236)))
+  ((mean ((span 26.733us) (number_of_positions 140) (k_pos_per_s 5236)))
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak false) (reference false)))
    (test_basename Test_L2_R1))
   ((mean
-    ((span 264.43762230873108ms) (number_of_positions 2081790)
-     (k_pos_per_s 7872)))
+    ((span 264.437622ms) (number_of_positions 2081790) (k_pos_per_s 7872)))
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak false) (reference false)))
    (test_basename Test_L2_R2))
   ((mean
-    ((span 5.0895641901493072s) (number_of_positions 40396714)
-     (k_pos_per_s 7937)))
+    ((span 5.08956419s) (number_of_positions 40396714) (k_pos_per_s 7937)))
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak false) (reference true)))
    (test_basename Test_L3_R1))
@@ -134,21 +118,17 @@
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak true) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 18.878459930419922us) (number_of_positions 107)
-     (k_pos_per_s 5667)))
+  ((mean ((span 18.878us) (number_of_positions 107) (k_pos_per_s 5667)))
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak true) (reference false)))
    (test_basename Test_L2_R1))
   ((mean
-    ((span 108.69996523857117ms) (number_of_positions 927943)
-     (k_pos_per_s 8536)))
+    ((span 108.699965ms) (number_of_positions 927943) (k_pos_per_s 8536)))
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak true) (reference false)))
    (test_basename Test_L2_R2))
   ((mean
-    ((span 2.973919653892517s) (number_of_positions 23685435)
-     (k_pos_per_s 7964)))
+    ((span 2.973919654s) (number_of_positions 23685435) (k_pos_per_s 7964)))
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak true) (reference true)))
    (test_basename Test_L3_R1))
@@ -164,20 +144,16 @@
    (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak false) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 79.518318176269531us) (number_of_positions 93) (k_pos_per_s 1169)))
+  ((mean ((span 79.518us) (number_of_positions 93) (k_pos_per_s 1169)))
    (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak false) (reference false)))
    (test_basename Test_L2_R1))
-  ((mean
-    ((span 33.177340030670166ms) (number_of_positions 207942)
-     (k_pos_per_s 6267)))
+  ((mean ((span 33.17734ms) (number_of_positions 207942) (k_pos_per_s 6267)))
    (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak false) (reference false)))
    (test_basename Test_L2_R2))
   ((mean
-    ((span 300.031209230423ms) (number_of_positions 1731151)
-     (k_pos_per_s 5769)))
+    ((span 300.031209ms) (number_of_positions 1731151) (k_pos_per_s 5769)))
    (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak false) (reference true)))
    (test_basename Test_L3_R1))
@@ -201,20 +177,16 @@
    (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak true) (reference false)))
    (test_basename Test_L3_R1))
-  ((mean
-    ((span 44.292926788330078us) (number_of_positions 69) (k_pos_per_s 1557)))
+  ((mean ((span 47.244us) (number_of_positions 69) (k_pos_per_s 1460)))
    (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak true) (reference false)))
    (test_basename Test_L2_R1))
-  ((mean
-    ((span 5.5925209522247314ms) (number_of_positions 28753)
-     (k_pos_per_s 5141)))
+  ((mean ((span 5.592521ms) (number_of_positions 28753) (k_pos_per_s 5141)))
    (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak true) (reference false)))
    (test_basename Test_L2_R2))
   ((mean
-    ((span 131.0635085105896ms) (number_of_positions 752278)
-     (k_pos_per_s 5739)))
+    ((span 131.063509ms) (number_of_positions 752278) (k_pos_per_s 5739)))
    (accuracy 100)))
  (((solver ((human_name Transposition_table) (weak true) (reference true)))
    (test_basename Test_L3_R1))

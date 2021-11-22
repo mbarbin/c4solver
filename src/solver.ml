@@ -37,11 +37,11 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
             if score > !best_score then best_score := score));
       !best_score)
   in
-  let t1 = Time.now () in
+  let t1 = Time_ns.now () in
   let result = negamax t in
-  let t2 = Time.now () in
+  let t2 = Time_ns.now () in
   { measure =
-      { Measure.span = Time.diff t2 t1; number_of_positions = !number_of_positions }
+      { Measure.span = Time_ns.diff t2 t1; number_of_positions = !number_of_positions }
   ; result
   }
 ;;
@@ -178,15 +178,15 @@ let negamax_alpha_beta
         in
         iter alpha 0))
   in
-  let t1 = Time.now () in
+  let t1 = Time_ns.now () in
   let result =
     if weak
     then negamax t (-1) 1
     else negamax t (-1 * height * width / 2) (height * width / 2)
   in
-  let t2 = Time.now () in
+  let t2 = Time_ns.now () in
   { measure =
-      { Measure.span = Time.diff t2 t1; number_of_positions = !number_of_positions }
+      { Measure.span = Time_ns.diff t2 t1; number_of_positions = !number_of_positions }
   ; result
   }
 ;;
