@@ -1,45 +1,5 @@
 open! Core
 
-module Test_line = struct
-  type t =
-    { position : string
-    ; result : int
-    }
-  [@@deriving sexp_of]
-
-  let parse_exn str =
-    let position, result = String.lsplit2 ~on:' ' str |> Option.value_exn ~here:[%here] in
-    let result = Int.of_string result in
-    { position; result }
-  ;;
-
-  let make_position (type p) t ~height ~width (module P : Position.S with type t = p) =
-    let p = P.create ~height ~width in
-    String.iteri t.position ~f:(fun index char ->
-        let column = Char.to_int char - Char.to_int '1' in
-        if column < 0
-           || column >= width
-           || (not (P.can_play p ~column))
-           || P.is_winning_move p ~column
-        then raise_s [%sexp [%here], "invalid move", { t : t; index : int; column : int }]
-        else P.play p ~column);
-    P.copy p
-  ;;
-end
-
-module Test_file = struct
-  type t =
-    { basename : string
-    ; test_lines : Test_line.t Array.t
-    }
-
-  let load_exn ~filename =
-    let lines = Stdio.In_channel.read_lines filename in
-    let basename = Filename.basename filename in
-    { basename; test_lines = Array.of_list lines |> Array.map ~f:Test_line.parse_exn }
-  ;;
-end
-
 type t =
   { headers : string list
   ; data : string list list
@@ -59,7 +19,7 @@ let run
     ~with_transposition_table
   =
   let solver =
-    Bench_db.Solver.of_params
+    Bench.Solver.of_params
       { position
       ; alpha_beta
       ; weak
@@ -69,7 +29,9 @@ let run
       }
   in
   let (module P : Position.S) = Position.get position in
-  let test_files = List.map filenames ~f:(fun filename -> Test_file.load_exn ~filename) in
+  let test_files =
+    List.map filenames ~f:(fun filename -> Bench.Test_file.load_exn ~filename)
+  in
   let headers =
     [ true, "test"
     ; true, "accuracy"
@@ -95,7 +57,7 @@ let run
                        index
                        number_of_lines));
               let position =
-                Test_line.make_position test_line ~height:6 ~width:7 (module P)
+                Bench.Test_line.make_position test_line ~height:6 ~width:7 (module P)
               in
               let { Solver.measure; result } =
                 if alpha_beta
@@ -145,9 +107,9 @@ let run
         let accuracy =
           float_of_int !accuracy_count /. float_of_int number_of_lines *. 100.
         in
-        let key = { Bench_db.Key.solver; test_basename = test_file.basename } in
-        let result = { Bench_db.Result.mean; accuracy } in
-        Bench_db.add bench_db ~key ~result;
+        let key = { Bench.Key.solver; test_basename = test_file.basename } in
+        let result = { Bench.Result.mean; accuracy } in
+        Bench_db.add bench_db ~bench:{ key; result };
         [ true, test_file.basename
         ; true, sprintf "%.2f%%" accuracy
         ; not accuracy_only, Time_ns.Span.to_string_hum mean.span

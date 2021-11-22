@@ -29,7 +29,7 @@ type t =
 [@@deriving equal, sexp_of]
 
 let eval ~test_line (module P : Position.S) =
-  let position = Bencher.Test_line.make_position test_line ~height ~width (module P) in
+  let position = Bench.Test_line.make_position test_line ~height ~width (module P) in
   let number_of_plies = P.number_of_plies position in
   assert (number_of_plies = String.length test_line.position);
   let can_play = List.init width ~f:(fun column -> column, P.can_play position ~column) in
@@ -41,7 +41,7 @@ let eval ~test_line (module P : Position.S) =
 ;;
 
 let test_line line =
-  let test_line = Bencher.Test_line.parse_exn line in
+  let test_line = Bench.Test_line.parse_exn line in
   let results = List.map implementations ~f:(eval ~test_line) in
   let t =
     match results with
