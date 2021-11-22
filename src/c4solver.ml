@@ -40,19 +40,18 @@ let bench_run_cmd =
      and debug = flag "--debug" no_arg ~doc:" print debug info" in
      fun () ->
        let bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
-       let bench =
+       let benches =
          Bencher.run
            ~bench_db
            ~position
            ~filenames
            ~debug
-           ~accuracy_only
            ~alpha_beta
            ~weak
            ~column_exploration_reorder
            ~with_transposition_table
        in
-       print_endline (Bencher.to_ascii_table bench))
+       print_endline (Bench.to_ascii_table ~accuracy_only benches))
 ;;
 
 let bench_show_cmd =

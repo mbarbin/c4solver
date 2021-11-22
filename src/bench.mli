@@ -87,4 +87,8 @@ type t =
   }
 [@@deriving compare, sexp]
 
-val to_ascii_table : ?entries:Result.t Map.M(Key).t -> t list -> string
+val to_ascii_table
+  :  ?entries:Result.t Map.M(Key).t
+  -> ?accuracy_only:bool
+  -> t list
+  -> string
