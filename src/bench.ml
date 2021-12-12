@@ -54,12 +54,19 @@ module Solver = struct
   end
 
   module Human_name = struct
+    module External_name = struct
+      include String
+
+      let all = []
+    end
+
     type t =
       | MinMax
       | Alpha_beta
       | Column_exploration_order
       | Bitboard
       | Transposition_table
+      | External of { name : External_name.t }
     [@@deriving compare, equal, enumerate, sexp]
 
     let to_string_hum = function
@@ -68,6 +75,7 @@ module Solver = struct
       | Column_exploration_order -> "Column exploration order"
       | Bitboard -> "Bitboard"
       | Transposition_table -> "Transposition table"
+      | External { name } -> "External - " ^ name
     ;;
   end
 
@@ -128,6 +136,10 @@ module Solver = struct
       ; with_transposition_table = true
       ; reference = t.reference
       }
+    | External { name } ->
+      raise_s
+        [%sexp
+          "to_params is not supported on external solvers", [%here], { name : string }]
   ;;
 
   let of_params (p : Params.t) =

@@ -54,6 +54,33 @@ let bench_run_cmd =
        print_endline (Bench.to_ascii_table ~accuracy_only benches))
 ;;
 
+let bench_run_external_cmd =
+  Command.basic
+    ~summary:"run an external solver"
+    (let%map_open.Command filenames = anon (non_empty_sequence_as_list ("FILE" %: string))
+     and height = return 6
+     and width = return 7
+     and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
+     and reference = flag "--reference" no_arg ~doc:" solver is a reference"
+     and solver = flag "--name" (required string) ~doc:"name solver name"
+     and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
+     and debug = flag "--debug" no_arg ~doc:" print debug info"
+     and command =
+       match%map.Command flag "--" escape ~doc:" solver command" with
+       | Some command -> command
+       | None -> raise_s [%sexp "external solver command is mandatory"]
+     in
+     fun () ->
+       let solver =
+         { Bench.Solver.human_name = External { name = solver }; weak; reference }
+       in
+       let _bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
+       let benches =
+         Bencher.run_external_solver ~command ~solver ~weak ~debug ~filenames
+       in
+       print_endline (Bench.to_ascii_table ~accuracy_only benches))
+;;
+
 let bench_show_cmd =
   Command.basic
     ~summary:"show saved benchmark"
@@ -66,7 +93,12 @@ let bench_show_cmd =
 ;;
 
 let bench_cmd =
-  Command.group ~summary:"bench commands" [ "show", bench_show_cmd; "run", bench_run_cmd ]
+  Command.group
+    ~summary:"bench commands"
+    [ "external-solver", bench_run_external_cmd
+    ; "show", bench_show_cmd
+    ; "run", bench_run_cmd
+    ]
 ;;
 
 let main = Command.group ~summary:"c4 solver" [ "bench", bench_cmd ]

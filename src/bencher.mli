@@ -10,3 +10,11 @@ val run
   -> column_exploration_reorder:bool
   -> with_transposition_table:bool
   -> Bench.t list
+
+val run_external_solver
+  :  command:string list
+  -> solver:Bench.Solver.t
+  -> weak:bool
+  -> debug:bool
+  -> filenames:string list
+  -> Bench.t list
