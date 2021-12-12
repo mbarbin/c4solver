@@ -91,7 +91,11 @@ let run
       let accuracy =
         float_of_int !accuracy_count /. float_of_int number_of_lines *. 100.
       in
-      { Bench.key = { solver; test_basename = test_file.basename }
-      ; result = { Bench.Result.mean; accuracy }
-      })
+      let bench =
+        { Bench.key = { solver; test_basename = test_file.basename }
+        ; result = { Bench.Result.mean; accuracy }
+        }
+      in
+      Bench_db.add bench_db ~bench;
+      bench)
 ;;
