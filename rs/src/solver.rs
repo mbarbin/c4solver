@@ -3,7 +3,7 @@ use crate::position::{self, Position};
 use timens::Time;
 
 struct Env<'a> {
-    moves: &'a Vec<u8>,
+    moves: &'a Vec<usize>,
     number_of_positions: usize,
 }
 
@@ -11,7 +11,7 @@ impl<'a> Env<'a> {
     fn negamax<P: Position>(&mut self, position: P) -> isize {
         self.number_of_positions += 1;
         /* Check for draw. */
-        if position.number_of_plies() == (position::WIDTH * position::HEIGHT) as usize {
+        if position.number_of_plies() == position::WIDTH * position::HEIGHT {
             0
         } else {
             for &column in self.moves {
@@ -54,7 +54,7 @@ pub fn negamax<P: Position>(position: P) -> Result {
     let moves = {
         let mut vec = Vec::new();
         for i in 0..position::WIDTH {
-            vec.push(i as u8)
+            vec.push(i)
         }
         vec
     };
