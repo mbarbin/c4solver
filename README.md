@@ -1,6 +1,6 @@
 # c4solver
 
-![main workflow](https://github.com/mbarbin/c4solver/actions/workflows/main.yml/badge.svg)
+[![Actions Status](https://github.com/mbarbin/c4solver/workflows/CI/badge.svg)](https://github.com/mbarbin/c4solver/actions)
 
 This is a toy project implementing a solver for the connect4 game,
 written in OCaml.
