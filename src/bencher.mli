@@ -12,7 +12,8 @@ val run
   -> Bench.t list
 
 val run_external_solver
-  :  command:string list
+  :  bench_db:Bench_db.t
+  -> command:string list
   -> solver:Bench.Solver.t
   -> weak:bool
   -> debug:bool

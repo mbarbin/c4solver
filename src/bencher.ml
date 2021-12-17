@@ -100,7 +100,7 @@ let run
       bench)
 ;;
 
-let run_external_solver ~command ~solver ~weak ~debug ~filenames =
+let run_external_solver ~bench_db ~command ~solver ~weak ~debug ~filenames =
   let prog, args =
     match command with
     | [] -> raise_s [%sexp "Invalid external solver command"]
@@ -176,5 +176,6 @@ let run_external_solver ~command ~solver ~weak ~debug ~filenames =
         ; result = { Bench.Result.mean; accuracy }
         }
       in
+      Bench_db.add bench_db ~bench;
       bench)
 ;;

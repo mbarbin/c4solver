@@ -5,6 +5,7 @@ pub struct Measure {
     pub number_of_positions: usize,
 }
 
+#[allow(dead_code)]
 pub struct Mean {
     pub span: Span,
     pub number_of_positions: usize,
@@ -12,12 +13,14 @@ pub struct Mean {
 }
 
 impl Mean {
+    #[allow(dead_code)]
     pub const ZERO: Self = Self {
         span: Span::ZERO,
         number_of_positions: 0,
         k_pos_per_s: 0,
     };
 
+    #[allow(dead_code)]
     pub fn of_measures(measures: &Vec<Measure>) -> Self {
         if measures.is_empty() {
             Mean::ZERO

@@ -62,7 +62,8 @@ let bench_run_external_cmd =
      and width = return 7
      and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
      and reference = flag "--reference" no_arg ~doc:" solver is a reference"
-     and solver = flag "--name" (required string) ~doc:"name solver name"
+     and solver =
+       flag "--name" (required string) ~doc:"name external solver shortname (language)"
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
      and debug = flag "--debug" no_arg ~doc:" print debug info"
      and command =
@@ -72,11 +73,11 @@ let bench_run_external_cmd =
      in
      fun () ->
        let solver =
-         { Bench.Solver.human_name = External { name = solver }; weak; reference }
+         { Bench.Solver.human_name = MinMax; weak; reference; ext = Some solver }
        in
-       let _bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
+       let bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
        let benches =
-         Bencher.run_external_solver ~command ~solver ~weak ~debug ~filenames
+         Bencher.run_external_solver ~bench_db ~command ~solver ~weak ~debug ~filenames
        in
        print_endline (Bench.to_ascii_table ~accuracy_only benches))
 ;;

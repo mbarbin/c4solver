@@ -44,7 +44,6 @@ module Solver : sig
       | Column_exploration_order
       | Bitboard
       | Transposition_table
-      | External of { name : string }
     [@@deriving compare, equal, enumerate, sexp]
 
     val to_string_hum : t -> string
@@ -56,6 +55,7 @@ module Solver : sig
     { human_name : Human_name.t
     ; weak : bool
     ; reference : bool
+    ; ext : string option
     }
   [@@deriving enumerate, compare, equal, sexp]
 

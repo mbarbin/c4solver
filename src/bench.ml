@@ -54,19 +54,12 @@ module Solver = struct
   end
 
   module Human_name = struct
-    module External_name = struct
-      include String
-
-      let all = []
-    end
-
     type t =
       | MinMax
       | Alpha_beta
       | Column_exploration_order
       | Bitboard
       | Transposition_table
-      | External of { name : External_name.t }
     [@@deriving compare, equal, enumerate, sexp]
 
     let to_string_hum = function
@@ -75,23 +68,30 @@ module Solver = struct
       | Column_exploration_order -> "Column exploration order"
       | Bitboard -> "Bitboard"
       | Transposition_table -> "Transposition table"
-      | External { name } -> "External - " ^ name
     ;;
   end
+
+  type lang = string [@@deriving compare, equal, sexp]
+
+  let all_of_lang = []
 
   type t =
     { human_name : Human_name.t
     ; weak : bool
     ; reference : bool
+    ; ext : lang option [@sexp.drop_if Option.is_none] [@sexp.default None]
     }
   [@@deriving enumerate, compare, equal, sexp]
 
   let to_string_hum t =
     sprintf
-      "%s%s%s"
+      "%s%s%s%s"
       (Human_name.to_string_hum t.human_name)
       (if t.weak then " (weak)" else "")
       (if t.reference then " - ref" else "")
+      (match t.ext with
+      | None -> ""
+      | Some lang -> " - " ^ lang)
   ;;
 
   let to_params t : Params.t =
@@ -136,10 +136,6 @@ module Solver = struct
       ; with_transposition_table = true
       ; reference = t.reference
       }
-    | External { name } ->
-      raise_s
-        [%sexp
-          "to_params is not supported on external solvers", [%here], { name : string }]
   ;;
 
   let of_params (p : Params.t) =
@@ -240,7 +236,9 @@ let to_ascii_table
               if key.solver.reference
               then []
               else (
-                let ref = { key with solver = { key.solver with reference = true } } in
+                let ref =
+                  { key with solver = { key.solver with reference = true; ext = None } }
+                in
                 match Map.find entries ref with
                 | None -> []
                 | Some ref_result ->

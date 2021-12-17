@@ -9,26 +9,29 @@ open! Bench
 
 (* References entries - from [http://blog.gamesolver.org/solving-connect-four/]. *)
 let reference_entries =
-  let minmax = { Solver.human_name = MinMax; weak = false; reference = true } in
+  let ext = None in
+  let minmax = { Solver.human_name = MinMax; weak = false; reference = true; ext } in
   let alpha_beta_strong =
-    { Solver.human_name = Alpha_beta; weak = false; reference = true }
+    { Solver.human_name = Alpha_beta; weak = false; reference = true; ext }
   in
   let alpha_beta_weak =
-    { Solver.human_name = Alpha_beta; weak = true; reference = true }
+    { Solver.human_name = Alpha_beta; weak = true; reference = true; ext }
   in
   let ceo_strong =
-    { Solver.human_name = Column_exploration_order; weak = false; reference = true }
+    { Solver.human_name = Column_exploration_order; weak = false; reference = true; ext }
   in
   let ceo_weak =
-    { Solver.human_name = Column_exploration_order; weak = true; reference = true }
+    { Solver.human_name = Column_exploration_order; weak = true; reference = true; ext }
   in
-  let bit_strong = { Solver.human_name = Bitboard; weak = false; reference = true } in
-  let bit_weak = { Solver.human_name = Bitboard; weak = true; reference = true } in
+  let bit_strong =
+    { Solver.human_name = Bitboard; weak = false; reference = true; ext }
+  in
+  let bit_weak = { Solver.human_name = Bitboard; weak = true; reference = true; ext } in
   let trans_strong =
-    { Solver.human_name = Transposition_table; weak = false; reference = true }
+    { Solver.human_name = Transposition_table; weak = false; reference = true; ext }
   in
   let trans_weak =
-    { Solver.human_name = Transposition_table; weak = true; reference = true }
+    { Solver.human_name = Transposition_table; weak = true; reference = true; ext }
   in
   (* MinMax. *)
   [ ( { Key.solver = minmax; test_basename = "Test_L3_R1" }
