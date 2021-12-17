@@ -14,6 +14,11 @@
    (test_basename Test_L3_R1))
   ((mean ((span 154.336us) (number_of_positions 284) (k_pos_per_s 1840)))
    (accuracy 100)))
+ (((solver
+    ((human_name Alpha_beta) (weak false) (reference false) (ext (rust))))
+   (test_basename Test_L3_R1))
+  ((mean ((span 97.303us) (number_of_positions 284) (k_pos_per_s 2918)))
+   (accuracy 100)))
  (((solver ((human_name Alpha_beta) (weak false) (reference true) (ext ())))
    (test_basename Test_L3_R1))
   ((mean ((span 69.62us) (number_of_positions 284) (k_pos_per_s 4074)))
@@ -29,6 +34,11 @@
  (((solver ((human_name Alpha_beta) (weak true) (reference false) (ext ())))
    (test_basename Test_L3_R1))
   ((mean ((span 119.854us) (number_of_positions 223) (k_pos_per_s 1860)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Alpha_beta) (weak true) (reference false) (ext (rust))))
+   (test_basename Test_L3_R1))
+  ((mean ((span 82.594us) (number_of_positions 223) (k_pos_per_s 2699)))
    (accuracy 100)))
  (((solver ((human_name Alpha_beta) (weak true) (reference true) (ext ())))
    (test_basename Test_L3_R1))

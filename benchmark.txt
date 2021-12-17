@@ -5,10 +5,12 @@
 │ MinMax - rust                         │ Test_L3_R1 │  100.00% │   1.921ms │         11_025 │     5_738 │
 │ MinMax - ref                          │ Test_L3_R1 │  100.00% │  790.28us │         11_024 │    13_950 │
 │ Alpha-beta                            │ Test_L3_R1 │  100.00% │ 154.336us │            284 │     1_840 │
+│ Alpha-beta - rust                     │ Test_L3_R1 │  100.00% │  97.303us │            284 │     2_918 │
 │ Alpha-beta - ref                      │ Test_L3_R1 │  100.00% │   69.62us │            284 │     4_074 │
 │ Alpha-beta - ref                      │ Test_L2_R1 │  100.00% │     4.54s │     54_236_700 │    11_940 │
 │ Alpha-beta - ref                      │ Test_L2_R2 │  100.00% │     38.7s │    453_614_000 │    11_725 │
 │ Alpha-beta (weak)                     │ Test_L3_R1 │  100.00% │ 119.854us │            223 │     1_860 │
+│ Alpha-beta (weak) - rust              │ Test_L3_R1 │  100.00% │  82.594us │            223 │     2_699 │
 │ Alpha-beta (weak) - ref               │ Test_L3_R1 │  100.00% │      52us │            223 │     4_284 │
 │ Alpha-beta (weak) - ref               │ Test_L2_R1 │  100.00% │     3.28s │     41_401_200 │    12_638 │
 │ Alpha-beta (weak) - ref               │ Test_L2_R2 │  100.00% │     24.5s │    308_114_000 │    12_548 │

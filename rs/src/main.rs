@@ -6,7 +6,33 @@ mod solver;
 use crate::position::Basic;
 use std::io;
 
+extern crate clap;
+use clap::{App, Arg};
+
 fn main() {
+    let matches = App::new("c4solver")
+        .arg(
+            Arg::with_name("alpha_beta")
+                .long("alpha-beta")
+                .value_name("BOOL")
+                .help("enable alpha-beta pruning")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("weak")
+                .long("weak")
+                .help("run weak solver")
+                .takes_value(false),
+        )
+        .get_matches();
+
+    let alpha_beta: bool = matches
+        .value_of("alpha_beta")
+        .unwrap_or("true")
+        .parse()
+        .expect("alpha-beta requires boolean");
+    let weak: bool = matches.is_present("weak");
+
     loop {
         let mut index = String::new();
 
@@ -17,7 +43,7 @@ fn main() {
         let line = index.trim();
 
         let position = position::make::<Basic>(&line);
-        let result = solver::negamax(position);
+        let result = solver::negamax(position, alpha_beta, weak);
         println!(
             "{} {} {} {}",
             line,
