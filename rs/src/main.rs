@@ -6,9 +6,6 @@ mod solver;
 use crate::position::Basic;
 use std::io;
 
-const HEIGHT: u8 = 6;
-const WIDTH: u8 = 7;
-
 fn main() {
     loop {
         let mut index = String::new();
@@ -19,7 +16,7 @@ fn main() {
 
         let line = index.trim();
 
-        let position = position::make::<Basic>(&line, WIDTH, HEIGHT);
+        let position = position::make::<Basic>(&line);
         let result = solver::negamax(position);
         println!(
             "{} {} {} {}",

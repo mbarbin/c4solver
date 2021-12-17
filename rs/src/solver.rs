@@ -1,10 +1,8 @@
 use crate::measure::Measure;
-use crate::position::Position;
+use crate::position::{self, Position};
 use timens::Time;
 
 struct Env<'a> {
-    width: isize,
-    height: isize,
     moves: &'a Vec<u8>,
     number_of_positions: usize,
 }
@@ -13,18 +11,19 @@ impl<'a> Env<'a> {
     fn negamax<P: Position>(&mut self, position: P) -> isize {
         self.number_of_positions += 1;
         /* Check for draw. */
-        if position.number_of_plies() as isize == self.height * self.width {
+        if position.number_of_plies() == (position::WIDTH * position::HEIGHT) as usize {
             0
         } else {
             for &column in self.moves {
                 /* Check if current player can win next move. */
                 if position.can_play(column) && position.is_winning_move(column) {
-                    return ((self.width * self.height) + 1 - position.number_of_plies() as isize)
+                    return ((position::WIDTH * position::HEIGHT) as isize + 1
+                        - position.number_of_plies() as isize)
                         / 2;
                 }
             }
             /* Init the best possible score with a lower bound. */
-            let mut best_score = -1 * self.width * self.height;
+            let mut best_score = -1 * (position::WIDTH * position::HEIGHT) as isize;
             for &column in self.moves {
                 /* Compute the score of all possible next move and keep the best one. */
                 if position.can_play(column) {
@@ -52,19 +51,15 @@ pub struct Result {
 }
 
 pub fn negamax<P: Position>(position: P) -> Result {
-    let width = position.width() as isize;
-    let height = position.height() as isize;
     let moves = {
         let mut vec = Vec::new();
-        for i in 0..width {
+        for i in 0..position::WIDTH {
             vec.push(i as u8)
         }
         vec
     };
     let number_of_positions = 0;
     let mut env = Env {
-        width,
-        height,
         moves: &moves,
         number_of_positions,
     };

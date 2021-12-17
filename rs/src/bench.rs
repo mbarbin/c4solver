@@ -19,7 +19,7 @@ impl TestLine {
     }
 
     #[allow(dead_code)]
-    fn make_position<P: Position>(&self, height: u8, width: u8) -> P {
-        position::make::<P>(&self.position, height, width)
+    fn make_position<P: Position>(&self) -> P {
+        position::make::<P>(&self.position)
     }
 }

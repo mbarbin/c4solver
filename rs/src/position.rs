@@ -1,11 +1,12 @@
+pub const HEIGHT: u8 = 6;
+pub const WIDTH: u8 = 7;
+
 // Represent a connect4 game position. Columns are 0-based.
 pub trait Position {
-    fn width(&self) -> u8;
-    fn height(&self) -> u8;
     fn key(&self) -> Option<usize>;
 
     // Create a new position from the given sizes.
-    fn create(width: u8, height: u8) -> Self;
+    fn create() -> Self;
 
     /* Return a deep copy of [t], for use in searching algorithm. The
     two positions can diverge freely from there without affecting
@@ -78,8 +79,6 @@ mod is_winning {
 impl Basic {
     fn is_winning_count(
         &self,
-        width: i8,
-        height: i8,
         cell: &Cell,
         acc: usize,
         (x, y): (i8, i8),
@@ -92,44 +91,34 @@ impl Basic {
             let y = y + dy;
             if x < 0
                 || y < 0
-                || x >= width
-                || y >= height
+                || x >= WIDTH as i8
+                || y >= HEIGHT as i8
                 || *cell != self.board[x as usize][y as usize]
             {
                 acc
             } else {
-                self.is_winning_count(width, height, cell, acc + 1, (x, y), (dx, dy))
+                self.is_winning_count(cell, acc + 1, (x, y), (dx, dy))
             }
         }
     }
 }
 
 impl Position for Basic {
-    fn width(&self) -> u8 {
-        self.board.len() as u8
-    }
-    fn height(&self) -> u8 {
-        if self.width() == 0 {
-            0
-        } else {
-            self.board[0].len() as u8
-        }
-    }
     fn key(&self) -> Option<usize> {
         None // only implemented in Bitboard
     }
 
-    fn create(width: u8, height: u8) -> Self {
+    fn create() -> Self {
         let mut board = Vec::new();
-        for _ in 0..width {
+        for _ in 0..WIDTH {
             let mut vec = Vec::new();
-            for _ in 0..height {
+            for _ in 0..HEIGHT {
                 vec.push(Cell::Empty);
             }
             board.push(vec);
         }
         let mut height = Vec::new();
-        for _ in 0..width {
+        for _ in 0..WIDTH {
             height.push(0);
         }
         Basic {
@@ -141,9 +130,9 @@ impl Position for Basic {
 
     fn copy(&self) -> Self {
         let mut board = Vec::new();
-        for i in 0..self.width() {
+        for i in 0..WIDTH {
             let mut vec = Vec::new();
-            for j in 0..self.height() {
+            for j in 0..HEIGHT {
                 vec.push(self.board[i as usize][j as usize]);
             }
             board.push(vec);
@@ -156,7 +145,7 @@ impl Position for Basic {
     }
 
     fn can_play(&self, column: u8) -> bool {
-        self.height[column as usize] < self.height() as usize
+        self.height[column as usize] < HEIGHT as usize
     }
 
     fn next_player_to_play(&self) -> Player {
@@ -176,28 +165,15 @@ impl Position for Basic {
     }
 
     fn is_winning_move(&self, column: u8) -> bool {
-        let width = self.width();
-        let height = self.height();
         let player = self.next_player_to_play();
         let cell = Cell::Token { player };
         let line = self.height[column as usize];
         for (left, right) in is_winning::TRIALS {
-            let acc = self.is_winning_count(
-                width as i8,
-                height as i8,
-                &cell,
-                0,
-                (column as i8, line as i8),
-                left,
-            );
-            let acc = self.is_winning_count(
-                width as i8,
-                height as i8,
-                &cell,
-                acc,
-                (column as i8, line as i8),
-                right,
-            );
+            let acc = self.is_winning_count(&cell, 0, (column as i8, line as i8), left);
+            if acc >= 3 {
+                return true;
+            }
+            let acc = self.is_winning_count(&cell, acc, (column as i8, line as i8), right);
             if acc >= 3 {
                 return true;
             }
@@ -214,12 +190,12 @@ impl Position for Basic {
     }
 }
 
-pub fn make<P: Position>(str: &str, width: u8, height: u8) -> P {
-    let mut p = P::create(width, height);
+pub fn make<P: Position>(str: &str) -> P {
+    let mut p = P::create();
     for (index, char) in str.chars().enumerate() {
         // println!("index, char = {}, {}", index, char);
         let column: u8 = (char.to_digit(10).unwrap() - 1) as u8;
-        if column >= width || !(p.can_play(column)) || p.is_winning_move(column) {
+        if column >= WIDTH || !(p.can_play(column)) || p.is_winning_move(column) {
             panic!("invalid move {:?} {:?} {:?}", str, index, column)
         } else {
             p.play(column)
