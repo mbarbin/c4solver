@@ -24,6 +24,13 @@ fn main() {
                 .help("run weak solver")
                 .takes_value(false),
         )
+        .arg(
+            Arg::with_name("column_exploration_reorder")
+                .long("column-exploration-reorder")
+                .value_name("BOOL")
+                .help("explore with center column first")
+                .takes_value(true),
+        )
         .get_matches();
 
     let alpha_beta: bool = matches
@@ -31,7 +38,14 @@ fn main() {
         .unwrap_or("true")
         .parse()
         .expect("alpha-beta requires boolean");
+
     let weak: bool = matches.is_present("weak");
+
+    let column_exploration_reorder: bool = matches
+        .value_of("column_exploration_reorder")
+        .unwrap_or("true")
+        .parse()
+        .expect("column-exploration-reorder requires boolean");
 
     loop {
         let mut index = String::new();
@@ -43,7 +57,7 @@ fn main() {
         let line = index.trim();
 
         let position = position::make::<Basic>(&line);
-        let result = solver::negamax(position, alpha_beta, weak);
+        let result = solver::negamax(position, alpha_beta, weak, column_exploration_reorder);
         println!(
             "{} {} {} {}",
             line,

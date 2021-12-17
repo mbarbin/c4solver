@@ -117,11 +117,23 @@ pub struct Result {
     pub result: isize,
 }
 
-pub fn negamax<P: Position>(position: P, alpha_beta: bool, weak: bool) -> Result {
+pub fn negamax<P: Position>(
+    position: P,
+    alpha_beta: bool,
+    weak: bool,
+    column_exploration_reorder: bool,
+) -> Result {
     let moves = {
         let mut moves = [0; position::WIDTH];
         for i in 0..position::WIDTH {
-            moves[i] = i
+            if column_exploration_reorder {
+                // initialize the column exploration order, starting with center columns
+                moves[i] = (position::WIDTH as isize / 2
+                    + (1 - 2 * (i as isize % 2)) * (i as isize + 1) / 2)
+                    as usize;
+            } else {
+                moves[i] = i;
+            }
         }
         moves
     };
