@@ -72,7 +72,6 @@ impl<'a> Env<'a> {
                         / 2;
                 }
             }
-
             // upper bound of our score as we cannot win immediately
             let max = ((position::WIDTH * position::HEIGHT) as isize
                 - 1
@@ -80,12 +79,11 @@ impl<'a> Env<'a> {
                 / 2;
             if beta > max {
                 beta = max; // there is no need to keep beta above our max possible score.
-
                 if alpha >= beta {
+                    // prune the exploration if the [alpha;beta] window is empty.
                     return beta;
                 }
-            }; // prune the exploration if the [alpha;beta] window is empty.
-
+            };
             for &column in self.moves {
                 /* Compute the score of all possible next move and keep the best one. */
                 if position.can_play(column) {
@@ -99,12 +97,14 @@ impl<'a> Env<'a> {
                     // no need to have good precision for score better than beta (opponent's score worse than -beta)
                     // no need to check for score worse than alpha (opponent's score worse better than -alpha)
                     if score >= beta {
+                        // prune the exploration if we find a possible move better than what we were looking for.
                         return score;
-                    }; // prune the exploration if we find a possible move better than what we were looking for.
+                    };
                     if score > alpha {
+                        // reduce the [alpha;beta] window for next exploration, as we only
+                        // need to search for a position that is better than the best so far.
                         alpha = score
-                    }; // reduce the [alpha;beta] window for next exploration, as we only
-                       // need to search for a position that is better than the best so far.
+                    };
                 }
             }
             return alpha;
