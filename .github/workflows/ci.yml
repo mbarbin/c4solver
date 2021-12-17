@@ -1,4 +1,4 @@
-name: Main workflow
+name: CI
 
 on:
   - pull_request
@@ -30,9 +30,7 @@ jobs:
             janestreet-bleeding-external: https://github.com/janestreet/opam-repository.git#external-packages
 
       - name: Install dependencies
-        run: |
-          opam pin c4solver.dev . --no-action
-          opam depext c4solver --yes --with-doc --with-test
+        run:
           opam install . --deps-only --with-doc --with-test
 
       - name: Build
@@ -43,10 +41,11 @@ jobs:
 
       - name: Run opam-dune-lint
         run: |
-          opam depext opam-dune-lint --install
+          opam install opam-dune-lint --yes
+          opam lint
           opam exec -- opam-dune-lint
 
       - name: Ocamlformat and dune @fmt
         run: |
-          opam depext ocamlformat=$(grep 'version' .ocamlformat | awk -F '=' '{ print $2 }') --install
+          opam install ocamlformat=$(grep 'version' .ocamlformat | awk -F '=' '{ print $2 }') --yes
           opam exec -- dune build @fmt
