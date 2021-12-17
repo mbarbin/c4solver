@@ -16,7 +16,7 @@ pub trait Position {
     /** The given column can be played if it is not currently completely filled. */
     fn can_play(&self, column: usize) -> bool;
 
-    fn next_player_to_play(&self) -> Player;
+    fn next_player_to_play(&self) -> usize;
 
     /* Given a free column, place a token of the next player to play
     there. */
@@ -34,19 +34,21 @@ pub trait Position {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
+#[allow(dead_code)]
 pub enum Player {
     Red,
     Yellow,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
+#[allow(dead_code)]
 pub enum Cell {
     Empty,
     Token { player: Player },
 }
 
 pub struct Basic {
-    board: Vec<Vec<Cell>>,
+    board: Vec<Vec<usize>>,
     height: Vec<usize>,
     number_of_plies: usize,
 }
@@ -61,7 +63,7 @@ impl Position for Basic {
         for _ in 0..WIDTH {
             let mut vec = Vec::new();
             for _ in 0..HEIGHT {
-                vec.push(Cell::Empty);
+                vec.push(0);
             }
             board.push(vec);
         }
@@ -79,10 +81,7 @@ impl Position for Basic {
     fn copy(&self) -> Self {
         let mut board = Vec::new();
         for i in 0..WIDTH {
-            let mut vec = Vec::new();
-            for j in 0..HEIGHT {
-                vec.push(self.board[i][j]);
-            }
+            let vec = self.board[i].clone();
             board.push(vec);
         }
         Basic {
@@ -96,25 +95,24 @@ impl Position for Basic {
         self.height[column] < HEIGHT
     }
 
-    fn next_player_to_play(&self) -> Player {
+    fn next_player_to_play(&self) -> usize {
         if self.number_of_plies % 2 == 0 {
-            Player::Red
+            1
         } else {
-            Player::Yellow
+            2
         }
     }
 
     fn play(&mut self, column: usize) {
         let player = self.next_player_to_play();
         let line = self.height[column];
-        self.board[column][line] = Cell::Token { player };
+        self.board[column][line] = player;
         self.height[column] = line + 1;
         self.number_of_plies += 1;
     }
 
     fn is_winning_move(&self, column: usize) -> bool {
-        let player = self.next_player_to_play();
-        let current_player = Cell::Token { player };
+        let current_player = self.next_player_to_play();
         // check for vertical alignments
         if self.height[column] >= 3
             && self.board[column][self.height[column] - 1] == current_player
