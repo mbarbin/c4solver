@@ -48,8 +48,8 @@ pub enum Cell {
 }
 
 pub struct Basic {
-    board: Vec<Vec<usize>>,
-    height: Vec<usize>,
+    board: [[usize; HEIGHT]; WIDTH],
+    height: [usize; WIDTH],
     number_of_plies: usize,
 }
 
@@ -59,18 +59,14 @@ impl Position for Basic {
     }
 
     fn create() -> Self {
-        let mut board = Vec::new();
-        for _ in 0..WIDTH {
-            let mut vec = Vec::new();
-            for _ in 0..HEIGHT {
-                vec.push(0);
+        let board = {
+            let mut board = [[0; HEIGHT]; WIDTH];
+            for i in 0..WIDTH {
+                board[i] = [0; HEIGHT];
             }
-            board.push(vec);
-        }
-        let mut height = Vec::new();
-        for _ in 0..WIDTH {
-            height.push(0);
-        }
+            board
+        };
+        let height = [0; WIDTH];
         Basic {
             board,
             height,
@@ -79,11 +75,13 @@ impl Position for Basic {
     }
 
     fn copy(&self) -> Self {
-        let mut board = Vec::new();
-        for i in 0..WIDTH {
-            let vec = self.board[i].clone();
-            board.push(vec);
-        }
+        let board = {
+            let mut board = [[0; HEIGHT]; WIDTH];
+            for i in 0..WIDTH {
+                board[i] = self.board[i].clone();
+            }
+            board
+        };
         Basic {
             board,
             height: self.height.clone(),

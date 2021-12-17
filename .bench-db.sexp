@@ -4,7 +4,7 @@
    (accuracy 100)))
  (((solver ((human_name MinMax) (weak false) (reference false) (ext (rust))))
    (test_basename Test_L3_R1))
-  ((mean ((span 15.128339ms) (number_of_positions 11025) (k_pos_per_s 728)))
+  ((mean ((span 3.898768ms) (number_of_positions 11025) (k_pos_per_s 2827)))
    (accuracy 100)))
  (((solver ((human_name MinMax) (weak false) (reference true) (ext ())))
    (test_basename Test_L3_R1))

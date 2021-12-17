@@ -2,7 +2,7 @@
 │ solver                                │ test       │ accuracy │ mean time │ mean nb of pos │ K pos / s │
 ├───────────────────────────────────────┼────────────┼──────────┼───────────┼────────────────┼───────────┤
 │ MinMax                                │ Test_L3_R1 │  100.00% │   4.509ms │         11_025 │     2_445 │
-│ MinMax - rust                         │ Test_L3_R1 │  100.00% │   7.445ms │         11_025 │     1_480 │
+│ MinMax - rust                         │ Test_L3_R1 │  100.00% │   3.899ms │         11_025 │     2_827 │
 │ MinMax - ref                          │ Test_L3_R1 │  100.00% │  790.28us │         11_024 │    13_950 │
 │ Alpha-beta                            │ Test_L3_R1 │  100.00% │ 154.336us │            284 │     1_840 │
 │ Alpha-beta - ref                      │ Test_L3_R1 │  100.00% │   69.62us │            284 │     4_074 │

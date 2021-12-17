@@ -3,7 +3,7 @@ use crate::position::{self, Position};
 use timens::Time;
 
 struct Env<'a> {
-    moves: &'a Vec<usize>,
+    moves: &'a [usize; position::WIDTH],
     number_of_positions: usize,
 }
 
@@ -52,11 +52,11 @@ pub struct Result {
 
 pub fn negamax<P: Position>(position: P) -> Result {
     let moves = {
-        let mut vec = Vec::new();
+        let mut moves = [0; position::WIDTH];
         for i in 0..position::WIDTH {
-            vec.push(i)
+            moves[i] = i
         }
-        vec
+        moves
     };
     let number_of_positions = 0;
     let mut env = Env {
