@@ -5,6 +5,8 @@ mod solver;
 mod transposition_table;
 
 use crate::position::{Basic, Bitboard};
+use crate::transposition_table::Store as Transposition_table;
+
 use std::io;
 
 extern crate clap;
@@ -75,6 +77,12 @@ fn main() {
         .parse()
         .expect("with-transposition-table requires boolean");
 
+    let mut transposition_table = if with_transposition_table {
+        Some(Transposition_table::create())
+    } else {
+        None
+    };
+
     loop {
         let mut index = String::new();
 
@@ -93,7 +101,7 @@ fn main() {
                         alpha_beta,
                         weak,
                         column_exploration_reorder,
-                        with_transposition_table,
+                        &mut transposition_table,
                     )
                 }
                 position::Kind::Bitboard => {
@@ -103,7 +111,7 @@ fn main() {
                         alpha_beta,
                         weak,
                         column_exploration_reorder,
-                        with_transposition_table,
+                        &mut transposition_table,
                     )
                 }
             }

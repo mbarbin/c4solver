@@ -6,8 +6,6 @@ use timens::Time;
 struct Env<'a> {
     moves: &'a [usize; position::WIDTH],
     number_of_positions: usize,
-    transposition_table: Transposition_table,
-    min_score: isize,
 }
 
 impl<'a> Env<'a> {
@@ -61,7 +59,7 @@ impl<'a> Env<'a> {
         position: P,
         mut alpha: isize,
         mut beta: isize,
-        with_transposition_table: bool,
+        transposition_table: &mut Option<Transposition_table>,
     ) -> isize {
         self.number_of_positions += 1;
         /* Check for draw. */
@@ -83,23 +81,23 @@ impl<'a> Env<'a> {
                 / 2;
 
             let key = {
-                if with_transposition_table {
-                    position.key().unwrap_or(0)
-                } else {
-                    0
+                match transposition_table {
+                    Some(_) => position.key().unwrap(),
+                    None => 0,
                 }
             };
 
             let max = {
-                if with_transposition_table {
-                    let data = self.transposition_table.get(key);
-                    if data > 0 {
-                        data as isize + self.min_score - 1
-                    } else {
-                        max
+                match transposition_table {
+                    None => max,
+                    Some(transposition_table) => {
+                        let data = transposition_table.get(key);
+                        if data > 0 {
+                            data as isize + position::MIN_SCORE - 1
+                        } else {
+                            max
+                        }
                     }
-                } else {
-                    max
                 }
             };
 
@@ -119,13 +117,8 @@ impl<'a> Env<'a> {
                     current player has played col, their score will be
                     the opposite of the score from the opponent's
                     perspective. */
-                    let score = -1
-                        * self.negamax_alpha_beta(
-                            position,
-                            -beta,
-                            -alpha,
-                            with_transposition_table,
-                        );
+                    let score =
+                        -1 * self.negamax_alpha_beta(position, -beta, -alpha, transposition_table);
                     // no need to have good precision for score better than beta (opponent's score worse than -beta)
                     // no need to check for score worse than alpha (opponent's score worse better than -alpha)
                     if score >= beta {
@@ -140,9 +133,11 @@ impl<'a> Env<'a> {
                 }
             }
             // Save the upper bound of the position.
-            if with_transposition_table {
-                self.transposition_table
-                    .put(key, (alpha - self.min_score + 1) as usize);
+            match transposition_table {
+                None => {}
+                Some(transposition_table) => {
+                    transposition_table.put(key, (alpha - position::MIN_SCORE + 1) as usize);
+                }
             };
             return alpha;
         }
@@ -159,7 +154,7 @@ pub fn negamax<P: Position>(
     alpha_beta: bool,
     weak: bool,
     column_exploration_reorder: bool,
-    with_transposition_table: bool,
+    transposition_table: &mut Option<Transposition_table>,
 ) -> Result {
     let moves = {
         let mut moves = [0; position::WIDTH];
@@ -176,26 +171,26 @@ pub fn negamax<P: Position>(
         moves
     };
     let number_of_positions = 0;
-    let transposition_table = Transposition_table::create();
-    let min_score = (-((position::WIDTH * position::HEIGHT) as isize) / 2) + 3;
     let mut env = Env {
         moves: &moves,
         number_of_positions,
-        transposition_table,
-        min_score,
+    };
+    match transposition_table {
+        None => {}
+        Some(transposition_table) => transposition_table.reset(),
     };
     let t1 = Time::now();
     let result = {
         if !alpha_beta {
             env.negamax(position)
         } else if weak {
-            env.negamax_alpha_beta(position, -1, 1, with_transposition_table)
+            env.negamax_alpha_beta(position, -1, 1, transposition_table)
         } else {
             env.negamax_alpha_beta(
                 position,
                 -((position::WIDTH * position::HEIGHT) as isize) / 2,
                 (position::WIDTH * position::HEIGHT) as isize / 2,
-                with_transposition_table,
+                transposition_table,
             )
         }
     };

@@ -62,6 +62,12 @@ impl Store {
         Self { store: vec }
     }
 
+    pub fn reset(&mut self) {
+        for i in 0..SIZE {
+            self.store[i] = Entry::ZERO;
+        }
+    }
+
     pub fn put(&mut self, key: usize, data: usize) {
         self.store[Self::index(key)] = Entry { key, data };
     }

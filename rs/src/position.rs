@@ -1,5 +1,6 @@
 pub const HEIGHT: usize = 6;
 pub const WIDTH: usize = 7;
+pub const MIN_SCORE: isize = (-((WIDTH * HEIGHT) as isize) / 2) + 3;
 
 // Represent a connect4 game position. Columns are 0-based.
 pub trait Position {
