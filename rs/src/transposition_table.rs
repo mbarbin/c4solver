@@ -14,10 +14,12 @@ pub struct StackStore {
 }
 
 impl StackStore {
+    #[allow(dead_code)]
     pub fn index(key: usize) -> usize {
         key % SIZE
     }
 
+    #[allow(dead_code)]
     pub fn create() -> Self {
         Self {
             store: [Entry::ZERO; SIZE],
@@ -31,10 +33,12 @@ impl StackStore {
         }
     }
 
+    #[allow(dead_code)]
     pub fn put(&mut self, key: usize, data: usize) {
         self.store[Self::index(key)] = Entry { key, data };
     }
 
+    #[allow(dead_code)]
     pub fn get(&self, key: usize) -> usize {
         let entry = &self.store[Self::index(key)];
         if entry.key == key {
