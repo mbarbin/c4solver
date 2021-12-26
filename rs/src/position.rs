@@ -16,8 +16,6 @@ pub trait Position {
     /** The given column can be played if it is not currently completely filled. */
     fn can_play(&self, column: usize) -> bool;
 
-    fn next_player_to_play(&self) -> usize;
-
     /* Given a free column, place a token of the next player to play
     there. */
     fn play(&mut self, column: usize);
@@ -51,6 +49,16 @@ pub struct Basic {
     board: [[usize; HEIGHT]; WIDTH],
     height: [usize; WIDTH],
     number_of_plies: usize,
+}
+
+impl Basic {
+    fn next_player_to_play(&self) -> usize {
+        if self.number_of_plies % 2 == 0 {
+            1
+        } else {
+            2
+        }
+    }
 }
 
 impl Position for Basic {
@@ -91,14 +99,6 @@ impl Position for Basic {
 
     fn can_play(&self, column: usize) -> bool {
         self.height[column] < HEIGHT
-    }
-
-    fn next_player_to_play(&self) -> usize {
-        if self.number_of_plies % 2 == 0 {
-            1
-        } else {
-            2
-        }
     }
 
     fn play(&mut self, column: usize) {
@@ -154,6 +154,113 @@ impl Position for Basic {
     }
 }
 
+pub struct Bitboard {
+    number_of_plies: usize,
+    position: usize,
+    mask: usize,
+}
+
+impl Bitboard {
+    fn key(&self) -> usize {
+        self.position + self.mask
+    }
+
+    fn top_mask_col(column: usize) -> usize {
+        1 << (HEIGHT - 1 + (column * (HEIGHT + 1)))
+    }
+
+    fn bottom_mask_col(column: usize) -> usize {
+        1 << (column * (HEIGHT + 1))
+    }
+
+    fn column_mask(column: usize) -> usize {
+        ((1 << HEIGHT) - 1) << (column * (HEIGHT + 1))
+    }
+
+    fn move_mask(&self, column: usize) -> usize {
+        (self.mask + Bitboard::bottom_mask_col(column)) & Bitboard::column_mask(column)
+    }
+
+    fn alignment(pos: usize) -> bool {
+        // horizontal
+        let mut m = pos & (pos >> (HEIGHT + 1));
+        if 0 != (m & (m >> (2 * (HEIGHT + 1)))) {
+            return true;
+        };
+
+        // diagonal 1
+        m = pos & (pos >> HEIGHT);
+        if 0 != (m & (m >> (2 * HEIGHT))) {
+            return true;
+        };
+
+        // diagonal 2
+        m = pos & (pos >> (HEIGHT + 2));
+        if 0 != (m & (m >> (2 * (HEIGHT + 2)))) {
+            return true;
+        };
+
+        // vertical;
+        m = pos & (pos >> 1);
+        if 0 != (m & (m >> 2)) {
+            return true;
+        };
+
+        return false;
+    }
+
+    #[allow(dead_code)]
+    fn cell_mask(column: usize, line: usize) -> usize {
+        1 << ((column * (HEIGHT + 1)) + line)
+    }
+}
+
+impl Position for Bitboard {
+    fn key(&self) -> Option<usize> {
+        Some(self.key())
+    }
+
+    fn create() -> Self {
+        Self {
+            number_of_plies: 0,
+            position: 0,
+            mask: 0,
+        }
+    }
+
+    fn copy(&self) -> Self {
+        Self {
+            number_of_plies: self.number_of_plies,
+            position: self.position,
+            mask: self.mask,
+        }
+    }
+
+    fn can_play(&self, column: usize) -> bool {
+        0 == self.mask & Bitboard::top_mask_col(column)
+    }
+
+    fn play(&mut self, column: usize) {
+        let move_mask = self.move_mask(column);
+        self.position = self.position ^ self.mask;
+        self.mask = self.mask | move_mask;
+        self.number_of_plies += 1;
+    }
+
+    fn is_winning_move(&self, column: usize) -> bool {
+        let position = self.position ^ self.move_mask(column);
+        Bitboard::alignment(position)
+    }
+
+    fn number_of_plies(&self) -> usize {
+        self.number_of_plies
+    }
+
+    fn to_ascii_table(&self) -> String {
+        panic!("Unimplemented");
+    }
+}
+
 pub fn make<P: Position>(str: &str) -> P {
     let mut p = P::create();
     for (index, char) in str.chars().enumerate() {
@@ -166,4 +273,19 @@ pub fn make<P: Position>(str: &str) -> P {
         }
     }
     p.copy()
+}
+
+pub enum Kind {
+    Basic,
+    Bitboard,
+}
+
+impl Kind {
+    pub fn parse_exn(str: &str) -> Self {
+        match str {
+            "basic" | "Basic" => Kind::Basic,
+            "bitboard" | "Bitboard" => Kind::Bitboard,
+            _ => panic!("Invalid str Kind, expect Basic|Bitboard, got {}", str),
+        }
+    }
 }

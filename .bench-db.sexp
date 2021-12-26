@@ -154,6 +154,23 @@
   ((mean
     ((span 5.08956419s) (number_of_positions 40396714) (k_pos_per_s 7937)))
    (accuracy 100)))
+ (((solver
+    ((human_name Bitboard) (weak false) (reference false) (ext (rust))))
+   (test_basename Test_L3_R1))
+  ((mean ((span 3.682us) (number_of_positions 140) (k_pos_per_s 38022)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Bitboard) (weak false) (reference false) (ext (rust))))
+   (test_basename Test_L2_R1))
+  ((mean
+    ((span 36.540074ms) (number_of_positions 2081790) (k_pos_per_s 56972)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Bitboard) (weak false) (reference false) (ext (rust))))
+   (test_basename Test_L2_R2))
+  ((mean
+    ((span 2.029010715s) (number_of_positions 40396714) (k_pos_per_s 19909)))
+   (accuracy 100)))
  (((solver ((human_name Bitboard) (weak false) (reference true) (ext ())))
    (test_basename Test_L3_R1))
   ((mean ((span 8.55us) (number_of_positions 140) (k_pos_per_s 16334)))
@@ -179,6 +196,23 @@
    (test_basename Test_L2_R2))
   ((mean
     ((span 2.973919654s) (number_of_positions 23685435) (k_pos_per_s 7964)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Bitboard) (weak true) (reference false) (ext (rust))))
+   (test_basename Test_L3_R1))
+  ((mean ((span 2.502us) (number_of_positions 107) (k_pos_per_s 42765)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Bitboard) (weak true) (reference false) (ext (rust))))
+   (test_basename Test_L2_R1))
+  ((mean
+    ((span 21.028287ms) (number_of_positions 927943) (k_pos_per_s 44128)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Bitboard) (weak true) (reference false) (ext (rust))))
+   (test_basename Test_L2_R2))
+  ((mean
+    ((span 1.116977164s) (number_of_positions 23685435) (k_pos_per_s 21204)))
    (accuracy 100)))
  (((solver ((human_name Bitboard) (weak true) (reference true) (ext ())))
    (test_basename Test_L3_R1))

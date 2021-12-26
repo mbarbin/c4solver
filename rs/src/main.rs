@@ -3,7 +3,7 @@ mod measure;
 mod position;
 mod solver;
 
-use crate::position::Basic;
+use crate::position::{Basic, Bitboard};
 use std::io;
 
 extern crate clap;
@@ -31,6 +31,13 @@ fn main() {
                 .help("explore with center column first")
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("position")
+                .long("position")
+                .value_name("(bitboard|basic)")
+                .help("choose position implementation")
+                .takes_value(true),
+        )
         .get_matches();
 
     let alpha_beta: bool = matches
@@ -47,6 +54,13 @@ fn main() {
         .parse()
         .expect("column-exploration-reorder requires boolean");
 
+    let position_kind: position::Kind = {
+        match matches.value_of("position") {
+            None => position::Kind::Basic,
+            Some(str) => position::Kind::parse_exn(str),
+        }
+    };
+
     loop {
         let mut index = String::new();
 
@@ -56,8 +70,24 @@ fn main() {
 
         let line = index.trim();
 
-        let position = position::make::<Basic>(&line);
-        let result = solver::negamax(position, alpha_beta, weak, column_exploration_reorder);
+        let result: solver::Result = {
+            match &position_kind {
+                position::Kind::Basic => {
+                    let position = position::make::<Basic>(&line);
+                    solver::negamax::<Basic>(position, alpha_beta, weak, column_exploration_reorder)
+                }
+                position::Kind::Bitboard => {
+                    let position = position::make::<Bitboard>(&line);
+                    solver::negamax::<Bitboard>(
+                        position,
+                        alpha_beta,
+                        weak,
+                        column_exploration_reorder,
+                    )
+                }
+            }
+        };
+
         println!(
             "{} {} {} {}",
             line,

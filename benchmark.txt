@@ -31,12 +31,18 @@
 │ Bitboard                               │ Test_L3_R1 │  100.00% │  26.733us │            140 │     5_236 │
 │ Bitboard                               │ Test_L2_R1 │  100.00% │ 264.438ms │      2_081_790 │     7_872 │
 │ Bitboard                               │ Test_L2_R2 │  100.00% │     5.09s │     40_396_714 │     7_937 │
+│ Bitboard - rust                        │ Test_L3_R1 │  100.00% │   3.682us │            140 │    38_022 │
+│ Bitboard - rust                        │ Test_L2_R1 │  100.00% │   36.54ms │      2_081_790 │    56_972 │
+│ Bitboard - rust                        │ Test_L2_R2 │  100.00% │    2.029s │     40_396_714 │    19_909 │
 │ Bitboard - ref                         │ Test_L3_R1 │  100.00% │    8.55us │            140 │    16_334 │
 │ Bitboard - ref                         │ Test_L2_R1 │  100.00% │   33.31ms │      2_081_790 │    62_504 │
 │ Bitboard - ref                         │ Test_L2_R2 │  100.00% │     644ms │     40_396_700 │    62_727 │
 │ Bitboard (weak)                        │ Test_L3_R1 │  100.00% │  18.878us │            107 │     5_667 │
 │ Bitboard (weak)                        │ Test_L2_R1 │  100.00% │   108.7ms │        927_943 │     8_536 │
 │ Bitboard (weak)                        │ Test_L2_R2 │  100.00% │    2.974s │     23_685_435 │     7_964 │
+│ Bitboard (weak) - rust                 │ Test_L3_R1 │  100.00% │   2.502us │            107 │    42_765 │
+│ Bitboard (weak) - rust                 │ Test_L2_R1 │  100.00% │  21.028ms │        927_943 │    44_128 │
+│ Bitboard (weak) - rust                 │ Test_L2_R2 │  100.00% │    1.117s │     23_685_435 │    21_204 │
 │ Bitboard (weak) - ref                  │ Test_L3_R1 │  100.00% │   6.708us │            107 │    15_973 │
 │ Bitboard (weak) - ref                  │ Test_L2_R1 │  100.00% │   14.69ms │        927_943 │    63_149 │
 │ Bitboard (weak) - ref                  │ Test_L2_R2 │  100.00% │   370.3ms │     23_685_400 │    63_968 │
