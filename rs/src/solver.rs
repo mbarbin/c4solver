@@ -1,10 +1,13 @@
 use crate::measure::Measure;
 use crate::position::{self, Position};
+use crate::transposition_table::Store as Transposition_table;
 use timens::Time;
 
 struct Env<'a> {
     moves: &'a [usize; position::WIDTH],
     number_of_positions: usize,
+    transposition_table: Transposition_table,
+    min_score: isize,
 }
 
 impl<'a> Env<'a> {
@@ -58,6 +61,7 @@ impl<'a> Env<'a> {
         position: P,
         mut alpha: isize,
         mut beta: isize,
+        with_transposition_table: bool,
     ) -> isize {
         self.number_of_positions += 1;
         /* Check for draw. */
@@ -77,6 +81,28 @@ impl<'a> Env<'a> {
                 - 1
                 - position.number_of_plies() as isize)
                 / 2;
+
+            let key = {
+                if with_transposition_table {
+                    position.key().unwrap_or(0)
+                } else {
+                    0
+                }
+            };
+
+            let max = {
+                if with_transposition_table {
+                    let data = self.transposition_table.get(key);
+                    if data > 0 {
+                        data as isize + self.min_score - 1
+                    } else {
+                        max
+                    }
+                } else {
+                    max
+                }
+            };
+
             if beta > max {
                 beta = max; // there is no need to keep beta above our max possible score.
                 if alpha >= beta {
@@ -93,7 +119,13 @@ impl<'a> Env<'a> {
                     current player has played col, their score will be
                     the opposite of the score from the opponent's
                     perspective. */
-                    let score = -1 * self.negamax_alpha_beta(position, -beta, -alpha);
+                    let score = -1
+                        * self.negamax_alpha_beta(
+                            position,
+                            -beta,
+                            -alpha,
+                            with_transposition_table,
+                        );
                     // no need to have good precision for score better than beta (opponent's score worse than -beta)
                     // no need to check for score worse than alpha (opponent's score worse better than -alpha)
                     if score >= beta {
@@ -107,6 +139,11 @@ impl<'a> Env<'a> {
                     };
                 }
             }
+            // Save the upper bound of the position.
+            if with_transposition_table {
+                self.transposition_table
+                    .put(key, (alpha - self.min_score + 1) as usize);
+            };
             return alpha;
         }
     }
@@ -122,6 +159,7 @@ pub fn negamax<P: Position>(
     alpha_beta: bool,
     weak: bool,
     column_exploration_reorder: bool,
+    with_transposition_table: bool,
 ) -> Result {
     let moves = {
         let mut moves = [0; position::WIDTH];
@@ -138,21 +176,26 @@ pub fn negamax<P: Position>(
         moves
     };
     let number_of_positions = 0;
+    let transposition_table = Transposition_table::create();
+    let min_score = (-((position::WIDTH * position::HEIGHT) as isize) / 2) + 3;
     let mut env = Env {
         moves: &moves,
         number_of_positions,
+        transposition_table,
+        min_score,
     };
     let t1 = Time::now();
     let result = {
         if !alpha_beta {
             env.negamax(position)
         } else if weak {
-            env.negamax_alpha_beta(position, -1, 1)
+            env.negamax_alpha_beta(position, -1, 1, with_transposition_table)
         } else {
             env.negamax_alpha_beta(
                 position,
                 -((position::WIDTH * position::HEIGHT) as isize) / 2,
                 (position::WIDTH * position::HEIGHT) as isize / 2,
+                with_transposition_table,
             )
         }
     };

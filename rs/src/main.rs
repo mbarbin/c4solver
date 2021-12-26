@@ -2,6 +2,7 @@ mod bench;
 mod measure;
 mod position;
 mod solver;
+mod transposition_table;
 
 use crate::position::{Basic, Bitboard};
 use std::io;
@@ -38,6 +39,13 @@ fn main() {
                 .help("choose position implementation")
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("with_transposition_table")
+                .long("with-transposition-table")
+                .value_name("BOOL")
+                .help("memoize with transposition table")
+                .takes_value(true),
+        )
         .get_matches();
 
     let alpha_beta: bool = matches
@@ -61,6 +69,12 @@ fn main() {
         }
     };
 
+    let with_transposition_table: bool = matches
+        .value_of("with_transposition_table")
+        .unwrap_or("false")
+        .parse()
+        .expect("with-transposition-table requires boolean");
+
     loop {
         let mut index = String::new();
 
@@ -74,7 +88,13 @@ fn main() {
             match &position_kind {
                 position::Kind::Basic => {
                     let position = position::make::<Basic>(&line);
-                    solver::negamax::<Basic>(position, alpha_beta, weak, column_exploration_reorder)
+                    solver::negamax::<Basic>(
+                        position,
+                        alpha_beta,
+                        weak,
+                        column_exploration_reorder,
+                        with_transposition_table,
+                    )
                 }
                 position::Kind::Bitboard => {
                     let position = position::make::<Bitboard>(&line);
@@ -83,6 +103,7 @@ fn main() {
                         alpha_beta,
                         weak,
                         column_exploration_reorder,
+                        with_transposition_table,
                     )
                 }
             }

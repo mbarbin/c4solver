@@ -246,6 +246,26 @@
     ((span 300.031209ms) (number_of_positions 1731151) (k_pos_per_s 5769)))
    (accuracy 100)))
  (((solver
+    ((human_name Transposition_table) (weak false) (reference false)
+     (ext (rust))))
+   (test_basename Test_L3_R1))
+  ((mean ((span 15.655us) (number_of_positions 93) (k_pos_per_s 5940)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Transposition_table) (weak false) (reference false)
+     (ext (rust))))
+   (test_basename Test_L2_R1))
+  ((mean
+    ((span 16.332381ms) (number_of_positions 207942) (k_pos_per_s 12731)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Transposition_table) (weak false) (reference false)
+     (ext (rust))))
+   (test_basename Test_L2_R2))
+  ((mean
+    ((span 172.798985ms) (number_of_positions 1731151) (k_pos_per_s 10018)))
+   (accuracy 100)))
+ (((solver
     ((human_name Transposition_table) (weak false) (reference true) (ext ())))
    (test_basename Test_L3_R1))
   ((mean ((span 6.531us) (number_of_positions 93) (k_pos_per_s 14220)))
@@ -285,6 +305,25 @@
    (test_basename Test_L2_R2))
   ((mean
     ((span 131.063509ms) (number_of_positions 752278) (k_pos_per_s 5739)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Transposition_table) (weak true) (reference false)
+     (ext (rust))))
+   (test_basename Test_L3_R1))
+  ((mean ((span 12.094us) (number_of_positions 69) (k_pos_per_s 5705)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Transposition_table) (weak true) (reference false)
+     (ext (rust))))
+   (test_basename Test_L2_R1))
+  ((mean ((span 3.072475ms) (number_of_positions 28753) (k_pos_per_s 9358)))
+   (accuracy 100)))
+ (((solver
+    ((human_name Transposition_table) (weak true) (reference false)
+     (ext (rust))))
+   (test_basename Test_L2_R2))
+  ((mean
+    ((span 85.050084ms) (number_of_positions 752278) (k_pos_per_s 8845)))
    (accuracy 100)))
  (((solver
     ((human_name Transposition_table) (weak true) (reference true) (ext ())))

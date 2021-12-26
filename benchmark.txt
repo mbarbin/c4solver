@@ -49,6 +49,9 @@
 │ Transposition table                    │ Test_L3_R1 │  100.00% │  79.518us │             93 │     1_169 │
 │ Transposition table                    │ Test_L2_R1 │  100.00% │  33.177ms │        207_942 │     6_267 │
 │ Transposition table                    │ Test_L2_R2 │  100.00% │ 300.031ms │      1_731_151 │     5_769 │
+│ Transposition table - rust             │ Test_L3_R1 │  100.00% │  15.655us │             93 │     5_940 │
+│ Transposition table - rust             │ Test_L2_R1 │  100.00% │  16.332ms │        207_942 │    12_731 │
+│ Transposition table - rust             │ Test_L2_R2 │  100.00% │ 172.799ms │      1_731_151 │    10_018 │
 │ Transposition table - ref              │ Test_L3_R1 │  100.00% │   6.531us │             93 │    14_220 │
 │ Transposition table - ref              │ Test_L2_R1 │  100.00% │   5.594ms │        207_900 │    37_170 │
 │ Transposition table - ref              │ Test_L2_R2 │  100.00% │   52.45ms │      1_731_000 │    33_000 │
@@ -57,6 +60,9 @@
 │ Transposition table (weak)             │ Test_L3_R1 │  100.00% │  47.244us │             69 │     1_460 │
 │ Transposition table (weak)             │ Test_L2_R1 │  100.00% │   5.593ms │         28_753 │     5_141 │
 │ Transposition table (weak)             │ Test_L2_R2 │  100.00% │ 131.064ms │        752_278 │     5_739 │
+│ Transposition table (weak) - rust      │ Test_L3_R1 │  100.00% │  12.094us │             69 │     5_705 │
+│ Transposition table (weak) - rust      │ Test_L2_R1 │  100.00% │   3.072ms │         28_753 │     9_358 │
+│ Transposition table (weak) - rust      │ Test_L2_R2 │  100.00% │   85.05ms │        752_278 │     8_845 │
 │ Transposition table (weak) - ref       │ Test_L3_R1 │  100.00% │   5.155us │             67 │    13_320 │
 │ Transposition table (weak) - ref       │ Test_L2_R1 │  100.00% │   1.072ms │         28_750 │    26_830 │
 │ Transposition table (weak) - ref       │ Test_L2_R2 │  100.00% │   23.79ms │        752_300 │    31_620 │
