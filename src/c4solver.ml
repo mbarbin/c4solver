@@ -35,6 +35,11 @@ let bench_run_cmd =
          "--with-transposition-table"
          (optional_with_default false bool)
          ~doc:"bool use a transposition table (default false)"
+     and iterative_deepening =
+       flag
+         "--iterative-deepening"
+         (optional_with_default false bool)
+         ~doc:"bool enable iterative deepening (default false)"
      and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
      and debug = flag "--debug" no_arg ~doc:" print debug info" in
@@ -50,6 +55,7 @@ let bench_run_cmd =
            ~weak
            ~column_exploration_reorder
            ~with_transposition_table
+           ~iterative_deepening
        in
        print_endline (Bench.to_ascii_table ~accuracy_only benches))
 ;;

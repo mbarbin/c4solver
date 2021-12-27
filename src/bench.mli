@@ -33,6 +33,7 @@ module Solver : sig
       ; weak : bool
       ; column_exploration_reorder : bool
       ; with_transposition_table : bool
+      ; iterative_deepening : bool
       ; reference : bool
       }
   end
@@ -44,6 +45,7 @@ module Solver : sig
       | Column_exploration_order
       | Bitboard
       | Transposition_table
+      | Iterative_deepening
     [@@deriving compare, equal, enumerate, sexp]
 
     val to_string_hum : t -> string

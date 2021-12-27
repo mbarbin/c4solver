@@ -11,6 +11,7 @@ let run
     ~weak
     ~column_exploration_reorder
     ~with_transposition_table
+    ~iterative_deepening
   =
   let solver =
     Bench.Solver.of_params
@@ -19,6 +20,7 @@ let run
       ; weak
       ; column_exploration_reorder
       ; with_transposition_table
+      ; iterative_deepening
       ; reference = false
       }
   in
@@ -52,8 +54,12 @@ let run
                   ~weak
                   ~column_exploration_reorder
                   ~with_transposition_table
+                  ~iterative_deepening
               else (
-                if weak || column_exploration_reorder || with_transposition_table
+                if weak
+                   || column_exploration_reorder
+                   || with_transposition_table
+                   || iterative_deepening
                 then
                   raise_s
                     [%sexp
@@ -61,6 +67,8 @@ let run
                       , [%here]
                       , { alpha_beta : bool
                         ; column_exploration_reorder : bool
+                        ; with_transposition_table : bool
+                        ; iterative_deepening : bool
                         ; weak : bool
                         }];
                 Solver.negamax (module P) position)

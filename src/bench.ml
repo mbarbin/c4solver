@@ -48,6 +48,7 @@ module Solver = struct
       ; weak : bool
       ; column_exploration_reorder : bool
       ; with_transposition_table : bool
+      ; iterative_deepening : bool
       ; reference : bool
       }
     [@@deriving equal, sexp_of]
@@ -60,6 +61,7 @@ module Solver = struct
       | Column_exploration_order
       | Bitboard
       | Transposition_table
+      | Iterative_deepening
     [@@deriving compare, equal, enumerate, sexp]
 
     let to_string_hum = function
@@ -68,6 +70,7 @@ module Solver = struct
       | Column_exploration_order -> "Column exploration order"
       | Bitboard -> "Bitboard"
       | Transposition_table -> "Transposition table"
+      | Iterative_deepening -> "Iterative deepening"
     ;;
   end
 
@@ -102,6 +105,7 @@ module Solver = struct
       ; weak = t.weak
       ; column_exploration_reorder = false
       ; with_transposition_table = false
+      ; iterative_deepening = false
       ; reference = t.reference
       }
     | Alpha_beta ->
@@ -110,6 +114,7 @@ module Solver = struct
       ; weak = t.weak
       ; column_exploration_reorder = false
       ; with_transposition_table = false
+      ; iterative_deepening = false
       ; reference = t.reference
       }
     | Column_exploration_order ->
@@ -118,6 +123,7 @@ module Solver = struct
       ; weak = t.weak
       ; column_exploration_reorder = true
       ; with_transposition_table = false
+      ; iterative_deepening = false
       ; reference = t.reference
       }
     | Bitboard ->
@@ -126,6 +132,7 @@ module Solver = struct
       ; weak = t.weak
       ; column_exploration_reorder = true
       ; with_transposition_table = false
+      ; iterative_deepening = false
       ; reference = t.reference
       }
     | Transposition_table ->
@@ -134,6 +141,16 @@ module Solver = struct
       ; weak = t.weak
       ; column_exploration_reorder = true
       ; with_transposition_table = true
+      ; iterative_deepening = false
+      ; reference = t.reference
+      }
+    | Iterative_deepening ->
+      { position = Bitboard
+      ; alpha_beta = true
+      ; weak = t.weak
+      ; column_exploration_reorder = true
+      ; with_transposition_table = true
+      ; iterative_deepening = true
       ; reference = t.reference
       }
   ;;

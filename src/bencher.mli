@@ -9,6 +9,7 @@ val run
   -> weak:bool
   -> column_exploration_reorder:bool
   -> with_transposition_table:bool
+  -> iterative_deepening:bool
   -> Bench.t list
 
 val run_external_solver

@@ -71,6 +71,7 @@ let negamax_alpha_beta
     ~weak
     ~column_exploration_reorder
     ~with_transposition_table
+    ~iterative_deepening
   =
   let height = P.height t in
   let width = P.width t in
@@ -102,7 +103,25 @@ let negamax_alpha_beta
       Array.init width ~f:(fun i -> (width / 2) + ((1 - (2 * (i % 2))) * (i + 1) / 2))
   in
   let number_of_positions = ref 0 in
-  let rec negamax t ~alpha ~beta =
+  let rec solve t =
+    let min = -((width * height) - P.number_of_plies t) / 2 in
+    let max = ((width * height) + 1 - P.number_of_plies t) / 2 in
+    let min, max = if weak then ref (-1), ref 1 else ref min, ref max in
+    (* iteratively narrow the min-max exploration window *)
+    while !min < !max do
+      let med = ref (!min + ((!max - !min) / 2)) in
+      let () =
+        if !med <= 0 && !min / 2 < !med
+        then med := !min / 2
+        else if !med >= 0 && !max / 2 > !med
+        then med := !max / 2
+      in
+      (* use a null depth window to know if the actual score is greater or smaller than med *)
+      let r = aux_negamax t ~alpha:!med ~beta:(!med + 1) in
+      if r <= !med then max := r else min := r
+    done;
+    !min
+  and aux_negamax t ~alpha ~beta =
     incr number_of_positions;
     (* Check for draw. *)
     if P.number_of_plies t = height * width
@@ -152,7 +171,7 @@ let negamax_alpha_beta
               let t = P.copy t in
               P.play t ~column;
               (* Explore opponent's score within [-beta;-alpha] windows. *)
-              let score = -1 * negamax t ~alpha:(-1 * beta) ~beta:(-1 * alpha) in
+              let score = -1 * aux_negamax t ~alpha:(-1 * beta) ~beta:(-1 * alpha) in
               (* No need to have good precision for score better than
                  beta (opponent's score worse than -beta).
 
@@ -180,9 +199,11 @@ let negamax_alpha_beta
   in
   let t1 = Time_ns.now () in
   let result =
-    if weak
-    then negamax t (-1) 1
-    else negamax t (-1 * height * width / 2) (height * width / 2)
+    if iterative_deepening
+    then solve t
+    else if weak
+    then aux_negamax t (-1) 1
+    else aux_negamax t (-1 * height * width / 2) (height * width / 2)
   in
   let t2 = Time_ns.now () in
   { measure =

@@ -13,4 +13,5 @@ val negamax_alpha_beta
   -> weak:bool
   -> column_exploration_reorder:bool
   -> with_transposition_table:bool
+  -> iterative_deepening:bool
   -> t
