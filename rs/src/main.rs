@@ -48,6 +48,13 @@ fn main() {
                 .help("memoize with transposition table")
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("iterative_deepening")
+                .long("iterative-deepening")
+                .value_name("BOOL")
+                .help("enable iterative deepening")
+                .takes_value(true),
+        )
         .get_matches();
 
     let alpha_beta: bool = matches
@@ -83,6 +90,12 @@ fn main() {
         None
     };
 
+    let iterative_deepening: bool = matches
+        .value_of("iterative_deepening")
+        .unwrap_or("false")
+        .parse()
+        .expect("iterative-deepening requires boolean");
+
     loop {
         let mut index = String::new();
 
@@ -102,6 +115,7 @@ fn main() {
                         weak,
                         column_exploration_reorder,
                         &mut transposition_table,
+                        iterative_deepening,
                     )
                 }
                 position::Kind::Bitboard => {
@@ -112,6 +126,7 @@ fn main() {
                         weak,
                         column_exploration_reorder,
                         &mut transposition_table,
+                        iterative_deepening,
                     )
                 }
             }

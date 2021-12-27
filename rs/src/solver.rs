@@ -45,6 +45,36 @@ impl<'a> Env<'a> {
         best_score
     }
 
+    fn iterative_deepening<P: Position>(&mut self, position: P, weak: bool) -> isize {
+        let mut min = -((position::WIDTH * position::HEIGHT) as isize
+            - position.number_of_plies() as isize)
+            / 2;
+        let mut max = ((position::WIDTH * position::HEIGHT) as isize + 1
+            - position.number_of_plies() as isize)
+            / 2;
+        if weak {
+            min = -1;
+            max = 1;
+        }
+        while min < max {
+            // iteratively narrow the min-max exploration window
+            let mut med = min + (max - min) / 2;
+            if med <= 0 && min / 2 < med {
+                med = min / 2;
+            } else if med >= 0 && max / 2 > med {
+                med = max / 2;
+            };
+            // use a null depth window to know if the actual score is greater or smaller than med
+            let r = self.aux_negamax_alpha_beta(position.copy(), med, med + 1);
+            if r <= med {
+                max = r
+            } else {
+                min = r
+            };
+        }
+        return min;
+    }
+
     /**
      * Reccursively score connect 4 position using negamax variant of alpha-beta algorithm.
      * @param: alpha < beta, a score window within which we are evaluating the position.
@@ -152,6 +182,7 @@ pub fn negamax<P: Position>(
     weak: bool,
     column_exploration_reorder: bool,
     transposition_table: &mut Option<Transposition_table>,
+    iterative_deepening: bool,
 ) -> Result {
     let moves = {
         let mut moves = [0; position::WIDTH];
@@ -180,6 +211,8 @@ pub fn negamax<P: Position>(
     let result = {
         if !alpha_beta {
             env.aux_negamax(position)
+        } else if iterative_deepening {
+            env.iterative_deepening(position, weak)
         } else if weak {
             env.aux_negamax_alpha_beta(position, -1, 1)
         } else {
