@@ -34,3 +34,16 @@ We have kept the original AGPL v3 License for this repo as well.
 - Benchmark: Reproduce and compare performance results. Experiment
   with various code changes and witness their impact on performances,
   compare OCaml with Rust, etc.
+  
+## Completion status and roadmap
+
+I'm not very actively working on this project, so the project
+progresses slowly. Currently the project implements 8 out of the 12 
+steps outlined in the tutorial. I plan on trying to continue progressing 
+toward the following goals:
+
+- [ ] Implement all of 12 steps in OCaml and Rust;
+- [ ] Stabilize the bench results - currently multiple run may create
+      large variations in the results;
+- [ ] Clean up the code, look for simple performance enhancements;
+- [ ] Write a basic summary of findings of comparing OCaml, Rust and cpp.
