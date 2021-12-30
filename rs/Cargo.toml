@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 clap = "2.34.0"
+enum-utils = "0.1.2"
 timens = "0.1.3"

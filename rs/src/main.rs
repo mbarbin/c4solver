@@ -1,10 +1,11 @@
-mod bench;
 mod measure;
 mod position;
 mod solver;
+mod step;
 mod transposition_table;
 
 use crate::position::{Basic, Bitboard};
+use crate::step::Step;
 use crate::transposition_table::Store as Transposition_table;
 
 use std::io;
@@ -15,10 +16,10 @@ use clap::{App, Arg};
 fn main() {
     let matches = App::new("c4solver")
         .arg(
-            Arg::with_name("alpha_beta")
-                .long("alpha-beta")
-                .value_name("BOOL")
-                .help("enable alpha-beta pruning")
+            Arg::with_name("step")
+                .long("step")
+                .value_name("STEP")
+                .help("select solver step")
                 .takes_value(true),
         )
         .arg(
@@ -27,62 +28,22 @@ fn main() {
                 .help("run weak solver")
                 .takes_value(false),
         )
-        .arg(
-            Arg::with_name("column_exploration_reorder")
-                .long("column-exploration-reorder")
-                .value_name("BOOL")
-                .help("explore with center column first")
-                .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("position")
-                .long("position")
-                .value_name("(bitboard|basic)")
-                .help("choose position implementation")
-                .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("with_transposition_table")
-                .long("with-transposition-table")
-                .value_name("BOOL")
-                .help("memoize with transposition table")
-                .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("iterative_deepening")
-                .long("iterative-deepening")
-                .value_name("BOOL")
-                .help("enable iterative deepening")
-                .takes_value(true),
-        )
         .get_matches();
 
-    let alpha_beta: bool = matches
-        .value_of("alpha_beta")
-        .unwrap_or("true")
+    let step: Step = matches
+        .value_of("step")
+        .unwrap_or("MinMax")
         .parse()
-        .expect("alpha-beta requires boolean");
+        .expect("step requires Step constructor");
 
+    let params = step.to_params();
+
+    let alpha_beta = params.alpha_beta;
     let weak: bool = matches.is_present("weak");
 
-    let column_exploration_reorder: bool = matches
-        .value_of("column_exploration_reorder")
-        .unwrap_or("true")
-        .parse()
-        .expect("column-exploration-reorder requires boolean");
-
-    let position_kind: position::Kind = {
-        match matches.value_of("position") {
-            None => position::Kind::Basic,
-            Some(str) => position::Kind::parse_exn(str),
-        }
-    };
-
-    let with_transposition_table: bool = matches
-        .value_of("with_transposition_table")
-        .unwrap_or("false")
-        .parse()
-        .expect("with-transposition-table requires boolean");
+    let column_exploration_reorder = params.column_exploration_reorder;
+    let position_kind = params.position_kind;
+    let with_transposition_table = params.with_transposition_table;
 
     let mut transposition_table = if with_transposition_table {
         Some(Transposition_table::create())

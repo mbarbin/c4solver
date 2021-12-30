@@ -280,13 +280,3 @@ pub enum Kind {
     Basic,
     Bitboard,
 }
-
-impl Kind {
-    pub fn parse_exn(str: &str) -> Self {
-        match str {
-            "basic" | "Basic" => Kind::Basic,
-            "bitboard" | "Bitboard" => Kind::Bitboard,
-            _ => panic!("Invalid str Kind, expect Basic|Bitboard, got {}", str),
-        }
-    }
-}
