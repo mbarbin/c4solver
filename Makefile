@@ -1,4 +1,4 @@
-.PHONY: all test fmt clean lint show-benches
+.PHONY: all test fmt clean lint show-benches gen-scripts
 
 all:
 	dune build
@@ -23,3 +23,7 @@ clean:
 show-benches:
 	dune exec c4solver -- bench show > benchmark.txt
 	dune exec c4solver -- bench show
+
+gen-scripts:
+	dune exec c4solver gen-scripts -- --script-dir ${PWD}/script
+	chmod +x ${PWD}/script/*.sh
