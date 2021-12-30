@@ -7,7 +7,7 @@ let resources_up_to ~(step : Step.t) =
   | Column_exploration_order -> 2
   | Bitboard -> 3
   | Transposition_table -> 3
-  | Iterative_deepening -> 3
+  | Iterative_deepening -> 4
 ;;
 
 let resources ~step = Resource.up_to (resources_up_to ~step)
