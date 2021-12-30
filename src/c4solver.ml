@@ -1,9 +1,11 @@
 open! Core
 module Bench = Bench
+module Bench_db = Bench_db
 module Bencher = Bencher
 module Measure = Measure
 module Position = Position
 module Solver = Solver
+module Step = Step
 
 let bench_db_default_filename = ".bench-db.sexp"
 
@@ -13,50 +15,18 @@ let bench_run_cmd =
     (let%map_open.Command filenames = anon (non_empty_sequence_as_list ("FILE" %: string))
      and height = return 6
      and width = return 7
-     and position =
-       flag
-         "--position"
-         (optional_with_default
-            Position.Basic
-            (Arg_type.enumerated_sexpable ~case_sensitive:false (module Position)))
-         ~doc:" choose position implementation"
-     and alpha_beta =
-       flag
-         "--alpha-beta"
-         (optional_with_default true bool)
-         ~doc:"bool enable alpha-beta prunning (default true)"
-     and column_exploration_reorder =
-       flag
-         "--column-exploration-reorder"
-         (optional_with_default true bool)
-         ~doc:"bool explore with center columns first (default true)"
-     and with_transposition_table =
-       flag
-         "--with-transposition-table"
-         (optional_with_default false bool)
-         ~doc:"bool use a transposition table (default false)"
-     and iterative_deepening =
-       flag
-         "--iterative-deepening"
-         (optional_with_default false bool)
-         ~doc:"bool enable iterative deepening (default false)"
      and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
+     and step =
+       flag
+         "--step"
+         (required (Arg_type.enumerated_sexpable (module Step)))
+         ~doc:"sexp solver step"
      and debug = flag "--debug" no_arg ~doc:" print debug info" in
      fun () ->
+       let solver = { Bench.Solver.step; weak; reference = false; ext = None } in
        let bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
-       let benches =
-         Bencher.run
-           ~bench_db
-           ~position
-           ~filenames
-           ~debug
-           ~alpha_beta
-           ~weak
-           ~column_exploration_reorder
-           ~with_transposition_table
-           ~iterative_deepening
-       in
+       let benches = Bencher.run ~bench_db ~filenames ~debug ~solver in
        print_endline (Bench.to_ascii_table ~accuracy_only benches))
 ;;
 
@@ -68,11 +38,11 @@ let bench_run_external_cmd =
      and width = return 7
      and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
      and reference = flag "--reference" no_arg ~doc:" solver is a reference"
-     and human_name =
+     and step =
        flag
-         "--human-name"
-         (required (Arg_type.enumerated_sexpable (module Bench.Solver.Human_name)))
-         ~doc:"sexp solver human-name"
+         "--step"
+         (required (Arg_type.enumerated_sexpable (module Step)))
+         ~doc:"sexp solver step"
      and solver =
        flag "--name" (required string) ~doc:"name external solver shortname (language)"
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
@@ -83,10 +53,10 @@ let bench_run_external_cmd =
        | None -> raise_s [%sexp "external solver command is mandatory"]
      in
      fun () ->
-       let solver = { Bench.Solver.human_name; weak; reference; ext = Some solver } in
+       let solver = { Bench.Solver.step; weak; reference; ext = Some solver } in
        let bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
        let benches =
-         Bencher.run_external_solver ~bench_db ~command ~solver ~weak ~debug ~filenames
+         Bencher.run_external_solver ~bench_db ~command ~filenames ~debug ~solver
        in
        print_endline (Bench.to_ascii_table ~accuracy_only benches))
 ;;

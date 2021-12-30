@@ -38,23 +38,10 @@ module Solver : sig
       }
   end
 
-  module Human_name : sig
-    type t =
-      | MinMax
-      | Alpha_beta
-      | Column_exploration_order
-      | Bitboard
-      | Transposition_table
-      | Iterative_deepening
-    [@@deriving compare, equal, enumerate, sexp]
-
-    val to_string_hum : t -> string
-  end
-
   (** A solver is obtained by selecting various parameters. It has a
      short human readable name for display purposes. *)
   type t =
-    { human_name : Human_name.t
+    { step : Step.t
     ; weak : bool
     ; reference : bool
     ; ext : string option

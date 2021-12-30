@@ -2,21 +2,15 @@ open! Core
 
 val run
   :  bench_db:Bench_db.t
-  -> position:Position.t
   -> filenames:string list
   -> debug:bool
-  -> alpha_beta:bool
-  -> weak:bool
-  -> column_exploration_reorder:bool
-  -> with_transposition_table:bool
-  -> iterative_deepening:bool
+  -> solver:Bench.Solver.t
   -> Bench.t list
 
 val run_external_solver
   :  bench_db:Bench_db.t
   -> command:string list
-  -> solver:Bench.Solver.t
-  -> weak:bool
-  -> debug:bool
   -> filenames:string list
+  -> debug:bool
+  -> solver:Bench.Solver.t
   -> Bench.t list

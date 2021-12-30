@@ -2,27 +2,17 @@ open! Core
 
 let do_ansi f = if ANSITerminal.isatty.contents Core_unix.stdout then f ()
 
-let run
-    ~bench_db
-    ~position
-    ~filenames
-    ~debug
-    ~alpha_beta
-    ~weak
-    ~column_exploration_reorder
-    ~with_transposition_table
-    ~iterative_deepening
-  =
-  let solver =
-    Bench.Solver.of_params
-      { position
+let run ~bench_db ~filenames ~debug ~solver =
+  let { Bench.Solver.Params.position
       ; alpha_beta
       ; weak
       ; column_exploration_reorder
       ; with_transposition_table
       ; iterative_deepening
-      ; reference = false
+      ; reference
       }
+    =
+    Bench.Solver.to_params solver
   in
   let (module P : Position.S) = Position.get position in
   let test_files =
@@ -45,7 +35,7 @@ let run
             let position =
               Bench.Test_line.make_position test_line ~height:6 ~width:7 (module P)
             in
-            let { Solver.measure; result } =
+            let { Solver.Result_with_measure.measure; result } =
               if alpha_beta
               then
                 Solver.negamax_alpha_beta
@@ -108,7 +98,7 @@ let run
       bench)
 ;;
 
-let run_external_solver ~bench_db ~command ~solver ~weak ~debug ~filenames =
+let run_external_solver ~bench_db ~command ~filenames ~debug ~solver =
   let prog, args =
     match command with
     | [] -> raise_s [%sexp "Invalid external solver command"]
@@ -145,15 +135,15 @@ let run_external_solver ~bench_db ~command ~solver ~weak ~debug ~filenames =
                   [%sexp "unexpected process output", [%here], (output : string list)]
             in
             assert (String.equal position test_line.position);
-            let { Solver.measure; result } =
-              { Solver.measure =
+            let { Solver.Result_with_measure.measure; result } =
+              { Solver.Result_with_measure.measure =
                   { span = Time_ns.Span.of_us (Float.of_string time_in_micro_second)
                   ; number_of_positions = Int.of_string nb_positions
                   }
               ; result = Int.of_string result
               }
             in
-            if match weak with
+            if match solver.Bench.Solver.weak with
                | false -> result = test_line.result
                | true ->
                  Ordering.equal

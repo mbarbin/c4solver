@@ -1,9 +1,11 @@
 open! Core
 
-type t =
-  { measure : Measure.t
-  ; result : int
-  }
+module Result_with_measure = struct
+  type t =
+    { measure : Measure.t
+    ; result : int
+    }
+end
 
 let negamax (type t) (module P : Position.S with type t = t) (t : t) =
   let height = P.height t in
@@ -40,8 +42,8 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
   let t1 = Time_ns.now () in
   let result = negamax t in
   let t2 = Time_ns.now () in
-  { measure =
-      { Measure.span = Time_ns.diff t2 t1; number_of_positions = !number_of_positions }
+  { Result_with_measure.measure =
+      { span = Time_ns.diff t2 t1; number_of_positions = !number_of_positions }
   ; result
   }
 ;;
@@ -206,8 +208,8 @@ let negamax_alpha_beta
     else aux_negamax t (-1 * height * width / 2) (height * width / 2)
   in
   let t2 = Time_ns.now () in
-  { measure =
-      { Measure.span = Time_ns.diff t2 t1; number_of_positions = !number_of_positions }
+  { Result_with_measure.measure =
+      { span = Time_ns.diff t2 t1; number_of_positions = !number_of_positions }
   ; result
   }
 ;;

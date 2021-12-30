@@ -1,11 +1,13 @@
 open! Core
 
-type t =
-  { measure : Measure.t
-  ; result : int
-  }
+module Result_with_measure : sig
+  type t =
+    { measure : Measure.t
+    ; result : int
+    }
+end
 
-val negamax : (module Position.S with type t = 'a) -> 'a -> t
+val negamax : (module Position.S with type t = 'a) -> 'a -> Result_with_measure.t
 
 val negamax_alpha_beta
   :  (module Position.S with type t = 'a)
@@ -14,4 +16,4 @@ val negamax_alpha_beta
   -> column_exploration_reorder:bool
   -> with_transposition_table:bool
   -> iterative_deepening:bool
-  -> t
+  -> Result_with_measure.t

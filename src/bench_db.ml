@@ -10,34 +10,32 @@ open! Bench
 (* References entries - from [http://blog.gamesolver.org/solving-connect-four/]. *)
 let reference_entries =
   let ext = None in
-  let minmax = { Solver.human_name = MinMax; weak = false; reference = true; ext } in
+  let minmax = { Solver.step = MinMax; weak = false; reference = true; ext } in
   let alpha_beta_strong =
-    { Solver.human_name = Alpha_beta; weak = false; reference = true; ext }
+    { Solver.step = Alpha_beta; weak = false; reference = true; ext }
   in
   let alpha_beta_weak =
-    { Solver.human_name = Alpha_beta; weak = true; reference = true; ext }
+    { Solver.step = Alpha_beta; weak = true; reference = true; ext }
   in
   let ceo_strong =
-    { Solver.human_name = Column_exploration_order; weak = false; reference = true; ext }
+    { Solver.step = Column_exploration_order; weak = false; reference = true; ext }
   in
   let ceo_weak =
-    { Solver.human_name = Column_exploration_order; weak = true; reference = true; ext }
+    { Solver.step = Column_exploration_order; weak = true; reference = true; ext }
   in
-  let bit_strong =
-    { Solver.human_name = Bitboard; weak = false; reference = true; ext }
-  in
-  let bit_weak = { Solver.human_name = Bitboard; weak = true; reference = true; ext } in
+  let bit_strong = { Solver.step = Bitboard; weak = false; reference = true; ext } in
+  let bit_weak = { Solver.step = Bitboard; weak = true; reference = true; ext } in
   let trans_strong =
-    { Solver.human_name = Transposition_table; weak = false; reference = true; ext }
+    { Solver.step = Transposition_table; weak = false; reference = true; ext }
   in
   let trans_weak =
-    { Solver.human_name = Transposition_table; weak = true; reference = true; ext }
+    { Solver.step = Transposition_table; weak = true; reference = true; ext }
   in
   let iter_strong =
-    { Solver.human_name = Iterative_deepening; weak = false; reference = true; ext }
+    { Solver.step = Iterative_deepening; weak = false; reference = true; ext }
   in
   let iter_weak =
-    { Solver.human_name = Iterative_deepening; weak = true; reference = true; ext }
+    { Solver.step = Iterative_deepening; weak = true; reference = true; ext }
   in
   (* MinMax. *)
   [ ( { Key.solver = minmax; test_basename = "Test_L3_R1" }

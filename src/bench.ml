@@ -54,32 +54,12 @@ module Solver = struct
     [@@deriving equal, sexp_of]
   end
 
-  module Human_name = struct
-    type t =
-      | MinMax
-      | Alpha_beta
-      | Column_exploration_order
-      | Bitboard
-      | Transposition_table
-      | Iterative_deepening
-    [@@deriving compare, equal, enumerate, sexp]
-
-    let to_string_hum = function
-      | MinMax -> "MinMax"
-      | Alpha_beta -> "Alpha-beta"
-      | Column_exploration_order -> "Column exploration order"
-      | Bitboard -> "Bitboard"
-      | Transposition_table -> "Transposition table"
-      | Iterative_deepening -> "Iterative deepening"
-    ;;
-  end
-
   type lang = string [@@deriving compare, equal, sexp]
 
   let all_of_lang = []
 
   type t =
-    { human_name : Human_name.t
+    { step : Step.t
     ; weak : bool
     ; reference : bool
     ; ext : lang option [@sexp.drop_if Option.is_none] [@sexp.default None]
@@ -89,7 +69,7 @@ module Solver = struct
   let to_string_hum t =
     sprintf
       "%s%s%s%s"
-      (Human_name.to_string_hum t.human_name)
+      (Step.to_string_hum t.step)
       (if t.weak then " (weak)" else "")
       (if t.reference then " - ref" else "")
       (match t.ext with
@@ -98,7 +78,7 @@ module Solver = struct
   ;;
 
   let to_params t : Params.t =
-    match t.human_name with
+    match t.step with
     | MinMax ->
       { position = Basic
       ; alpha_beta = false
