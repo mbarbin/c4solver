@@ -5,12 +5,12 @@
 │ MinMax rust                               │ Test_L3_R1 │  100.00% │ 680.121us │         11_025 │    16_210 │
 │ MinMax c++ - ref                          │ Test_L3_R1 │  100.00% │  790.28us │         11_024 │    13_950 │
 │ Alpha-beta ocaml                          │ Test_L3_R1 │  100.00% │ 154.336us │            284 │     1_840 │
-│ Alpha-beta rust                           │ Test_L3_R1 │  100.00% │  97.303us │            284 │     2_918 │
+│ Alpha-beta rust                           │ Test_L3_R1 │  100.00% │  49.451us │            284 │     5_743 │
 │ Alpha-beta c++ - ref                      │ Test_L3_R1 │  100.00% │   69.62us │            284 │     4_074 │
 │ Alpha-beta c++ - ref                      │ Test_L2_R1 │  100.00% │     4.54s │     54_236_700 │    11_940 │
 │ Alpha-beta c++ - ref                      │ Test_L2_R2 │  100.00% │     38.7s │    453_614_000 │    11_725 │
 │ Alpha-beta (weak) ocaml                   │ Test_L3_R1 │  100.00% │ 119.854us │            223 │     1_860 │
-│ Alpha-beta (weak) rust                    │ Test_L3_R1 │  100.00% │  82.594us │            223 │     2_699 │
+│ Alpha-beta (weak) rust                    │ Test_L3_R1 │  100.00% │  37.014us │            223 │     6_024 │
 │ Alpha-beta (weak) c++ - ref               │ Test_L3_R1 │  100.00% │      52us │            223 │     4_284 │
 │ Alpha-beta (weak) c++ - ref               │ Test_L2_R1 │  100.00% │     3.28s │     41_401_200 │    12_638 │
 │ Alpha-beta (weak) c++ - ref               │ Test_L2_R2 │  100.00% │     24.5s │    308_114_000 │    12_548 │
@@ -31,17 +31,17 @@
 │ Bitboard ocaml                            │ Test_L3_R1 │  100.00% │  26.733us │            140 │     5_236 │
 │ Bitboard ocaml                            │ Test_L2_R1 │  100.00% │ 264.438ms │      2_081_790 │     7_872 │
 │ Bitboard ocaml                            │ Test_L2_R2 │  100.00% │     5.09s │     40_396_714 │     7_937 │
-│ Bitboard rust                             │ Test_L3_R1 │  100.00% │  10.355us │            140 │    13_520 │
-│ Bitboard rust                             │ Test_L2_R1 │  100.00% │ 428.164ms │      2_081_790 │     4_862 │
-│ Bitboard rust                             │ Test_L2_R2 │  100.00% │    2.029s │     40_396_714 │    19_909 │
+│ Bitboard rust                             │ Test_L3_R1 │  100.00% │  12.072us │            140 │    11_597 │
+│ Bitboard rust                             │ Test_L2_R1 │  100.00% │  77.693ms │      2_081_790 │    26_794 │
+│ Bitboard rust                             │ Test_L2_R2 │  100.00% │    2.198s │     40_396_714 │    18_376 │
 │ Bitboard c++ - ref                        │ Test_L3_R1 │  100.00% │    8.55us │            140 │    16_334 │
 │ Bitboard c++ - ref                        │ Test_L2_R1 │  100.00% │   33.31ms │      2_081_790 │    62_504 │
 │ Bitboard c++ - ref                        │ Test_L2_R2 │  100.00% │     644ms │     40_396_700 │    62_727 │
 │ Bitboard (weak) ocaml                     │ Test_L3_R1 │  100.00% │  18.878us │            107 │     5_667 │
 │ Bitboard (weak) ocaml                     │ Test_L2_R1 │  100.00% │   108.7ms │        927_943 │     8_536 │
 │ Bitboard (weak) ocaml                     │ Test_L2_R2 │  100.00% │    2.974s │     23_685_435 │     7_964 │
-│ Bitboard (weak) rust                      │ Test_L3_R1 │  100.00% │   8.222us │            107 │    13_013 │
-│ Bitboard (weak) rust                      │ Test_L2_R1 │  100.00% │ 227.247ms │        927_943 │     4_083 │
+│ Bitboard (weak) rust                      │ Test_L3_R1 │  100.00% │    8.59us │            107 │    12_456 │
+│ Bitboard (weak) rust                      │ Test_L2_R1 │  100.00% │  66.985ms │        927_943 │    13_853 │
 │ Bitboard (weak) rust                      │ Test_L2_R2 │  100.00% │    1.117s │     23_685_435 │    21_204 │
 │ Bitboard (weak) c++ - ref                 │ Test_L3_R1 │  100.00% │   6.708us │            107 │    15_973 │
 │ Bitboard (weak) c++ - ref                 │ Test_L2_R1 │  100.00% │   14.69ms │        927_943 │    63_149 │
