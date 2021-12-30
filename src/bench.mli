@@ -26,6 +26,14 @@ module Test_file : sig
 end
 
 module Solver : sig
+  module Lang : sig
+    type t =
+      | Cpp
+      | Ocaml
+      | Rust
+    [@@deriving enumerate, compare, equal, sexp]
+  end
+
   module Params : sig
     type t =
       { position : Position.t
@@ -35,6 +43,7 @@ module Solver : sig
       ; with_transposition_table : bool
       ; iterative_deepening : bool
       ; reference : bool
+      ; lang : Lang.t
       }
   end
 
@@ -44,7 +53,7 @@ module Solver : sig
     { step : Step.t
     ; weak : bool
     ; reference : bool
-    ; ext : string option
+    ; lang : Lang.t
     }
   [@@deriving enumerate, compare, equal, sexp]
 

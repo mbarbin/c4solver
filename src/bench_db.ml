@@ -9,33 +9,34 @@ open! Bench
 
 (* References entries - from [http://blog.gamesolver.org/solving-connect-four/]. *)
 let reference_entries =
-  let ext = None in
-  let minmax = { Solver.step = MinMax; weak = false; reference = true; ext } in
+  let minmax = { Solver.step = MinMax; weak = false; reference = true; lang = Cpp } in
   let alpha_beta_strong =
-    { Solver.step = Alpha_beta; weak = false; reference = true; ext }
+    { Solver.step = Alpha_beta; weak = false; reference = true; lang = Cpp }
   in
   let alpha_beta_weak =
-    { Solver.step = Alpha_beta; weak = true; reference = true; ext }
+    { Solver.step = Alpha_beta; weak = true; reference = true; lang = Cpp }
   in
   let ceo_strong =
-    { Solver.step = Column_exploration_order; weak = false; reference = true; ext }
+    { Solver.step = Column_exploration_order; weak = false; reference = true; lang = Cpp }
   in
   let ceo_weak =
-    { Solver.step = Column_exploration_order; weak = true; reference = true; ext }
+    { Solver.step = Column_exploration_order; weak = true; reference = true; lang = Cpp }
   in
-  let bit_strong = { Solver.step = Bitboard; weak = false; reference = true; ext } in
-  let bit_weak = { Solver.step = Bitboard; weak = true; reference = true; ext } in
+  let bit_strong =
+    { Solver.step = Bitboard; weak = false; reference = true; lang = Cpp }
+  in
+  let bit_weak = { Solver.step = Bitboard; weak = true; reference = true; lang = Cpp } in
   let trans_strong =
-    { Solver.step = Transposition_table; weak = false; reference = true; ext }
+    { Solver.step = Transposition_table; weak = false; reference = true; lang = Cpp }
   in
   let trans_weak =
-    { Solver.step = Transposition_table; weak = true; reference = true; ext }
+    { Solver.step = Transposition_table; weak = true; reference = true; lang = Cpp }
   in
   let iter_strong =
-    { Solver.step = Iterative_deepening; weak = false; reference = true; ext }
+    { Solver.step = Iterative_deepening; weak = false; reference = true; lang = Cpp }
   in
   let iter_weak =
-    { Solver.step = Iterative_deepening; weak = true; reference = true; ext }
+    { Solver.step = Iterative_deepening; weak = true; reference = true; lang = Cpp }
   in
   (* MinMax. *)
   [ ( { Key.solver = minmax; test_basename = "Test_L3_R1" }

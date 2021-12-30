@@ -41,6 +41,20 @@ module Test_file = struct
 end
 
 module Solver = struct
+  module Lang = struct
+    type t =
+      | Cpp
+      | Ocaml
+      | Rust
+    [@@deriving enumerate, compare, equal, sexp]
+
+    let to_string_hum = function
+      | Cpp -> "c++"
+      | Ocaml -> "ocaml"
+      | Rust -> "rust"
+    ;;
+  end
+
   module Params = struct
     type t =
       { position : Position.t
@@ -50,31 +64,26 @@ module Solver = struct
       ; with_transposition_table : bool
       ; iterative_deepening : bool
       ; reference : bool
+      ; lang : Lang.t
       }
     [@@deriving equal, sexp_of]
   end
-
-  type lang = string [@@deriving compare, equal, sexp]
-
-  let all_of_lang = []
 
   type t =
     { step : Step.t
     ; weak : bool
     ; reference : bool
-    ; ext : lang option [@sexp.drop_if Option.is_none] [@sexp.default None]
+    ; lang : Lang.t
     }
   [@@deriving enumerate, compare, equal, sexp]
 
   let to_string_hum t =
     sprintf
-      "%s%s%s%s"
+      "%s%s %s%s"
       (Step.to_string_hum t.step)
       (if t.weak then " (weak)" else "")
+      (Lang.to_string_hum t.lang)
       (if t.reference then " - ref" else "")
-      (match t.ext with
-      | None -> ""
-      | Some lang -> " - " ^ lang)
   ;;
 
   let to_params t : Params.t =
@@ -87,6 +96,7 @@ module Solver = struct
       ; with_transposition_table = false
       ; iterative_deepening = false
       ; reference = t.reference
+      ; lang = t.lang
       }
     | Alpha_beta ->
       { position = Basic
@@ -96,6 +106,7 @@ module Solver = struct
       ; with_transposition_table = false
       ; iterative_deepening = false
       ; reference = t.reference
+      ; lang = t.lang
       }
     | Column_exploration_order ->
       { position = Basic
@@ -105,6 +116,7 @@ module Solver = struct
       ; with_transposition_table = false
       ; iterative_deepening = false
       ; reference = t.reference
+      ; lang = t.lang
       }
     | Bitboard ->
       { position = Bitboard
@@ -114,6 +126,7 @@ module Solver = struct
       ; with_transposition_table = false
       ; iterative_deepening = false
       ; reference = t.reference
+      ; lang = t.lang
       }
     | Transposition_table ->
       { position = Bitboard
@@ -123,6 +136,7 @@ module Solver = struct
       ; with_transposition_table = true
       ; iterative_deepening = false
       ; reference = t.reference
+      ; lang = t.lang
       }
     | Iterative_deepening ->
       { position = Bitboard
@@ -132,6 +146,7 @@ module Solver = struct
       ; with_transposition_table = true
       ; iterative_deepening = true
       ; reference = t.reference
+      ; lang = t.lang
       }
   ;;
 
@@ -234,7 +249,7 @@ let to_ascii_table
               then []
               else (
                 let ref =
-                  { key with solver = { key.solver with reference = true; ext = None } }
+                  { key with solver = { key.solver with reference = true; lang = Cpp } }
                 in
                 match Map.find entries ref with
                 | None -> []

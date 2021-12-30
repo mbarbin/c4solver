@@ -24,7 +24,7 @@ let bench_run_cmd =
          ~doc:"sexp solver step"
      and debug = flag "--debug" no_arg ~doc:" print debug info" in
      fun () ->
-       let solver = { Bench.Solver.step; weak; reference = false; ext = None } in
+       let solver = { Bench.Solver.step; weak; reference = false; lang = Ocaml } in
        let bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
        let benches = Bencher.run ~bench_db ~filenames ~debug ~solver in
        print_endline (Bench.to_ascii_table ~accuracy_only benches))
@@ -43,8 +43,14 @@ let bench_run_external_cmd =
          "--step"
          (required (Arg_type.enumerated_sexpable (module Step)))
          ~doc:"sexp solver step"
-     and solver =
-       flag "--name" (required string) ~doc:"name external solver shortname (language)"
+     and lang =
+       flag
+         "--lang"
+         (required
+            (Arg_type.enumerated_sexpable
+               (module Bench.Solver.Lang)
+               ~case_sensitive:false))
+         ~doc:"name external solver language"
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
      and debug = flag "--debug" no_arg ~doc:" print debug info"
      and command =
@@ -53,7 +59,7 @@ let bench_run_external_cmd =
        | None -> raise_s [%sexp "external solver command is mandatory"]
      in
      fun () ->
-       let solver = { Bench.Solver.step; weak; reference; ext = Some solver } in
+       let solver = { Bench.Solver.step; weak; reference; lang } in
        let bench_db = Bench_db.load_or_init ~filename:bench_db_default_filename in
        let benches =
          Bencher.run_external_solver ~bench_db ~command ~filenames ~debug ~solver
