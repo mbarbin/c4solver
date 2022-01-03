@@ -16,14 +16,14 @@ use clap::{App, Arg};
 fn main() {
     let matches = App::new("c4solver")
         .arg(
-            Arg::with_name("step")
+            Arg::new("step")
                 .long("step")
                 .value_name("STEP")
                 .help("select solver step")
                 .takes_value(true),
         )
         .arg(
-            Arg::with_name("weak")
+            Arg::new("weak")
                 .long("weak")
                 .help("run weak solver")
                 .takes_value(false),
