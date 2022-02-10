@@ -67,3 +67,6 @@ jobs:
 
       - name: Lint fmt
         uses: ocaml/setup-ocaml/lint-fmt@v2
+
+      - name: Lint doc
+        uses: ocaml/setup-ocaml/lint-doc@v2
