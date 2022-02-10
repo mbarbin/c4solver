@@ -5,7 +5,7 @@ maintainer: "Mathieu Barbin"
 authors: "Mathieu Barbin"
 license: "MIT"
 homepage: "https://github.com/mbarbin/c4solver"
-doc: "https://github.com/mbarbin/c4solver"
+doc: "https://mbarbin.github.io/c4solver/odoc/c4solver/index.html"
 bug-reports: "https://github.com/mbarbin/c4solver/issues"
 depends: [
   "ocaml" {>= "4.12.0"}
