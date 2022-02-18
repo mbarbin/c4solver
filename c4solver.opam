@@ -11,13 +11,13 @@ depends: [
   "ocaml" {>= "4.12.0"}
   "dune" {>= "2.0.0"}
   "ANSITerminal" {>= "0.8.3"}
-  "core" {= "v0.15~preview.126.09+236"}
-  "core_unix" {= "v0.15~preview.126.09+236"}
-  "expect_test_helpers_core" {= "v0.15~preview.126.09+236" & with-test}
-  "ppx_jane" {= "v0.15~preview.126.09+236"}
+  "core" {= "v0.15~preview.126.09+332"}
+  "core_unix" {= "v0.15~preview.126.09+332"}
+  "expect_test_helpers_core" {= "v0.15~preview.126.09+332" & with-test}
+  "ppx_jane" {= "v0.15~preview.126.09+332"}
   "stdint" {>= "0.7.0"}
-  "stdio" {= "v0.15~preview.126.09+236"}
-  "textutils" {= "v0.15~preview.126.09+236"}
+  "stdio" {= "v0.15~preview.126.09+332"}
+  "textutils" {= "v0.15~preview.126.09+332"}
 ]
 build: [
   ["dune" "subst"] {pinned}
