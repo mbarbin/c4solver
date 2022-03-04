@@ -36,6 +36,12 @@ We have kept the original AGPL v3 License for this repo as well.
   with various code changes and witness their impact on performances,
   compare OCaml with Rust, etc.
 
+## Code documentation
+
+The tip of the main branch is compiled with odoc and published to
+github pages
+[here](https://mbarbin.github.io/c4solver/odoc/c4solver/index.html).
+
 ## Completion status and roadmap
 
 I'm not very actively working on this project, so the project
