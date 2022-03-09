@@ -11,10 +11,10 @@ use crate::transposition_table::Store as Transposition_table;
 use std::io;
 
 extern crate clap;
-use clap::{App, Arg};
+use clap::{Arg, Command};
 
 fn main() {
-    let matches = App::new("c4solver")
+    let matches = Command::new("c4solver")
         .arg(
             Arg::new("step")
                 .long("step")
