@@ -54,15 +54,3 @@ progressing toward the following goals:
       large variations in the results;
 - [ ] Clean up the code, look for simple performance enhancements;
 - [ ] Write a basic summary of findings of comparing OCaml, Rust and cpp.
-
-## OCaml dependencies : janestreet-bleeding
-
-Currently this project depends on unstable version of Janestreet
-librairies, and requires the opam switch to refer to janestreet
-opam-repository located here:
-
-https://github.com/janestreet/opam-repository
-
-Once the ongoing refactoring of core/core_kernel/core_unix etc. lands
-as an official release (perhaps v15 or so), I don't necessarily plan
-on keeping the dependency to unstable libraries. TBD.
