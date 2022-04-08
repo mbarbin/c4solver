@@ -53,8 +53,8 @@ module Basic : S = struct
   ;;
 
   let create ~width ~height =
-    let board = Array.make_matrix width height Cell.Empty in
-    let height = Array.create width 0 in
+    let board = Array.make_matrix ~dimx:width ~dimy:height Cell.Empty in
+    let height = Array.create ~len:width 0 in
     { board; height; number_of_plies = 0 }
   ;;
 

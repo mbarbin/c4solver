@@ -15,7 +15,7 @@ let index t ~key = key % Array.length t
 
 let create ~size =
   assert (size > 0);
-  Array.create size Entry.zero
+  Array.create ~len:size Entry.zero
 ;;
 
 let reset t =

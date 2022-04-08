@@ -204,8 +204,8 @@ let negamax_alpha_beta
     if iterative_deepening
     then solve t
     else if weak
-    then aux_negamax t (-1) 1
-    else aux_negamax t (-1 * height * width / 2) (height * width / 2)
+    then aux_negamax t ~alpha:(-1) ~beta:1
+    else aux_negamax t ~alpha:(-1 * height * width / 2) ~beta:(height * width / 2)
   in
   let t2 = Time_ns.now () in
   { Result_with_measure.measure =
