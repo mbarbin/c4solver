@@ -11,7 +11,7 @@ use crate::transposition_table::Store as Transposition_table;
 use std::io;
 
 extern crate clap;
-use clap::{Arg, Command};
+use clap::{Arg, ArgAction, Command};
 
 fn main() {
     let matches = Command::new("c4solver")
@@ -19,27 +19,26 @@ fn main() {
             Arg::new("step")
                 .long("step")
                 .value_name("STEP")
-                .help("select solver step")
-                .takes_value(true),
+                .help("select solver step"),
         )
         .arg(
             Arg::new("weak")
                 .long("weak")
                 .help("run weak solver")
-                .takes_value(false),
+                .action(ArgAction::SetTrue),
         )
         .get_matches();
 
     let step: Step = matches
-        .value_of("step")
-        .unwrap_or("MinMax")
+        .get_one::<String>("step")
+        .unwrap_or(&String::from("MinMax"))
         .parse()
         .expect("step requires Step constructor");
 
     let params = step.to_params();
 
     let alpha_beta = params.alpha_beta;
-    let weak: bool = matches.is_present("weak");
+    let weak: bool = matches.get_flag("weak");
 
     let column_exploration_reorder = params.column_exploration_reorder;
     let position_kind = params.position_kind;
@@ -52,8 +51,8 @@ fn main() {
     };
 
     let iterative_deepening: bool = matches
-        .value_of("iterative_deepening")
-        .unwrap_or("false")
+        .get_one::<String>("iterative_deepening")
+        .unwrap_or(&String::from("false"))
         .parse()
         .expect("iterative-deepening requires boolean");
 
