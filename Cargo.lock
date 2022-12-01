@@ -313,9 +313,9 @@ dependencies = [
 
 [[package]]
 name = "timens"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03175c1161f118880e3f5744cdcdd229324693ccd71f325033b733bd889bb662"
+checksum = "f7a11cf19f13502baba3ddf338e467b4d4a7d93ab59d93cce29aeda041d12272"
 dependencies = [
  "binprot",
  "parse-zoneinfo",
