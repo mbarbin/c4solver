@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 clap = "4.0.9"
 enum-utils = "0.1.2"
-timens = "0.1.4"
+timens = "0.1.7"
