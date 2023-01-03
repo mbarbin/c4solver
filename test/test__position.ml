@@ -35,7 +35,7 @@ let eval ~test_line (module P : Position.S) =
   let can_play = List.init width ~f:(fun column -> column, P.can_play position ~column) in
   let is_winning =
     List.filter_map can_play ~f:(fun (column, can_play) ->
-        if not can_play then None else Some (column, P.is_winning_move position ~column))
+      if not can_play then None else Some (column, P.is_winning_move position ~column))
   in
   { number_of_plies; can_play; is_winning; ascii_table = P.to_ascii_table position }
 ;;
@@ -48,11 +48,11 @@ let test_line line =
     | [] -> assert false
     | e1 :: tl ->
       List.iter tl ~f:(fun e2 ->
-          if not (equal e1 e2)
-          then (
-            print_string e1.ascii_table;
-            print_string e2.ascii_table;
-            raise_s [%sexp "Inconsistent evaluation", [%here], { e1 : t; e2 : t }]));
+        if not (equal e1 e2)
+        then (
+          print_string e1.ascii_table;
+          print_string e2.ascii_table;
+          raise_s [%sexp "Inconsistent evaluation", [%here], { e1 : t; e2 : t }]));
       e1
   in
   print_string t.ascii_table;
@@ -61,7 +61,7 @@ let test_line line =
 
 let%expect_test "Test_L3_R1 #1" =
   require_does_not_raise [%here] (fun () ->
-      test_line "2252576253462244111563365343671351441 -1");
+    test_line "2252576253462244111563365343671351441 -1");
   [%expect
     {|
     ┌───┬───┬───┬───┬───┬───┬───┐
@@ -90,7 +90,7 @@ let%expect_test "Test_L3_R1 #1" =
 
 let%expect_test "Test_L3_R1 #3" =
   require_does_not_raise [%here] (fun () ->
-      test_line "23163416124767223154467471272416755633 0");
+    test_line "23163416124767223154467471272416755633 0");
   [%expect
     {|
     ┌───┬───┬───┬───┬───┬───┬───┐

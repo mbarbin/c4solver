@@ -25,9 +25,9 @@ let mean ts =
     let number_of_positions = ref 0 in
     let count = ref 0 in
     List.iter ts ~f:(fun t ->
-        span := Time_ns.Span.( + ) !span t.span;
-        number_of_positions := !number_of_positions + t.number_of_positions;
-        count := !count + 1);
+      span := Time_ns.Span.( + ) !span t.span;
+      number_of_positions := !number_of_positions + t.number_of_positions;
+      count := !count + 1);
     let span = Time_ns.Span.( / ) !span (float_of_int !count) in
     let number_of_positions =
       Float.iround_exn

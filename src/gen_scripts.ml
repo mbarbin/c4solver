@@ -86,20 +86,20 @@ let script_name ~(step : Step.t) ~(lang : Bench.Solver.Lang.t) =
     Sexp.to_string [%sexp (step : Step.t)]
     |> String.lowercase
     |> String.map ~f:(function
-           | '_' -> '-'
-           | c -> c)
+         | '_' -> '-'
+         | c -> c)
   in
   sprintf "run-%s%s.sh" step_name suffix
 ;;
 
 let gen ~script_dir =
   List.iter Step.all ~f:(fun step ->
-      let ocaml = gen_ocaml ~step in
-      let rust = gen_rust ~step in
-      let ocaml_script = script_name ~step ~lang:Ocaml in
-      let rust_script = script_name ~step ~lang:Rust in
-      Stdio.Out_channel.write_all (script_dir ^/ ocaml_script) ~data:ocaml;
-      Stdio.Out_channel.write_all (script_dir ^/ rust_script) ~data:rust)
+    let ocaml = gen_ocaml ~step in
+    let rust = gen_rust ~step in
+    let ocaml_script = script_name ~step ~lang:Ocaml in
+    let rust_script = script_name ~step ~lang:Rust in
+    Stdio.Out_channel.write_all (script_dir ^/ ocaml_script) ~data:ocaml;
+    Stdio.Out_channel.write_all (script_dir ^/ rust_script) ~data:rust)
 ;;
 
 let main =

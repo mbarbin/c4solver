@@ -31,12 +31,12 @@ module Basic : S = struct
     let headers = List.init (width t) ~f:(fun i -> Int.to_string i) in
     let data =
       List.init (height t) ~f:(fun line ->
-          let line = height t - 1 - line in
-          List.init (width t) ~f:(fun column ->
-              match t.board.(column).(line) with
-              | Empty -> " "
-              | Token { player = Red } -> "X"
-              | Token { player = Yellow } -> "0"))
+        let line = height t - 1 - line in
+        List.init (width t) ~f:(fun column ->
+          match t.board.(column).(line) with
+          | Empty -> " "
+          | Token { player = Red } -> "X"
+          | Token { player = Yellow } -> "0"))
     in
     Ascii_table.simple_list_table_string headers data
   ;;
@@ -108,9 +108,9 @@ module Basic : S = struct
         else count (acc + 1) (x, y) (dx, dy))
     in
     List.exists Is_winning.trials ~f:(fun (left, right) ->
-        let acc = count 0 (column, line) left in
-        let acc = count acc (column, line) right in
-        acc >= 3)
+      let acc = count 0 (column, line) left in
+      let acc = count acc (column, line) right in
+      acc >= 3)
   ;;
 end
 
@@ -262,14 +262,14 @@ module Make_bitboard (Uint : Uint) : S = struct
     let headers = List.init (width t) ~f:(fun i -> Int.to_string i) in
     let data =
       List.init (height t) ~f:(fun line ->
-          let line = height t - 1 - line in
-          List.init (width t) ~f:(fun column ->
-              let cell = cell_mask t ~column ~line in
-              if is_zero (Uint.logand cell t.mask)
-              then " "
-              else if is_zero (Uint.logand cell t.position)
-              then opponent
-              else player))
+        let line = height t - 1 - line in
+        List.init (width t) ~f:(fun column ->
+          let cell = cell_mask t ~column ~line in
+          if is_zero (Uint.logand cell t.mask)
+          then " "
+          else if is_zero (Uint.logand cell t.position)
+          then opponent
+          else player))
     in
     Ascii_table.simple_list_table_string headers data
   ;;
@@ -394,14 +394,14 @@ module Bitboard = struct
     let headers = List.init (width t) ~f:(fun i -> Int.to_string i) in
     let data =
       List.init (height t) ~f:(fun line ->
-          let line = height t - 1 - line in
-          List.init (width t) ~f:(fun column ->
-              let cell = cell_mask t ~column ~line in
-              if is_zero (Uint.logand cell t.mask)
-              then " "
-              else if is_zero (Uint.logand cell t.position)
-              then opponent
-              else player))
+        let line = height t - 1 - line in
+        List.init (width t) ~f:(fun column ->
+          let cell = cell_mask t ~column ~line in
+          if is_zero (Uint.logand cell t.mask)
+          then " "
+          else if is_zero (Uint.logand cell t.position)
+          then opponent
+          else player))
     in
     Ascii_table.simple_list_table_string headers data
   ;;
