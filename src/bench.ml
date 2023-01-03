@@ -16,13 +16,13 @@ module Test_line = struct
   let make_position (type p) t ~height ~width (module P : Position.S with type t = p) =
     let p = P.create ~height ~width in
     String.iteri t.position ~f:(fun index char ->
-        let column = Char.to_int char - Char.to_int '1' in
-        if column < 0
-           || column >= width
-           || (not (P.can_play p ~column))
-           || P.is_winning_move p ~column
-        then raise_s [%sexp [%here], "invalid move", { t : t; index : int; column : int }]
-        else P.play p ~column);
+      let column = Char.to_int char - Char.to_int '1' in
+      if column < 0
+         || column >= width
+         || (not (P.can_play p ~column))
+         || P.is_winning_move p ~column
+      then raise_s [%sexp [%here], "invalid move", { t : t; index : int; column : int }]
+      else P.play p ~column);
     P.copy p
   ;;
 end
@@ -158,12 +158,12 @@ module Solver = struct
 
   let%expect_test "roundtrip" =
     List.iter all ~f:(fun t ->
-        let p = t |> to_params in
-        let t' = p |> of_params in
-        if not (equal t t')
-        then
-          print_s
-            [%sexp "Value does not roundtrip", [%here], { t : t; t' : t; p : Params.t }]);
+      let p = t |> to_params in
+      let t' = p |> of_params in
+      if not (equal t t')
+      then
+        print_s
+          [%sexp "Value does not roundtrip", [%here], { t : t; t' : t; p : Params.t }]);
     [%expect {||}]
   ;;
 end
@@ -219,9 +219,9 @@ type t =
 [@@deriving compare, equal, sexp]
 
 let to_ascii_table
-    ?(entries = (Map.empty (module Key) : Result.t Map.M(Key).t))
-    ?(accuracy_only = false)
-    ts
+  ?(entries = (Map.empty (module Key) : Result.t Map.M(Key).t))
+  ?(accuracy_only = false)
+  ts
   =
   let isatty = ANSITerminal.isatty.contents Core_unix.stdout in
   let columns =
@@ -230,41 +230,41 @@ let to_ascii_table
       if isatty then styles else []
     in
     [ [ Ascii_table.Column.create_attr "solver" ~align:Left (fun t ->
-            dim t [], Solver.to_string_hum t.key.solver)
+          dim t [], Solver.to_string_hum t.key.solver)
       ; Ascii_table.Column.create_attr "test" ~align:Left (fun t ->
-            dim t [], t.key.test_basename)
+          dim t [], t.key.test_basename)
       ; Ascii_table.Column.create_attr "accuracy" ~align:Right (fun t ->
-            dim t [], sprintf "%.2f%%" t.result.accuracy)
+          dim t [], sprintf "%.2f%%" t.result.accuracy)
       ]
     ; (if accuracy_only
       then []
       else
         [ Ascii_table.Column.create_attr "mean time" ~align:Right (fun t ->
-              dim t [], Time_ns.Span.to_string_hum t.result.mean.span)
+            dim t [], Time_ns.Span.to_string_hum t.result.mean.span)
         ])
     ; [ Ascii_table.Column.create_attr "mean nb of pos" ~align:Right (fun t ->
-            let { key; result } = t in
-            let styles =
-              if key.solver.reference
-              then []
-              else (
-                let ref =
-                  { key with solver = { key.solver with reference = true; lang = Cpp } }
-                in
-                match Map.find entries ref with
-                | None -> []
-                | Some ref_result ->
-                  if ref_result.mean.number_of_positions = result.mean.number_of_positions
-                  then [ `Green ]
-                  else [ `Yellow ])
-            in
-            dim t styles, Int.to_string_hum result.mean.number_of_positions)
+          let { key; result } = t in
+          let styles =
+            if key.solver.reference
+            then []
+            else (
+              let ref =
+                { key with solver = { key.solver with reference = true; lang = Cpp } }
+              in
+              match Map.find entries ref with
+              | None -> []
+              | Some ref_result ->
+                if ref_result.mean.number_of_positions = result.mean.number_of_positions
+                then [ `Green ]
+                else [ `Yellow ])
+          in
+          dim t styles, Int.to_string_hum result.mean.number_of_positions)
       ]
     ; (if accuracy_only
       then []
       else
         [ Ascii_table.Column.create_attr "K pos / s" ~align:Right (fun t ->
-              dim t [], Int.to_string_hum t.result.mean.k_pos_per_s)
+            dim t [], Int.to_string_hum t.result.mean.k_pos_per_s)
         ])
     ]
     |> List.concat

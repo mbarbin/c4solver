@@ -374,7 +374,7 @@ let load_or_init ~filename =
   in
   let entries =
     List.fold reference_entries ~init:entries ~f:(fun acc (key, data) ->
-        Map.set acc ~key ~data)
+      Map.set acc ~key ~data)
   in
   { filename; entries }
 ;;

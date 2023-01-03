@@ -18,25 +18,24 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
     if P.number_of_plies t = height * width
     then 0
     else if Array.exists moves ~f:(fun column ->
-                (* Check if current player can win next move. *)
-                P.can_play t ~column && P.is_winning_move t ~column)
+              (* Check if current player can win next move. *)
+              P.can_play t ~column && P.is_winning_move t ~column)
     then ((width * height) + 1 - P.number_of_plies t) / 2
     else (
       (* Init the best possible score with a lower bound. *)
       let best_score = ref (-1 * width * height) in
       Array.iter moves ~f:(fun column ->
-          (* Compute the score of all possible next move and keep the best one. *)
-          if P.can_play t ~column
-          then (
-            let t = P.copy t in
-            P.play t ~column;
-            (* The turn in the copy of t is the opponent. If the
-                 current player has played col, their score will be
-                 the opposite of the score from the opponent's
-                 perspective. *)
-            let score = -1 * negamax t in
-            (* Keep track of the best possible score so far. *)
-            if score > !best_score then best_score := score));
+        (* Compute the score of all possible next move and keep the best one. *)
+        if P.can_play t ~column
+        then (
+          let t = P.copy t in
+          P.play t ~column;
+          (* The turn in the copy of t is the opponent. If the current
+             player has played col, their score will be the opposite
+             of the score from the opponent's perspective. *)
+          let score = -1 * negamax t in
+          (* Keep track of the best possible score so far. *)
+          if score > !best_score then best_score := score));
       !best_score)
   in
   let t1 = Time_ns.now () in
@@ -67,13 +66,13 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
 let transposition_table = lazy (Transposition_table.create ~size:8_388_593)
 
 let negamax_alpha_beta
-    (type t)
-    (module P : Position.S with type t = t)
-    (t : t)
-    ~weak
-    ~column_exploration_reorder
-    ~with_transposition_table
-    ~iterative_deepening
+  (type t)
+  (module P : Position.S with type t = t)
+  (t : t)
+  ~weak
+  ~column_exploration_reorder
+  ~with_transposition_table
+  ~iterative_deepening
   =
   let height = P.height t in
   let width = P.width t in
@@ -129,8 +128,8 @@ let negamax_alpha_beta
     if P.number_of_plies t = height * width
     then 0
     else if Array.exists moves ~f:(fun column ->
-                (* Check if current player can win next move. *)
-                P.can_play t ~column && P.is_winning_move t ~column)
+              (* Check if current player can win next move. *)
+              P.can_play t ~column && P.is_winning_move t ~column)
     then ((width * height) + 1 - P.number_of_plies t) / 2
     else (
       let key = key t in
