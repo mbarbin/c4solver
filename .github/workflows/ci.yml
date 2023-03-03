@@ -35,7 +35,7 @@ jobs:
         os:
           - ubuntu-latest
         ocaml-compiler:
-          - 4.13.1
+          - 5.0.x
 
     runs-on: ${{ matrix.os }}
 
