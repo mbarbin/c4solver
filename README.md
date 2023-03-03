@@ -53,4 +53,3 @@ progressing toward the following goals:
 - [ ] Stabilize the bench results - currently multiple run may create
       large variations in the results;
 - [ ] Clean up the code, look for simple performance enhancements;
-- [ ] Write a basic summary of findings of comparing OCaml, Rust and cpp.
