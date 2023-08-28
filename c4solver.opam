@@ -8,8 +8,8 @@ homepage: "https://github.com/mbarbin/c4solver"
 doc: "https://mbarbin.github.io/c4solver/odoc/c4solver/index.html"
 bug-reports: "https://github.com/mbarbin/c4solver/issues"
 depends: [
-  "ocaml" {>= "4.13"}
-  "dune" {>= "2.0.0"}
+  "ocaml" {>= "5.0"}
+  "dune" {>= "3.8"}
   "ANSITerminal" {>= "0.8.3"}
   "core" {>= "v0.15"}
   "core_unix" {>= "v0.15"}
