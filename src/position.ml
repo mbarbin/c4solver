@@ -179,6 +179,7 @@ module Make_bitboard (Uint : Uint) : S = struct
    * non-ambiguous representation of the position.
    *)
 
+  (*$*)
   type uint = Uint.t
 
   let sexp_of_uint t = Sexp.Atom (Uint.to_string t)
@@ -273,6 +274,7 @@ module Make_bitboard (Uint : Uint) : S = struct
     in
     Ascii_table.simple_list_table_string headers data
   ;;
+  (*$ let functor_contents = _last_text_block *)(*$*)
 end
 
 module Uint = struct
@@ -309,6 +311,7 @@ module Bitboard_uint = Make_bitboard (Uint)
    of the argument [Uint] is the same as the name of the module above, this
    results in an inlined version of the same implementation. *)
 module Bitboard = struct
+  (*$ print_string functor_contents *)
   type uint = Uint.t
 
   let sexp_of_uint t = Sexp.Atom (Uint.to_string t)
@@ -334,7 +337,7 @@ module Bitboard = struct
     { width; height; number_of_plies = 0; position = Uint.zero; mask = Uint.zero }
   ;;
 
-  let is_zero u = u = 0 [@@inline]
+  let is_zero u = 0 = Uint.compare Uint.zero u
 
   let top_mask_col t ~column =
     Uint.shift_left Uint.one (t.height - 1 + (column * (t.height + 1)))
@@ -403,6 +406,7 @@ module Bitboard = struct
     in
     Ascii_table.simple_list_table_string headers data
   ;;
+  (*$*)
 end
 
 type t =
