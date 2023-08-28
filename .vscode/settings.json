@@ -3,6 +3,7 @@
         "alist",
         "bitboard",
         "bitboards",
+        "cinaps",
         "dimx",
         "dimy",
         "intf",
@@ -17,6 +18,7 @@
         "negamax",
         "oxxo",
         "stdint",
+        "textutils",
         "timens"
     ]
 }
