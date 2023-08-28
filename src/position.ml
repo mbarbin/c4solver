@@ -121,6 +121,7 @@ module type Uint = sig
   val to_int : t -> int
   val one : t
   val zero : t
+  val is_zero : t -> bool
   val pred : t -> t
   val add : t -> t -> t
   val compare : t -> t -> int
@@ -205,14 +206,12 @@ module Make_bitboard (Uint : Uint) : S = struct
     { width; height; number_of_plies = 0; position = Uint.zero; mask = Uint.zero }
   ;;
 
-  let is_zero u = 0 = Uint.compare Uint.zero u
-
   let top_mask_col t ~column =
     Uint.shift_left Uint.one (t.height - 1 + (column * (t.height + 1)))
   ;;
 
   let bottom_mask_col t ~column = Uint.shift_left Uint.one (column * (t.height + 1))
-  let can_play t ~column = is_zero (Uint.logand t.mask (top_mask_col t ~column))
+  let can_play t ~column = Uint.is_zero (Uint.logand t.mask (top_mask_col t ~column))
 
   let column_mask t ~column =
     Uint.shift_left
@@ -234,17 +233,17 @@ module Make_bitboard (Uint : Uint) : S = struct
   let alignment t position =
     (* Horizontal. *)
     (let m = Uint.logand position (Uint.shift_right position (t.height + 1)) in
-     not (is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 1))))))
+     not (Uint.is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 1))))))
     (* Diagonal 1. *)
     || (let m = Uint.logand position (Uint.shift_right position t.height) in
-        not (is_zero (Uint.logand m (Uint.shift_right m (2 * t.height)))))
+        not (Uint.is_zero (Uint.logand m (Uint.shift_right m (2 * t.height)))))
     (* Diagonal 2. *)
     || (let m = Uint.logand position (Uint.shift_right position (t.height + 2)) in
-        not (is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 2))))))
+        not (Uint.is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 2))))))
     ||
     (* Vertical. *)
     let m = Uint.logand position (Uint.shift_right position 1) in
-    not (is_zero (Uint.logand m (Uint.shift_right m 2)))
+    not (Uint.is_zero (Uint.logand m (Uint.shift_right m 2)))
   ;;
 
   let is_winning_move t ~column =
@@ -266,15 +265,15 @@ module Make_bitboard (Uint : Uint) : S = struct
         let line = height t - 1 - line in
         List.init (width t) ~f:(fun column ->
           let cell = cell_mask t ~column ~line in
-          if is_zero (Uint.logand cell t.mask)
+          if Uint.is_zero (Uint.logand cell t.mask)
           then " "
-          else if is_zero (Uint.logand cell t.position)
+          else if Uint.is_zero (Uint.logand cell t.position)
           then opponent
           else player))
     in
     Ascii_table.simple_list_table_string headers data
   ;;
-  (*$ let functor_contents = _last_text_block *)(*$*)
+  (*$ let functor_contents = _last_text_block $*)
 end
 
 module Uint = struct
@@ -286,6 +285,7 @@ module Uint = struct
 
   let one = 1
   let zero = 0
+  let is_zero t = Int.equal t 0 [@@inline]
   let pred = Int.pred
   let add = ( + )
   let compare = Int.compare
@@ -298,8 +298,17 @@ end
 
 (* Bitboards 64 and 128 are not actually used, we just show that we can build it
    if we wanted to work with bigger boards. *)
-module Bitboard64 = Make_bitboard (Stdint.Uint64)
-module Bitboard128 = Make_bitboard (Stdint.Uint128)
+module Bitboard64 = Make_bitboard (struct
+    include Stdint.Uint64
+
+    let is_zero u = 0 = compare zero u
+  end)
+
+module Bitboard128 = Make_bitboard (struct
+    include Stdint.Uint128
+
+    let is_zero u = 0 = compare zero u
+  end)
 
 (* In theory this is the bitboard that we would want to use, however sadly the
    fact that we are using a functor degrades performances. Perhaps using f-lambda
@@ -337,14 +346,12 @@ module Bitboard = struct
     { width; height; number_of_plies = 0; position = Uint.zero; mask = Uint.zero }
   ;;
 
-  let is_zero u = 0 = Uint.compare Uint.zero u
-
   let top_mask_col t ~column =
     Uint.shift_left Uint.one (t.height - 1 + (column * (t.height + 1)))
   ;;
 
   let bottom_mask_col t ~column = Uint.shift_left Uint.one (column * (t.height + 1))
-  let can_play t ~column = is_zero (Uint.logand t.mask (top_mask_col t ~column))
+  let can_play t ~column = Uint.is_zero (Uint.logand t.mask (top_mask_col t ~column))
 
   let column_mask t ~column =
     Uint.shift_left
@@ -366,17 +373,17 @@ module Bitboard = struct
   let alignment t position =
     (* Horizontal. *)
     (let m = Uint.logand position (Uint.shift_right position (t.height + 1)) in
-     not (is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 1))))))
+     not (Uint.is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 1))))))
     (* Diagonal 1. *)
     || (let m = Uint.logand position (Uint.shift_right position t.height) in
-        not (is_zero (Uint.logand m (Uint.shift_right m (2 * t.height)))))
+        not (Uint.is_zero (Uint.logand m (Uint.shift_right m (2 * t.height)))))
     (* Diagonal 2. *)
     || (let m = Uint.logand position (Uint.shift_right position (t.height + 2)) in
-        not (is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 2))))))
+        not (Uint.is_zero (Uint.logand m (Uint.shift_right m (2 * (t.height + 2))))))
     ||
     (* Vertical. *)
     let m = Uint.logand position (Uint.shift_right position 1) in
-    not (is_zero (Uint.logand m (Uint.shift_right m 2)))
+    not (Uint.is_zero (Uint.logand m (Uint.shift_right m 2)))
   ;;
 
   let is_winning_move t ~column =
@@ -398,9 +405,9 @@ module Bitboard = struct
         let line = height t - 1 - line in
         List.init (width t) ~f:(fun column ->
           let cell = cell_mask t ~column ~line in
-          if is_zero (Uint.logand cell t.mask)
+          if Uint.is_zero (Uint.logand cell t.mask)
           then " "
-          else if is_zero (Uint.logand cell t.position)
+          else if Uint.is_zero (Uint.logand cell t.position)
           then opponent
           else player))
     in
