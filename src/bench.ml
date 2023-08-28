@@ -237,11 +237,11 @@ let to_ascii_table
           dim t [], sprintf "%.2f%%" t.result.accuracy)
       ]
     ; (if accuracy_only
-      then []
-      else
-        [ Ascii_table.Column.create_attr "mean time" ~align:Right (fun t ->
-            dim t [], Time_ns.Span.to_string_hum t.result.mean.span)
-        ])
+       then []
+       else
+         [ Ascii_table.Column.create_attr "mean time" ~align:Right (fun t ->
+             dim t [], Time_ns.Span.to_string_hum t.result.mean.span)
+         ])
     ; [ Ascii_table.Column.create_attr "mean nb of pos" ~align:Right (fun t ->
           let { key; result } = t in
           let styles =
@@ -261,11 +261,11 @@ let to_ascii_table
           dim t styles, Int.to_string_hum result.mean.number_of_positions)
       ]
     ; (if accuracy_only
-      then []
-      else
-        [ Ascii_table.Column.create_attr "K pos / s" ~align:Right (fun t ->
-            dim t [], Int.to_string_hum t.result.mean.k_pos_per_s)
-        ])
+       then []
+       else
+         [ Ascii_table.Column.create_attr "K pos / s" ~align:Right (fun t ->
+             dim t [], Int.to_string_hum t.result.mean.k_pos_per_s)
+         ])
     ]
     |> List.concat
   in

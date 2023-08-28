@@ -53,15 +53,15 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
    the search windows:
 
    - If the actual score of the position is within the range, than the
-   alpha-beta function should return the exact score.
+     alpha-beta function should return the exact score.
 
    - If the actual score of the position lower than alpha, than the
-   alpha-beta function is allowed to return any upper bound of the
-   actual score that is lower or equal to alpha.
+     alpha-beta function is allowed to return any upper bound of the
+     actual score that is lower or equal to alpha.
 
    - If the actual score of the position greater than beta, than the
-   alpha-beta function is allowed to return any lower bound of the
-   actual score that is greater or equal to beta. *)
+     alpha-beta function is allowed to return any lower bound of the
+     actual score that is greater or equal to beta. *)
 
 let transposition_table = lazy (Transposition_table.create ~size:8_388_593)
 
@@ -190,7 +190,7 @@ let negamax_alpha_beta
                     (* Reduce the [alpha;beta] window for next
                        exploration, as we only need to search for a
                        position that is better than the best so far.
-                       *)
+                    *)
                     score
                   else alpha
                 in

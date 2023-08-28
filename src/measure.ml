@@ -38,7 +38,7 @@ let mean ts =
     ; number_of_positions
     ; k_pos_per_s =
         (if Float.equal (Time_ns.Span.to_ms span) 0.
-        then 0
-        else int_of_float (float_of_int number_of_positions /. Time_ns.Span.to_ms span))
+         then 0
+         else int_of_float (float_of_int number_of_positions /. Time_ns.Span.to_ms span))
     })
 ;;

@@ -46,7 +46,7 @@ let aux_gen_rust ~(step : Step.t) ~(resource : Resource.t) ~weak ~padding =
   sprintf
     ("dune exec c4solver -- bench external-solver --step %s --lang rust resources/%s%s \
       -- "
-    ^^ "$PWD/target/release/c4solver --step %s%s\n")
+     ^^ "$PWD/target/release/c4solver --step %s%s\n")
     (Sexp.to_string [%sexp (step : Step.t)])
     (Sexp.to_string [%sexp (resource : Resource.t)])
     (if weak then weak_param else if padding then weak_padding else "")
@@ -58,9 +58,9 @@ let gen_ocaml ~(step : Step.t) =
   let resources = resources ~step in
   let weak = if weak ~step then [ false; true ] else [ false ] in
   (let open List.Let_syntax in
-  let%map weak = weak
-  and resource = resources in
-  aux_gen_ocaml ~step ~resource ~weak)
+   let%map weak = weak
+   and resource = resources in
+   aux_gen_ocaml ~step ~resource ~weak)
   |> String.concat ~sep:""
 ;;
 
@@ -69,9 +69,9 @@ let gen_rust ~(step : Step.t) =
   let has_weak = weak ~step in
   let weak = if has_weak then [ false; true ] else [ false ] in
   (let open List.Let_syntax in
-  let%map weak = weak
-  and resource = resources in
-  aux_gen_rust ~step ~resource ~weak ~padding:has_weak)
+   let%map weak = weak
+   and resource = resources in
+   aux_gen_rust ~step ~resource ~weak ~padding:has_weak)
   |> String.concat ~sep:""
 ;;
 
@@ -86,8 +86,8 @@ let script_name ~(step : Step.t) ~(lang : Bench.Solver.Lang.t) =
     Sexp.to_string [%sexp (step : Step.t)]
     |> String.lowercase
     |> String.map ~f:(function
-         | '_' -> '-'
-         | c -> c)
+      | '_' -> '-'
+      | c -> c)
   in
   sprintf "run-%s%s.sh" step_name suffix
 ;;

@@ -1,8 +1,8 @@
 open! Core
 
 (** Currently this implementation does not optimize memory use and
-   stores the keys and data as ints. We plan on optimizing this later
-   while monitoring the impact on the benches. *)
+    stores the keys and data as ints. We plan on optimizing this later
+    while monitoring the impact on the benches. *)
 
 type t
 

@@ -48,7 +48,7 @@ module Solver : sig
   end
 
   (** A solver is obtained by selecting various parameters. It has a
-     short human readable name for display purposes. *)
+      short human readable name for display purposes. *)
   type t =
     { step : Step.t
     ; weak : bool
