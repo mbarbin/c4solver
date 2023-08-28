@@ -294,22 +294,20 @@ module Uint = struct
   let shift_right t i = t lsr i [@@inline]
 end
 
-(* Bitboards 64 and 128 are not actually used, we just show that we
-   can build it if we wanted to work with bigger boards. *)
+(* Bitboards 64 and 128 are not actually used, we just show that we can build it
+   if we wanted to work with bigger boards. *)
 module Bitboard64 = Make_bitboard (Stdint.Uint64)
 module Bitboard128 = Make_bitboard (Stdint.Uint128)
 
-(* In theory this is the bitboard that we would want to use, however
-   sadly the fact that we are using a functor degrades performances.
-   Perhaps using flambda would be something to consider and bench if
-   interested. In practice we use an inlined version of this code, see
-   below. *)
+(* In theory this is the bitboard that we would want to use, however sadly the
+   fact that we are using a functor degrades performances. Perhaps using flambda
+   would be something to consider and bench if interested. In practice we use an
+   inlined version of this code, see below. *)
 module Bitboard_uint = Make_bitboard (Uint)
 
-(* We copy here verbatim the code of the functor [Make_bitboard],
-   since the name of the argument [Uint] is the same as the name of
-   the module above, this results in an inlined version of the same
-   implementation. *)
+(* We copy here verbatim the code of the functor [Make_bitboard], since the name
+   of the argument [Uint] is the same as the name of the module above, this
+   results in an inlined version of the same implementation. *)
 module Bitboard = struct
   type uint = Uint.t
 

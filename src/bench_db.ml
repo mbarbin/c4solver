@@ -1,10 +1,4 @@
 open! Core
-
-(** A bench db is a local file where we store bench results as we
-    gather them using the [bench run] command. The motivation for
-    storing them is so that we can show them all together in nice
-    tables, and avoid re-running benches that we have already run too
-    many times unintentionally. *)
 open! Bench
 
 (* References entries - from [http://blog.gamesolver.org/solving-connect-four/]. *)
