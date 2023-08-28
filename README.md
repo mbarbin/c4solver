@@ -14,7 +14,7 @@ Pons' tutorial, which is published online there:
 - http://blog.gamesolver.org/solving-connect-four/01-introduction/
 
 The original cpp source code behind the tutorial is published under
-AGPL v3 Licence and is available here:
+AGPL v3 License and is available here:
 
 - https://github.com/PascalPons/connect4
 

@@ -122,7 +122,7 @@ impl Position for Basic {
         }
         for dy in -1..2 {
             // Iterate on horizontal (dy = 0) or two diagonal directions (dy = -1 or dy = 1).
-            let mut nb = 0; // counter of the number of stones of current player surronding the played stone in tested direction.
+            let mut nb = 0; // counter of the number of stones of current player surrounding the played stone in tested direction.
             for dx in [-1, 1] {
                 // count continuous stones of current player on the left, then right of the played column.
                 let mut x = column as isize + dx;
@@ -140,8 +140,8 @@ impl Position for Basic {
             }
             if nb >= 3 {
                 return true;
-            }; // there is an aligment if at least 3 other stones of the current user
-               // are surronding the played stone in the tested direction.
+            }; // there is an alignment if at least 3 other stones of the current user
+               // are surrounding the played stone in the tested direction.
         }
         return false;
     }

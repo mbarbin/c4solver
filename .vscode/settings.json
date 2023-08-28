@@ -1,0 +1,22 @@
+{
+    "cSpell.words": [
+        "alist",
+        "bitboard",
+        "bitboards",
+        "dimx",
+        "dimy",
+        "intf",
+        "iround",
+        "isatty",
+        "logand",
+        "logor",
+        "logxor",
+        "lsplit",
+        "lxor",
+        "minmax",
+        "negamax",
+        "oxxo",
+        "stdint",
+        "timens"
+    ]
+}

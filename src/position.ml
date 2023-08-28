@@ -134,7 +134,7 @@ end
 module Make_bitboard (Uint : Uint) : S = struct
   (* From: http://blog.gamesolver.org/solving-connect-four/06-bitboard
    *
-   * A binary bitboard representationis used.
+   * A binary bitboard representation is used.
    * Each column is encoded on HEIGH+1 bits.
    *
    * Example of bit order to encode for a 7x6 board
@@ -152,7 +152,7 @@ module Make_bitboard (Uint : Uint) : S = struct
    *
    * "current_player" bitboard can be transformed into a compact and non ambiguous key
    * by adding an extra bit on top of the last non empty cell of each column.
-   * This allow to identify all the empty cells whithout needing "mask" bitboard
+   * This allow to identify all the empty cells without needing "mask" bitboard
    *
    * current_player "x" = 1, opponent "o" = 0
    * board     position  mask      key       bottom
@@ -176,7 +176,7 @@ module Make_bitboard (Uint : Uint) : S = struct
    *
    * key is an unique representation of a board key = position + mask + bottom
    * in practice, as bottom is constant, key = position + mask is also a
-   * non-ambigous representation of the position.
+   * non-ambiguous representation of the position.
    *)
 
   type uint = Uint.t
@@ -300,7 +300,7 @@ module Bitboard64 = Make_bitboard (Stdint.Uint64)
 module Bitboard128 = Make_bitboard (Stdint.Uint128)
 
 (* In theory this is the bitboard that we would want to use, however sadly the
-   fact that we are using a functor degrades performances. Perhaps using flambda
+   fact that we are using a functor degrades performances. Perhaps using f-lambda
    would be something to consider and bench if interested. In practice we use an
    inlined version of this code, see below. *)
 module Bitboard_uint = Make_bitboard (Uint)

@@ -76,7 +76,7 @@ impl<'a> Env<'a> {
     }
 
     /**
-     * Reccursively score connect 4 position using negamax variant of alpha-beta algorithm.
+     * Recursively score connect 4 position using negamax variant of alpha-beta algorithm.
      * @param: alpha < beta, a score window within which we are evaluating the position.
      *
      * @return the exact score, an upper or lower bound score depending of the case:
