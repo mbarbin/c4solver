@@ -12,13 +12,13 @@ depends: [
   "dune" {>= "3.8"}
   "ANSITerminal" {>= "0.8.3"}
   "cinaps" {>= "v0.15.1" & with-test}
-  "core" {>= "v0.15"}
-  "core_unix" {>= "v0.15"}
-  "expect_test_helpers_core" {>= "v0.15" & with-test}
-  "ppx_jane" {>= "v0.15"}
-  "stdint" {>= "0.7.0"}
-  "stdio" {>= "v0.15"}
-  "textutils" {>= "v0.15"}
+  "core" {>= "v0.16"}
+  "core_unix" {>= "v0.16"}
+  "expect_test_helpers_core" {>= "v0.16" & with-test}
+  "ppx_jane" {>= "v0.16"}
+  "stdint" {>= "0.7"}
+  "stdio" {>= "v0.16"}
+  "textutils" {>= "v0.16"}
 ]
 build: [
   ["dune" "subst"] {pinned}
