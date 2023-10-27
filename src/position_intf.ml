@@ -36,7 +36,7 @@ module type Position = sig
       matrix. *)
   module Basic : S
 
-  (** A more effecient implementation based on a clever use of bit operations. *)
+  (** A more efficient implementation based on a clever use of bit operations. *)
   module Bitboard : S
 
   (** [t] Allows for dynamically choosing the implementation among those

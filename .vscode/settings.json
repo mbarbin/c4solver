@@ -9,6 +9,7 @@
         "intf",
         "iround",
         "isatty",
+        "janestreet",
         "logand",
         "logor",
         "logxor",
