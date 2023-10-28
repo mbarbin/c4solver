@@ -38,11 +38,12 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
           if score > !best_score then best_score := score));
       !best_score)
   in
-  let t1 = Time_ns.now () in
+  let counter = Mtime_clock.counter () in
+  let t1 = Mtime_clock.count counter in
   let result = negamax t in
-  let t2 = Time_ns.now () in
+  let t2 = Mtime_clock.count counter in
   { Result_with_measure.measure =
-      { span = Time_ns.diff t2 t1; number_of_positions = !number_of_positions }
+      { span = Mtime.Span.abs_diff t2 t1; number_of_positions = !number_of_positions }
   ; result
   }
 ;;
@@ -196,7 +197,8 @@ let negamax_alpha_beta
         in
         iter alpha 0))
   in
-  let t1 = Time_ns.now () in
+  let counter = Mtime_clock.counter () in
+  let t1 = Mtime_clock.count counter in
   let result =
     if iterative_deepening
     then solve t
@@ -204,9 +206,9 @@ let negamax_alpha_beta
     then aux_negamax t ~alpha:(-1) ~beta:1
     else aux_negamax t ~alpha:(-1 * height * width / 2) ~beta:(height * width / 2)
   in
-  let t2 = Time_ns.now () in
+  let t2 = Mtime_clock.count counter in
   { Result_with_measure.measure =
-      { span = Time_ns.diff t2 t1; number_of_positions = !number_of_positions }
+      { span = Mtime.Span.abs_diff t2 t1; number_of_positions = !number_of_positions }
   ; result
   }
 ;;

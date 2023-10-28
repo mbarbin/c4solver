@@ -126,7 +126,7 @@ let run_external_solver ~bench_db ~command ~filenames ~debug ~solver =
         assert (String.equal position test_line.position);
         let { Solver.Result_with_measure.measure; result } =
           { Solver.Result_with_measure.measure =
-              { span = Time_ns.Span.of_us (Float.of_string time_in_micro_second)
+              { span = Span.of_us (Float.of_string time_in_micro_second)
               ; number_of_positions = Int.of_string nb_positions
               }
           ; result = Int.of_string result

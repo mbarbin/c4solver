@@ -1,7 +1,12 @@
 (library
  (name c4solver_test)
  (flags -warn-error +a)
- (libraries core c4solver expect_test_helpers_core)
+ (libraries
+  base
+  core
+  c4solver
+  expect_test_helpers_core
+  expect_test_helpers_core.expect_test_helpers_base)
  (inline_tests)
  (preprocess
   (pps ppx_jane)))

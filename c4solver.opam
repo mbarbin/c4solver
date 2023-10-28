@@ -11,10 +11,13 @@ depends: [
   "ocaml" {>= "5.0"}
   "dune" {>= "3.8"}
   "ANSITerminal" {>= "0.8.3"}
+  "base" {>= "v0.16"}
+  "bignum" {>= "v0.16"}
   "cinaps" {>= "v0.15.1" & with-test}
   "core" {>= "v0.16"}
   "core_unix" {>= "v0.16"}
   "expect_test_helpers_core" {>= "v0.16" & with-test}
+  "mtime" {>= "2.0"}
   "ppx_jane" {>= "v0.16"}
   "stdint" {>= "0.7"}
   "stdio" {>= "v0.16"}

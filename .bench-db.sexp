@@ -137,7 +137,7 @@
    (accuracy 100)))
  (((solver ((step Bitboard) (weak false) (reference false) (lang Ocaml)))
    (test_basename Test_L3_R1))
-  ((mean ((span 26.733us) (number_of_positions 140) (k_pos_per_s 5236)))
+  ((mean ((span 20.248us) (number_of_positions 140) (k_pos_per_s 6914)))
    (accuracy 100)))
  (((solver ((step Bitboard) (weak false) (reference false) (lang Ocaml)))
    (test_basename Test_L2_R1))
