@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 module Test_line = struct
   type t =
@@ -35,7 +35,7 @@ module Test_file = struct
 
   let load_exn ~filename =
     let lines = Stdio.In_channel.read_lines filename in
-    let basename = Filename.basename filename in
+    let basename = Filename_base.basename filename in
     { basename; test_lines = Array.of_list lines |> Array.map ~f:Test_line.parse_exn }
   ;;
 end
@@ -78,7 +78,7 @@ module Solver = struct
   [@@deriving enumerate, compare, equal, sexp]
 
   let to_string_hum t =
-    sprintf
+    Printf.sprintf
       "%s%s %s%s"
       (Step.to_string_hum t.step)
       (if t.weak then " (weak)" else "")
@@ -162,7 +162,7 @@ module Solver = struct
       let t' = p |> of_params in
       if not (equal t t')
       then
-        print_s
+        Stdio.print_s
           [%sexp "Value does not roundtrip", [%here], { t : t; t' : t; p : Params.t }]);
     [%expect {||}]
   ;;
@@ -234,7 +234,7 @@ let to_ascii_table
       ; Ascii_table.Column.create_attr "test" ~align:Left (fun t ->
           dim t [], t.key.test_basename)
       ; Ascii_table.Column.create_attr "accuracy" ~align:Right (fun t ->
-          dim t [], sprintf "%.2f%%" t.result.accuracy)
+          dim t [], Printf.sprintf "%.2f%%" t.result.accuracy)
       ]
     ; (if accuracy_only
        then []

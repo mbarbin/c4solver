@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 let resources_up_to ~(step : Step.t) =
   match step with
@@ -33,7 +33,7 @@ let rust_step_name ~(step : Step.t) =
 ;;
 
 let aux_gen_ocaml ~(step : Step.t) ~(resource : Resource.t) ~weak =
-  sprintf
+  Printf.sprintf
     "dune exec c4solver -- bench run resources/%s --step %s%s\n"
     (Sexp.to_string [%sexp (resource : Resource.t)])
     (Sexp.to_string [%sexp (step : Step.t)])
@@ -43,10 +43,9 @@ let aux_gen_ocaml ~(step : Step.t) ~(resource : Resource.t) ~weak =
 let aux_gen_rust ~(step : Step.t) ~(resource : Resource.t) ~weak ~padding =
   let weak_param = " --weak" in
   let weak_padding = String.make (String.length weak_param) ' ' in
-  sprintf
-    ("dune exec c4solver -- bench external-solver --step %s --lang rust resources/%s%s \
-      -- "
-     ^^ "$PWD/target/release/c4solver --step %s%s\n")
+  Printf.sprintf
+    "dune exec c4solver -- bench external-solver --step %s --lang rust resources/%s%s -- \
+     $PWD/target/release/c4solver --step %s%s\n"
     (Sexp.to_string [%sexp (step : Step.t)])
     (Sexp.to_string [%sexp (resource : Resource.t)])
     (if weak then weak_param else if padding then weak_padding else "")
@@ -89,10 +88,11 @@ let script_name ~(step : Step.t) ~(lang : Bench.Solver.Lang.t) =
       | '_' -> '-'
       | c -> c)
   in
-  sprintf "run-%s%s.sh" step_name suffix
+  Printf.sprintf "run-%s%s.sh" step_name suffix
 ;;
 
 let gen ~script_dir =
+  let ( ^/ ) = Filename_base.concat in
   List.iter Step.all ~f:(fun step ->
     let ocaml = gen_ocaml ~step in
     let rust = gen_rust ~step in

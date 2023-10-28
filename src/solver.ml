@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 module Result_with_measure = struct
   type t =
@@ -13,7 +13,7 @@ let negamax (type t) (module P : Position.S with type t = t) (t : t) =
   let moves = Array.init width ~f:Fn.id in
   let number_of_positions = ref 0 in
   let rec negamax t =
-    incr number_of_positions;
+    Int.incr number_of_positions;
     (* Check for draw. *)
     if P.number_of_plies t = height * width
     then 0
@@ -123,7 +123,7 @@ let negamax_alpha_beta
     done;
     !min
   and aux_negamax t ~alpha ~beta =
-    incr number_of_positions;
+    Int.incr number_of_positions;
     (* Check for draw. *)
     if P.number_of_plies t = height * width
     then 0

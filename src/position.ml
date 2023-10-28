@@ -1,4 +1,4 @@
-open! Core
+open! Base
 include Position_intf
 
 module Basic : S = struct

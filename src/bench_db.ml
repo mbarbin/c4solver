@@ -1,4 +1,4 @@
-open! Core
+open! Base
 open! Bench
 
 (* References entries - from [http://blog.gamesolver.org/solving-connect-four/]. *)
@@ -302,7 +302,7 @@ type t =
 
 let load_or_init ~filename =
   let entries =
-    match Sexp.load_sexp filename with
+    match Core.Sexp.load_sexp filename with
     | exception _ -> Map.empty (module Key)
     | sexp -> entries_of_sexp sexp
   in
@@ -314,7 +314,7 @@ let load_or_init ~filename =
 ;;
 
 let mem t ~key = Map.mem t.entries key
-let save t = Sexp.save_hum t.filename (sexp_of_entries t.entries)
+let save t = Core.Sexp.save_hum t.filename (sexp_of_entries t.entries)
 
 let add t ~bench:{ Bench.key; result } =
   let t = load_or_init ~filename:t.filename in

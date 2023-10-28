@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 type t =
   { span : Span.t
@@ -30,9 +30,7 @@ let mean ts =
       count := !count + 1);
     let span = Span.divide !span ~by:!count in
     let number_of_positions =
-      Float.iround_exn
-        ~dir:`Nearest
-        (float_of_int !number_of_positions /. float_of_int !count)
+      Float.iround_exn ~dir:`Nearest Int.(!number_of_positions // !count)
     in
     { Mean.span
     ; number_of_positions
@@ -40,6 +38,6 @@ let mean ts =
         (let ms = Span.to_ms span in
          if Float.equal ms 0.
          then 0
-         else int_of_float (float_of_int number_of_positions /. ms))
+         else Float.iround_exn (Float.of_int number_of_positions /. ms))
     })
 ;;

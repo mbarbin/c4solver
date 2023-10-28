@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 (** A bench db is a local file where we store bench results as we gather them
     using the [bench run] command. The motivation for storing them is so that

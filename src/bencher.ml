@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 let do_ansi f = if ANSITerminal.isatty.contents Core_unix.stdout then f ()
 
@@ -27,7 +27,11 @@ let run ~bench_db ~filenames ~debug ~solver =
           ANSITerminal.move_bol ();
           ANSITerminal.print_string
             []
-            (sprintf "Bench: file %S : %d / %d" test_file.basename index number_of_lines));
+            (Printf.sprintf
+               "Bench: file %S : %d / %d"
+               test_file.basename
+               index
+               number_of_lines));
         let position =
           Bench.Test_line.make_position test_line ~height:6 ~width:7 (module P)
         in
@@ -65,10 +69,10 @@ let run ~bench_db ~filenames ~debug ~solver =
              Ordering.equal
                (Int.compare 0 result |> Ordering.of_int)
                (Int.compare 0 test_line.result |> Ordering.of_int)
-        then incr accuracy_count;
+        then Int.incr accuracy_count;
         if debug
         then
-          print_s
+          Stdio.print_s
             [%sexp
               { index : int
               ; result : int
@@ -82,7 +86,7 @@ let run ~bench_db ~filenames ~debug ~solver =
       ANSITerminal.move_bol ();
       ANSITerminal.erase Eol);
     let mean = Measure.mean measures in
-    let accuracy = float_of_int !accuracy_count /. float_of_int number_of_lines *. 100. in
+    let accuracy = Int.(!accuracy_count * 100 // number_of_lines) in
     let bench =
       { Bench.key = { solver; test_basename = test_file.basename }
       ; result = { Bench.Result.mean; accuracy }
@@ -111,7 +115,11 @@ let run_external_solver ~bench_db ~command ~filenames ~debug ~solver =
           ANSITerminal.move_bol ();
           ANSITerminal.print_string
             []
-            (sprintf "Bench: file %S : %d / %d" test_file.basename index number_of_lines));
+            (Printf.sprintf
+               "Bench: file %S : %d / %d"
+               test_file.basename
+               index
+               number_of_lines));
         Stdio.Out_channel.output_string out_channel (test_line.position ^ "\n");
         Stdio.Out_channel.flush out_channel;
         let process_result =
@@ -138,10 +146,10 @@ let run_external_solver ~bench_db ~command ~filenames ~debug ~solver =
              Ordering.equal
                (Int.compare 0 result |> Ordering.of_int)
                (Int.compare 0 test_line.result |> Ordering.of_int)
-        then incr accuracy_count;
+        then Int.incr accuracy_count;
         if debug
         then
-          print_s
+          Stdio.print_s
             [%sexp
               { index : int
               ; result : int
@@ -155,7 +163,7 @@ let run_external_solver ~bench_db ~command ~filenames ~debug ~solver =
       ANSITerminal.move_bol ();
       ANSITerminal.erase Eol);
     let mean = Measure.mean measures in
-    let accuracy = float_of_int !accuracy_count /. float_of_int number_of_lines *. 100. in
+    let accuracy = Int.(!accuracy_count * 100 // number_of_lines) in
     let bench =
       { Bench.key = { solver; test_basename = test_file.basename }
       ; result = { Bench.Result.mean; accuracy }

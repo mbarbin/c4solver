@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 module Test_line : sig
   type t =

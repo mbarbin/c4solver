@@ -1,4 +1,5 @@
-open! Core
+open! Base
+open! Stdio
 module Bench = Bench
 module Bench_db = Bench_db
 module Bencher = Bencher

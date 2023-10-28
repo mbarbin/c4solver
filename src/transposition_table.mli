@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 (** Currently this implementation does not optimize memory use and stores the
     keys and data as integers. We plan on optimizing this later while

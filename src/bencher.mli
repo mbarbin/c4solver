@@ -1,4 +1,4 @@
-open! Core
+open! Base
 
 val run
   :  bench_db:Bench_db.t
