@@ -1,5 +1,3 @@
-open! Base
-
 type t =
   | MinMax
   | Alpha_beta

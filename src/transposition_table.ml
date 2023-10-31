@@ -1,5 +1,3 @@
-open! Base
-
 module Entry = struct
   type t =
     { key : int

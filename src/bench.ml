@@ -1,5 +1,3 @@
-open! Base
-
 module Test_line = struct
   type t =
     { position : string

@@ -1,4 +1,4 @@
-open! Base
+open! Stdio
 
 let resources_up_to ~(step : Step.t) =
   match step with

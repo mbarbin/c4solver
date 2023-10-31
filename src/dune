@@ -1,7 +1,15 @@
 (library
  (name c4solver)
  (public_name c4solver)
- (flags -w +a-4-40-42-44-66-70 -warn-error +a)
+ (flags
+  -w
+  +a-4-40-42-44-66-70
+  -warn-error
+  +a
+  -strict-sequence
+  -short-paths
+  -open
+  Base)
  (inline_tests)
  (libraries
   ANSITerminal

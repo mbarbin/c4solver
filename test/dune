@@ -1,6 +1,18 @@
 (library
  (name c4solver_test)
- (flags -w +a-4-40-42-44-66 -warn-error +a)
+ (flags
+  -w
+  +a-4-40-42-44-66
+  -warn-error
+  +a
+  -strict-sequence
+  -short-paths
+  -open
+  Base
+  -open
+  Expect_test_helpers_base
+  -open
+  C4solver)
  (libraries base c4solver expect_test_helpers_core.expect_test_helpers_base)
  (inline_tests)
  (preprocess

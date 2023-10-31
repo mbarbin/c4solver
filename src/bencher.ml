@@ -1,5 +1,3 @@
-open! Base
-
 let do_ansi f = if ANSITerminal.isatty.contents Core_unix.stdout then f ()
 
 let run ~bench_db ~filenames ~debug ~solver =

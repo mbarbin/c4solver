@@ -1,7 +1,3 @@
-open! Base
-open! C4solver
-open! Expect_test_helpers_base
-
 (* In this test, we check the consistency of the results computed by
    the various implementations available in the [Position] module.
 

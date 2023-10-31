@@ -1,5 +1,3 @@
-open! Base
-
 module Result_with_measure = struct
   type t =
     { measure : Measure.t

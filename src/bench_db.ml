@@ -1,4 +1,3 @@
-open! Base
 open! Bench
 
 (* References entries - from [http://blog.gamesolver.org/solving-connect-four/]. *)

@@ -1,5 +1,3 @@
-open! Base
-
 module Test_line : sig
   type t =
     { position : string

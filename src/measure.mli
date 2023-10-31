@@ -1,5 +1,3 @@
-open! Base
-
 type t =
   { span : Mtime_extended.Span.t
   ; number_of_positions : int

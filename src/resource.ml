@@ -1,5 +1,3 @@
-open! Base
-
 type t =
   | Test_L3_R1
   | Test_L2_R1
