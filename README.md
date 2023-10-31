@@ -1,7 +1,7 @@
 # c4solver
 
-[![CI Actions Status](https://github.com/mbarbin/c4solver/workflows/CI/badge.svg)](https://github.com/mbarbin/c4solver/actions/workflows/ci.yml)
-[![Deploy odoc Actions Status](https://github.com/mbarbin/c4solver/workflows/Deploy-odoc/badge.svg)](https://github.com/mbarbin/c4solver/actions/workflows/deploy-odoc.yml)
+[![CI Status](https://github.com/mbarbin/c4solver/workflows/ci/badge.svg)](https://github.com/mbarbin/c4solver/actions/workflows/ci.yml)
+[![Deploy odoc Status](https://github.com/mbarbin/c4solver/workflows/deploy-odoc/badge.svg)](https://github.com/mbarbin/c4solver/actions/workflows/deploy-odoc.yml)
 
 This is a toy project implementing a solver for the connect4 game,
 written in OCaml and Rust, based on Pascal Pons' original work.
