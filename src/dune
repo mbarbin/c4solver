@@ -1,7 +1,7 @@
 (library
  (name c4solver)
  (public_name c4solver)
- (flags -warn-error +a)
+ (flags -w +a-4-40-42-44-66-70 -warn-error +a)
  (inline_tests)
  (libraries
   ANSITerminal

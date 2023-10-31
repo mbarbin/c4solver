@@ -9,7 +9,8 @@ let run ~bench_db ~filenames ~debug ~solver =
       ; column_exploration_reorder
       ; with_transposition_table
       ; iterative_deepening
-      ; reference
+      ; reference = _
+      ; lang = _
       }
     =
     Bench.Solver.to_params solver

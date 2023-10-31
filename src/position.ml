@@ -124,7 +124,6 @@ module type Uint = sig
   val is_zero : t -> bool
   val pred : t -> t
   val add : t -> t -> t
-  val compare : t -> t -> int
   val logand : t -> t -> t
   val logor : t -> t -> t
   val logxor : t -> t -> t
@@ -288,7 +287,6 @@ module Uint = struct
   let is_zero t = Int.equal t 0 [@@inline]
   let pred = Int.pred
   let add = ( + )
-  let compare = Int.compare
   let logand a b = a land b [@@inline]
   let logor a b = a lor b [@@inline]
   let logxor a b = a lxor b [@@inline]

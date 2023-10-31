@@ -15,8 +15,6 @@ let bench_run_cmd =
   Command.basic
     ~summary:"run a benchmark"
     (let%map_open.Command filenames = anon (non_empty_sequence_as_list ("FILE" %: string))
-     and height = return 6
-     and width = return 7
      and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
      and accuracy_only = flag "--accuracy-only" no_arg ~doc:" print only accuracy info"
      and step =
@@ -36,8 +34,6 @@ let bench_run_external_cmd =
   Command.basic
     ~summary:"run an external solver"
     (let%map_open.Command filenames = anon (non_empty_sequence_as_list ("FILE" %: string))
-     and height = return 6
-     and width = return 7
      and weak = flag "--weak" no_arg ~doc:" enable weak solving (1:Win/-1:Lose/0:Draw)"
      and reference = flag "--reference" no_arg ~doc:" solver is a reference"
      and step =
