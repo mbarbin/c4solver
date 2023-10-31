@@ -1,5 +1,5 @@
 type t =
-  { span : Mtime_extended.Span.t
+  { span : Mtime.Span.t
   ; number_of_positions : int
   }
 [@@deriving sexp_of]
