@@ -9,7 +9,9 @@
   -strict-sequence
   -short-paths
   -open
-  Base)
+  Base
+  -open
+  Stdio)
  (inline_tests)
  (libraries
   ANSITerminal

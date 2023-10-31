@@ -71,7 +71,7 @@ let run ~bench_db ~filenames ~debug ~solver =
         then Int.incr accuracy_count;
         if debug
         then
-          Stdio.print_s
+          print_s
             [%sexp
               { index : int
               ; result : int
@@ -119,10 +119,10 @@ let run_external_solver ~bench_db ~command ~filenames ~debug ~solver =
                test_file.basename
                index
                number_of_lines));
-        Stdio.Out_channel.output_string out_channel (test_line.position ^ "\n");
-        Stdio.Out_channel.flush out_channel;
+        Out_channel.output_string out_channel (test_line.position ^ "\n");
+        Out_channel.flush out_channel;
         let process_result =
-          Stdio.In_channel.input_line in_channel |> Option.value_exn ~here:[%here]
+          In_channel.input_line in_channel |> Option.value_exn ~here:[%here]
         in
         let position, result, nb_positions, time_in_micro_second =
           match String.split process_result ~on:' ' with
@@ -148,7 +148,7 @@ let run_external_solver ~bench_db ~command ~filenames ~debug ~solver =
         then Int.incr accuracy_count;
         if debug
         then
-          Stdio.print_s
+          print_s
             [%sexp
               { index : int
               ; result : int

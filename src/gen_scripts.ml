@@ -1,5 +1,3 @@
-open! Stdio
-
 let resources_up_to ~(step : Step.t) =
   match step with
   | MinMax -> 1
@@ -98,8 +96,8 @@ let gen ~script_dir =
     let rust = gen_rust ~step in
     let ocaml_script = script_name ~step ~lang:Ocaml in
     let rust_script = script_name ~step ~lang:Rust in
-    Stdio.Out_channel.write_all (script_dir ^/ ocaml_script) ~data:ocaml;
-    Stdio.Out_channel.write_all (script_dir ^/ rust_script) ~data:rust)
+    Out_channel.write_all (script_dir ^/ ocaml_script) ~data:ocaml;
+    Out_channel.write_all (script_dir ^/ rust_script) ~data:rust)
 ;;
 
 let main =

@@ -32,7 +32,7 @@ module Test_file = struct
     }
 
   let load_exn ~filename =
-    let lines = Stdio.In_channel.read_lines filename in
+    let lines = In_channel.read_lines filename in
     let basename = Filename_base.basename filename in
     { basename; test_lines = Array.of_list lines |> Array.map ~f:Test_line.parse_exn }
   ;;
@@ -160,7 +160,7 @@ module Solver = struct
       let t' = p |> of_params in
       if not (equal t t')
       then
-        Stdio.print_s
+        print_s
           [%sexp "Value does not roundtrip", [%here], { t : t; t' : t; p : Params.t }]);
     [%expect {||}]
   ;;
