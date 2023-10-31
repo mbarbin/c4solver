@@ -20,6 +20,7 @@ depends: [
   "mtime" {>= "2.0"}
   "mtime-extended" {>= "2.0"}
   "ppx_jane" {>= "v0.16"}
+  "ppx_js_style" {>= "v0.16"}
   "stdint" {>= "0.7"}
   "stdio" {>= "v0.16"}
   "textutils" {>= "v0.16"}

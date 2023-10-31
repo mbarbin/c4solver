@@ -4,7 +4,7 @@
  (libraries base c4solver expect_test_helpers_core.expect_test_helpers_base)
  (inline_tests)
  (preprocess
-  (pps ppx_jane)))
+  (pps ppx_jane ppx_js_style -check-doc-comments)))
 
 (copy_files %{project_root}/resources/Test_L*)
 

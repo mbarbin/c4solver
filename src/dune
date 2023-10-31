@@ -15,7 +15,7 @@
   stdio
   textutils.ascii_table)
  (preprocess
-  (pps ppx_jane)))
+  (pps ppx_jane ppx_js_style -check-doc-comments)))
 
 (cinaps
  (files position.ml))
