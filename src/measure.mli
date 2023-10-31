@@ -1,14 +1,14 @@
 open! Base
 
 type t =
-  { span : Span.t
+  { span : Mtime_extended.Span.t
   ; number_of_positions : int
   }
 [@@deriving sexp_of]
 
 module Mean : sig
   type t =
-    { span : Span.t
+    { span : Mtime.Span.t
     ; number_of_positions : int
     ; k_pos_per_s : int
     }

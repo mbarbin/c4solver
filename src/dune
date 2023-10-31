@@ -10,6 +10,7 @@
   core
   mtime
   mtime.clock.os
+  mtime-extended
   stdint
   stdio
   textutils.ascii_table)

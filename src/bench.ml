@@ -240,7 +240,7 @@ let to_ascii_table
        then []
        else
          [ Ascii_table.Column.create_attr "mean time" ~align:Right (fun t ->
-             dim t [], Span.to_string_hum t.result.mean.span)
+             dim t [], Mtime_extended.Span.to_string_hum t.result.mean.span)
          ])
     ; [ Ascii_table.Column.create_attr "mean nb of pos" ~align:Right (fun t ->
           let { key; result } = t in

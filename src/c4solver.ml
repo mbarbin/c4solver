@@ -7,7 +7,6 @@ module Gen_scripts = Gen_scripts
 module Measure = Measure
 module Position = Position
 module Solver = Solver
-module Span = Span
 module Step = Step
 
 let bench_db_default_filename = ".bench-db.sexp"
