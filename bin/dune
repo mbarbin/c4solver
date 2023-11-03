@@ -3,4 +3,4 @@
  (public_name c4solver)
  (package c4solver)
  (flags -warn-error +a)
- (libraries c4solver core_unix.command_unix))
+ (libraries c4solver command-unix-for-opam))

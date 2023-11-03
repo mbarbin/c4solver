@@ -1,1 +1,1 @@
-let () = Command_unix.run C4solver.main
+let () = Command_unix_for_opam.run C4solver.main
