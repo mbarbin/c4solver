@@ -16,7 +16,6 @@ depends: [
   "bignum" {>= "v0.16" & < "v0.17"}
   "cinaps" {with-test & >= "v0.15.1"}
   "core" {>= "v0.16" & < "v0.17"}
-  "core_unix" {>= "v0.16" & < "v0.17"}
   "command-unix-for-opam" {>= "0.0.1"}
   "expect_test_helpers_core" {with-test & >= "v0.16" & < "v0.17"}
   "mtime" {>= "2.0"}

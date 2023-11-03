@@ -221,7 +221,7 @@ let to_ascii_table
   ?(accuracy_only = false)
   ts
   =
-  let isatty = ANSITerminal.isatty.contents Core_unix.stdout in
+  let isatty = Stdlib.Out_channel.isatty Out_channel.stdout in
   let columns =
     let dim (t : t) styles =
       let styles = if t.key.solver.reference then `Dim :: styles else styles in

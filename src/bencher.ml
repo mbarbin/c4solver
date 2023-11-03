@@ -1,4 +1,4 @@
-let do_ansi f = if ANSITerminal.isatty.contents Core_unix.stdout then f ()
+let do_ansi f = if Stdlib.Out_channel.isatty Out_channel.stdout then f ()
 
 let run ~bench_db ~filenames ~debug ~solver =
   let { Bench.Solver.Params.position
