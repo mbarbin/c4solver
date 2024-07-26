@@ -6,7 +6,7 @@
 
 (generate_opam_files)
 
-(license "GNU AFFERO GENERAL")
+(license "AGPL-3.0-or-later")
 
 (authors "Mathieu Barbin")
 

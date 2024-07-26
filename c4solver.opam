@@ -4,7 +4,7 @@ synopsis: "A solver for the connect4 game"
 description: "A solver for the connect4 game"
 maintainer: ["Mathieu Barbin"]
 authors: ["Mathieu Barbin"]
-license: "GNU AFFERO GENERAL"
+license: "AGPL-3.0-or-later"
 homepage: "https://github.com/mbarbin/c4solver"
 doc: "https://mbarbin.github.io/c4solver/odoc/"
 bug-reports: "https://github.com/mbarbin/c4solver/issues"
